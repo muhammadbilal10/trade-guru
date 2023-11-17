@@ -1,10 +1,12 @@
 import React from "react";
 import { useState } from "react";
+import Navbar from "../navbar/navbar";
 
 
-export default function Lognin() {
+export default function Login() {
     return (
       <>
+      <Navbar/>
       <section className="bg-[#20344A] h-screen">
                 <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto shadow-lg">
                    
