@@ -5,22 +5,22 @@ import { Link } from "react-router-dom";
 export default function Navbar() {
     return (
         <>
-            {/* <object data="https://sarmaaya.pk/public/widgets/stocks-overview" width="100%" height="110" type="text/html"> Stocks Overview </object> */}
-            <nav className="bg-[#142941] h-16 text-[#D9ECFF] flex justify-between basis-3">
+        
+            <nav className="navbar bg-[#142941] h-16 text-[#D9ECFF] flex justify-between basis-3">
                 <a href="" className="flex items-center ml-8">
                     <span >Trade</span>
                     <span className="text-[#21B573]">Guru.pk</span>
                 </a>
-                <div className="flex items-center space-x-6">
+                <div className="flex items-center space-x-6 navbar-links">
                     <Link to={'/'}>
                         <button>Home</button>
                     </Link>
                     <button>course</button>
                     <button>learn</button>
                     <button>stocks</button>
-                    <button>Porfolio</button>
+                    <button>Portfolio</button>
                 </div>
-                <div className="flex items-center space-x-4 mr-8 ">
+                <div className="flex items-center space-x-4 mr-8 navbar-auth">
                     <Link to={'/login'}>
                         <button className="border rounded-md outline-2 w-20 border-[#D9ECFF]" >Login</button>
                     </Link>
@@ -32,6 +32,7 @@ export default function Navbar() {
         </>
     );
 }
+
 
 
 

@@ -3,7 +3,11 @@ import { useState } from "react";
 import Navbar from "../navbar/navbar";
 
 
+
+
 export default function Login() {
+ 
+
     return (
       <>
       <Navbar/>
@@ -18,7 +22,7 @@ export default function Login() {
                             <form className="space-y-4 md:space-y-6" action="#">
                                 <div>
                                     <label for="email" className="block mb-2 text-sm font-medium text-gray-900 ">Your email</label>
-                                    <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="name@company.com" required="">
+                                    <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="name@company.com" required="" >
                                     </input>
                                 </div>
                                 <div>
@@ -49,6 +53,7 @@ export default function Login() {
                     </div>
                 </div>
             </section>
+            
       </>
       );
   }
