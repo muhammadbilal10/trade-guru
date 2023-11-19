@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export default function Navbar() {
     return (
         <>
-            <object data="https://sarmaaya.pk/public/widgets/stocks-overview" width="100%" height="110" type="text/html"> Stocks Overview </object>
+            {/* <object data="https://sarmaaya.pk/public/widgets/stocks-overview" width="100%" height="110" type="text/html"> Stocks Overview </object> */}
             <nav className="bg-[#142941] h-16 text-[#D9ECFF] flex justify-between basis-3">
                 <a href="" className="flex items-center ml-8">
                     <span >Trade</span>
