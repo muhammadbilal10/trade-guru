@@ -3,6 +3,32 @@ import { useState } from "react";
 import Navbar from "../navbar/navbar";
 
 export default function Signup() {
+    function SignUp() {
+        const [email, setEmail] = useState('');
+        const [password, setPassword] = useState('');
+
+        const originalEmail = 'cricketbrain@example.com'
+        const originalPassword = 'cricket2023'
+
+        const handleLogin = () => {
+            if (email === originalEmail && password === originalPassword) {
+                navigate("/user")
+            }
+            else {
+                alert("Authentication Failed!")
+            }
+        }
+
+        const handleSignUp = async () => {
+            try {
+                await auth.createUserWithEmailAndPassword(email, password);
+                console.log('User signed up successfully!');
+            } catch (error) {
+                console.error('Error signing up:', error.message);
+            }
+        };
+    }
+
     return (
         <>
             <Navbar />
