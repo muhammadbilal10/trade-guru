@@ -5,6 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import app from "../../database/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { collection, addDoc } from 'firebase/firestore';
+import { doc, setDoc } from "firebase/firestore"; 
+import { getFirestore } from "firebase/firestore";
+
 
 export default function Signup() {
 
@@ -12,6 +16,8 @@ export default function Signup() {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const auth = getAuth(app);
+    const db = getFirestore(app);
+    const userCollection = collection(db, 'temp');
 
     const handlesignup = () => {
 
@@ -20,6 +26,12 @@ export default function Signup() {
                 // Signed up 
                 const user = userCredential.user;
                 console.log(user);
+                const docRef =  addDoc(collection(db, "temp"), {
+                    email: "Tokyo",
+                    pass: "Japan"
+                  });
+                  console.log("Document written with ID: ", docRef.id);
+                  
                 navigate("/");
                 // ...
             })
@@ -29,12 +41,22 @@ export default function Signup() {
                 // ..
             });
 
+        const adddata = () => {
+            // Add data to the user's collection
+            addDoc(userCollection, {
+                email: 'john@example.com',
+                pass: '123456'
+                // other user-specific data
+            })
+        }
+
+
     }
 
     return (
         <>
             <Navbar />
-            <form className="bg-white w-1/2  rounded-lg px-6 py-8 mx-auto shadow-lg "  onSubmit={(e)=>e.preventDefault()}>
+            <form className="bg-white w-1/2  rounded-lg px-6 py-8 mx-auto shadow-lg " onSubmit={(e) => e.preventDefault()}>
                 <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
                     Fill the form
                 </h1>
