@@ -24,7 +24,7 @@ export default function Navbar() {
                     </Link>
                     <button>learn</button>
                     <button>stocks</button>
-                    <button>Porfolio</button>
+                    <button>Portfolio</button>
                 </div>
                 <div className="flex items-center space-x-4 mr-8 navbar-auth">
                     <Link to={'/login'}>
