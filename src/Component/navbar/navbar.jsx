@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+
 export default function Navbar() {
     return (
         <>
@@ -15,10 +16,15 @@ export default function Navbar() {
                     <Link to={'/'}>
                         <button>Home</button>
                     </Link>
+                    <Link to='/course' >
                     <button>course</button>
+                    </Link>
+                    <Link to={'/Regesteration'}>
+                    <button>Regesteration</button>
+                    </Link>
                     <button>learn</button>
                     <button>stocks</button>
-                    <button>Portfolio</button>
+                    <button>Porfolio</button>
                 </div>
                 <div className="flex items-center space-x-4 mr-8 navbar-auth">
                     <Link to={'/login'}>
