@@ -13,7 +13,6 @@ export default function Login() {
     const auth = getAuth(app);
 
     const handleLogin = () => {
-
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           // Signed in 

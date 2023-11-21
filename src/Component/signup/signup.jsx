@@ -34,7 +34,7 @@ export default function Signup() {
     return (
         <>
             <Navbar />
-            <form className="bg-white w-1/2  rounded-lg px-6 py-8 mx-auto shadow-lg ">
+            <form className="bg-white w-1/2  rounded-lg px-6 py-8 mx-auto shadow-lg "  onSubmit={(e)=>e.preventDefault()}>
                 <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
                     Fill the form
                 </h1>
