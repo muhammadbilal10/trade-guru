@@ -6,7 +6,7 @@ import { getAuth } from "firebase/auth";
 import app from "../../database/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, addDoc } from 'firebase/firestore';
-import { doc, setDoc } from "firebase/firestore"; 
+import { doc, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 
 
@@ -17,8 +17,6 @@ export default function Signup() {
     const navigate = useNavigate();
     const auth = getAuth(app);
     const db = getFirestore(app);
-    const userCollection = collection(db, 'temp');
-
     const handlesignup = () => {
 
         createUserWithEmailAndPassword(auth, email, password)
@@ -26,12 +24,8 @@ export default function Signup() {
                 // Signed up 
                 const user = userCredential.user;
                 console.log(user);
-                const docRef =  addDoc(collection(db, "temp"), {
-                    email: "Tokyo",
-                    pass: "Japan"
-                  });
-                  console.log("Document written with ID: ", docRef.id);
-                  
+                const uid = user.uid;
+                addNewDocument(uid);
                 navigate("/");
                 // ...
             })
@@ -41,13 +35,18 @@ export default function Signup() {
                 // ..
             });
 
-        const adddata = () => {
-            // Add data to the user's collection
-            addDoc(userCollection, {
-                email: 'john@example.com',
-                pass: '123456'
-                // other user-specific data
-            })
+        const addNewDocument = async (uid) => {
+            try {
+                const collectionRef = doc(db, "temp", uid); // Replace 'yourCollection' with the actual name of your collection
+                await setDoc(collectionRef, {
+                    field1: 'value1',
+                    field2: 'value2',
+                });
+
+                console.log('Document added with custom ID: ', customDocId);
+            } catch (error) {
+                console.error('Error adding document with custom ID: ', error);
+            }
         }
 
 
