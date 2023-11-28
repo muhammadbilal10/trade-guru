@@ -14,19 +14,30 @@ import Home from "./Component/home/home";
 import CourseForm from "./Component/course/CourseForm";
 import CourseRegistration from "./Component/course/CourseRegistration";
 import UploadResource from "./Component/Resources/UploadResource";
+import TempLogin from "./Component/login/Templogin";
+import TempSignup from "./Component/signup/Tempsignup";
+import DashboardHome from "./Component/Dashboard/home";
+import Instructorform from "./Component/instructor/instructorfoam";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home/>,
+    // element: <DashboardHome/>
+     element: <Home/>,
+  },
+  {
+    path: "/dashboard",
+    element: <DashboardHome/>,
   },
   {
     path: "/signup",
-    element: <Signup/>,
+    element:<TempSignup/>
+    // element: <Signup/>,
   },
   {
     path: "/login",
-    element: <Login/>,
+    element:<TempLogin/>
+    // element: <Login/>,
   },
   {
     path: "/course",
@@ -36,6 +47,11 @@ const router = createBrowserRouter([
   {
     path: "/Regesteration",
     element: <CourseRegistration/>,
+  },
+  {
+    path: "/instructoform",
+    element:<Instructorform/>
+    // element: <Login/>,
   },
 ]);
 
