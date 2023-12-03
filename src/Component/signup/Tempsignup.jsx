@@ -41,7 +41,7 @@ export default function TempSignup() {
 
         const addNewDocument = async (uid) => {
             try {
-                const collectionRef = doc(db, "User", uid); // Replace 'yourCollection' with the actual name of your collection
+                const collectionRef = doc(db, "User", uid); 
                 await setDoc(collectionRef, {
                     first_name: fname,
                     last_name: lname,

@@ -1,12 +1,13 @@
 import React from 'react'
 import { Link } from "react-router-dom";
-import Sidenav from './sidenav';
-import Topnav from './topnavbar';
-import Instructorcard from './totalinstructor';
-import Coursecard from './coursecard';
-import Approvalcard from './approvalcard';
-import Pandingcourse from './courseapproval';
-import Instructortable from './instructortable';
+import Sidenav from './navbar/sidenav';
+import Topnav from './navbar/topnavbar';
+
+import Card from './card';
+
+import Instructortable from './instructor/instructortable';
+import { MdPendingActions } from "react-icons/md";
+
 export default function DashboardHome() {
   return (
 
@@ -42,13 +43,13 @@ export default function DashboardHome() {
               {/* <!-- Cards --> */}
               <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
                 {/* <!-- Card --> */}
-                <Instructorcard/>
+                <Card title={"total course"} count={6} Icon={<MdPendingActions/>} color={'green-500'}/>
                 {/* <!-- Card --> */}
-                <Coursecard/>
+                <Card title={"total course"} count={6} Icon={<MdPendingActions/>}/>
                 {/* <!-- Card --> */}
-                <Approvalcard/>
+                <Card title={"total course"} count={6} Icon={<MdPendingActions/>}/>
                 {/* <!-- Card --> */}
-                <Pandingcourse/>
+                <Card title={"total course"} count={6} Icon={<MdPendingActions/>}/>
               </div>
 
               {/* <!--  Table --> */}
@@ -67,8 +68,8 @@ export default function DashboardHome() {
                     Revenue
                   </h4>
                   <canvas id="pie"></canvas>
-                  <div
-                    class="flex justify-center mt-4 space-x-3 text-sm text-gray-600 dark:text-gray-400"
+                  <div 
+                  class="flex justify-center mt-4 space-x-3 text-sm text-gray-600 dark:text-gray-400"
                   >
                     {/* <!-- Chart legend --> */}
                     <div class="flex items-center">
@@ -119,24 +120,9 @@ export default function DashboardHome() {
               </div>
             </div>
           </main>
-
-
-
-
-
-
-
-
-
-
-
         </div>
-
       </div>
-
-
     </>
-
 
   )
 }

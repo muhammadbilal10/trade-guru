@@ -5,7 +5,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import "./index.css";
-
+import 'alpinejs';
 
 import Navbar from './Component/navbar/navbar'
 import Login from './Component/login/login'
@@ -18,6 +18,7 @@ import TempLogin from "./Component/login/Templogin";
 import TempSignup from "./Component/signup/Tempsignup";
 import DashboardHome from "./Component/Dashboard/home";
 import Instructorform from "./Component/instructor/instructorfoam";
+import Instructorpage from "./Component/Dashboard/instructor/instructorpage";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
     path: "/signup",
     element:<TempSignup/>
     // element: <Signup/>,
+  },
+  {
+    path: "/instructorpage",
+    element:<Instructorpage/>
   },
   {
     path: "/login",

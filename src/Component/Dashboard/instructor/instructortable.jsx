@@ -2,33 +2,40 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { getAuth } from "firebase/auth";
-import app from "../../database/firebase";
+import app from "../../../database/firebase";
+import { fetchUserData } from '../js file/instructor';
 
 
 
 export default function Instructortable() {
+    
     const [instructor, setInstructor] = useState([]);
     // const auth = getAuth(app);
     const db = getFirestore(app);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const peopleCollection = collection(db, 'User'); // Replace 'your_collection_name' with the actual name of your collection
-                const snapshot = await getDocs(peopleCollection);
+        // const fetchData = async () => {
+        //     try {
+        //         const peopleCollection = collection(db, 'User'); // Replace 'your_collection_name' with the actual name of your collection
+        //         const snapshot = await getDocs(peopleCollection);
 
-                const peopleData = snapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                }));
+        //         const peopleData = snapshot.docs.map((doc) => ({
+        //             id: doc.id,
+        //             ...doc.data(),
+        //         }));
 
-                setInstructor(peopleData);
-            } catch (error) {
-                console.error('Error fetching data:', error.message);
-            }
-        };
+        //         setInstructor(peopleData);
+        //     } catch (error) {
+        //         console.error('Error fetching data:', error.message);
+        //     }
+        // };
 
-        fetchData();
+        fetchUserData(db).then((res)=>{
+            setInstructor(res)
+           })
+    //    setInstructor(data)
+       
+
     }, [db]);
 
 
@@ -50,7 +57,7 @@ export default function Instructortable() {
                         <tbody
                             class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
                         >
-                            {instructor.map((instructor) => (
+                            {instructor?.map((instructor) => (
                                 <tr class="text-gray-700 dark:text-gray-400">
                                     <td class="px-4 py-3">
                                         <div class="flex items-center text-sm">
@@ -97,10 +104,6 @@ export default function Instructortable() {
 
 
                             ))}
-
-
-
-
                         </tbody>
                     </table>
                 </div>
