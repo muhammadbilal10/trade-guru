@@ -7,6 +7,7 @@ import { MdOutlinePayments } from "react-icons/md";
 export default function Sidenav() {
   const [togglePages, setTogglePages] = useState(false)
   const [toggleInstructor, setToggleInstructor] = useState(false)
+  const [togglestudent, setToggleStudent] = useState(false)
   return (
     <>
 
@@ -20,6 +21,7 @@ export default function Sidenav() {
             <span className="text-[#21B573]">Guru.pk</span>
           </Link>
           <ul class="mt-6">
+            <Link to={'/dashboard'}>
             <li class="relative px-6 py-3">
               <span
                 class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
@@ -46,20 +48,20 @@ export default function Sidenav() {
                 <span class="ml-4">Dashboard</span>
               </a>
             </li>
+            </Link>
           </ul>
-
 
           <ul>
             <li class="relative px-6 py-3">
 
               <button
                 class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                //@click="togglePagesMenu"
+              
                 onClick={() => setToggleInstructor(!toggleInstructor)}
                 aria-haspopup="true"
               >
                 <span class="inline-flex items-center">
-                <FiBookOpen className='w-5 h-5' />
+                  <FiBookOpen className='w-5 h-5' />
 
                   <span class="ml-4">Instructor</span>
                 </span>
@@ -90,25 +92,88 @@ export default function Sidenav() {
                   </Link>
 
                   <Link to={'/instructorpage'}>
-                  <li
-                    class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                  >
-                    <a class="w-full" href="pages/create-account.html">
-                      Aprrovals
-                    </a>
-                  </li>
+                    <li
+                      class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    >
+                      <a class="w-full" href="pages/create-account.html">
+                        Aprrovals
+                      </a>
+                    </li>
                   </Link>
-                  
+
                   <Link to={'/instructorpage'}>
-                  <li
-                    class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                  >
-                    <a class="w-full" href="pages/forgot-password.html">
-                      Instructors
-                    </a>
-                  </li>
+                    <li
+                      class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    >
+                      <a class="w-full" href="pages/forgot-password.html">
+                        Instructors
+                      </a>
+                    </li>
                   </Link>
-                  
+
+                </ul>
+              </template>
+            </li>
+
+            <li class="relative px-6 py-3">
+
+              <button
+                class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                //@click="togglePagesMenu"
+                onClick={() => setToggleStudent(!togglestudent)}
+                aria-haspopup="true"
+              >
+                <span class="inline-flex items-center">
+                  <FiUser className='w-5 h-5' />
+
+                  <span class="ml-4">Studet</span>
+                </span>
+                <svg
+                  class="w-4 h-4"
+                  aria-hidden="true"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+              <template className={`${togglestudent ? 'block' : 'hidden'}`} >
+                <ul
+                  class="transition-all ease-in-out duration-300 p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
+                  aria-label="submenu"
+                >
+                  <Link to={'/instructorpage'}>
+                    <li
+                      class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    >
+                      <a class="w-full" href="pages/login.html">manage Students</a>
+                    </li>
+                  </Link>
+
+                  <Link to={'/instructorpage'}>
+                    <li
+                      class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    >
+                      <a class="w-full" href="pages/create-account.html">
+                        Aprrovals
+                      </a>
+                    </li>
+                  </Link>
+
+                  <Link to={'/instructorpage'}>
+                    <li
+                      class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    >
+                      <a class="w-full" href="pages/forgot-password.html">
+                        queries
+                      </a>
+                    </li>
+                  </Link>
+
                 </ul>
               </template>
             </li>
@@ -116,18 +181,9 @@ export default function Sidenav() {
             <li class="relative px-6 py-3">
               <a
                 class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="cards.html"
-              >
-                <FiUser className='w-5 h-5' />
-                <span class="ml-4">student</span>
-              </a>
-            </li>
-            <li class="relative px-6 py-3">
-              <a
-                class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 href="charts.html"
               >
-                <FiBookOpen className='w-5 h-5' />
+                <FiUser className='w-5 h-5' />
                 <span class="ml-4">Courses</span>
               </a>
             </li>
@@ -145,8 +201,8 @@ export default function Sidenav() {
                 class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 href="modals.html"
               >
-                 <MdOutlinePayments className='w-5 h-5' />
-                 
+                <MdOutlinePayments className='w-5 h-5' />
+
                 <span class="ml-4">Payment</span>
               </a>
             </li>
@@ -155,7 +211,7 @@ export default function Sidenav() {
                 class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 href="tables.html"
               >
-                 <FiBookOpen className='w-5 h-5' />
+                <FiBookOpen className='w-5 h-5' />
                 <span class="ml-4">Tables</span>
               </a>
             </li>
@@ -168,7 +224,7 @@ export default function Sidenav() {
                 aria-haspopup="true"
               >
                 <span class="inline-flex items-center">
-                <FiBookOpen className='w-5 h-5' />
+                  <FiBookOpen className='w-5 h-5' />
 
                   <span class="ml-4">More options</span>
                 </span>

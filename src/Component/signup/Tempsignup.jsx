@@ -15,7 +15,6 @@ export default function TempSignup() {
     const [fname, setFname] = useState('');
     const [lname, setLname] = useState('');
     const [gender, setGender] = useState('');
-    const [occupasion, setOccupasion] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -43,8 +42,8 @@ export default function TempSignup() {
             try {
                 const collectionRef = doc(db, "User", uid); 
                 await setDoc(collectionRef, {
-                    first_name: fname,
-                    last_name: lname,
+                    fname: fname,
+                    lname: lname,
                     email: email,
                     id: uid,
                     gender: gender,

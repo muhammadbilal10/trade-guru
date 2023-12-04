@@ -1,19 +1,22 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
-import { getAuth } from "firebase/auth";
 import app from "../../../database/firebase";
 import { fetchUserData } from '../js file/instructor';
+import { FaEdit } from "react-icons/fa";
+import { MdDeleteOutline } from "react-icons/md";
+import { Dialog } from '@headlessui/react'
+import EditModal from './EditModal';
 
 
+export default function EditTable() {
 
-export default function Instructortable() {
-
+    const [isOpen, setIsOpen] = useState(false)
     const [instructor, setInstructor] = useState([]);
     const db = getFirestore(app);
 
     useEffect(() => {
-        fetchUserData(db,'User').then((res) => {
+        fetchUserData(db,'Instructor').then((res) => {
             setInstructor(res)
         })
     },[]);
@@ -21,6 +24,11 @@ export default function Instructortable() {
 
     return (
         <>
+            <h4
+                class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300"
+            >
+                Table with actions
+            </h4>
             <div class="w-full overflow-hidden rounded-lg shadow-xs">
                 <div class="w-full overflow-x-auto">
                     <table class="w-full whitespace-no-wrap">
@@ -28,10 +36,11 @@ export default function Instructortable() {
                             <tr
                                 class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
                             >
-                                <th class="px-4 py-3">Instructor</th>
+                                <th class="px-4 py-3">Name</th>
                                 <th class="px-4 py-3">total course</th>
                                 <th class="px-4 py-3">Status</th>
-                                <th class="px-4 py-3">Registraion Date</th>
+                                <th class="px-4 py-3">Date</th>
+                                <th class="px-4 py-3">Actions</th>
                             </tr>
                         </thead>
                         <tbody
@@ -57,9 +66,9 @@ export default function Instructortable() {
                                                 ></div>
                                             </div>
                                             <div>
-                                                <p class="font-semibold">{instructor.first_name}</p>
+                                                <p class="font-semibold">{instructor.fname}</p>
                                                 <p class="text-xs text-gray-600 dark:text-gray-400">
-                                                {instructor.occupation}
+                                                    10x Developer
                                                 </p>
                                             </div>
                                         </div>
@@ -69,16 +78,37 @@ export default function Instructortable() {
                                     </td>
                                     <td class="px-4 py-3 text-xs">
                                         <span
-                                            className={`px-2 py-1 font-semibold leading-tight rounded-full ${instructor.status
-                                                ? 'text-green-700 bg-green-100 dark:bg-green-700 dark:text-green-100'
-                                                : 'text-red-700 bg-red-100 dark:bg-red-700 dark:text-red-100'
-                                                }`}
+                                            class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"
                                         >
-                                            {instructor.status ? 'approved' : 'not approved'}
+                                            Approved
                                         </span>
                                     </td>
                                     <td class="px-4 py-3 text-sm">
                                         6/10/2020
+                                    </td>
+
+
+                                    <td class="px-4 py-3">
+
+                                        <div class="flex items-center space-x-4 text-sm">
+                                           
+                                            <button
+                                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                                aria-label="Edit"
+                                                onClick={()=> setIsOpen(true)}
+                                            >
+                                                
+                                                <FaEdit class="w-5 h-5"/>
+
+                                            </button>
+
+                                            <button
+                                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                                aria-label="Delete"
+                                            >
+                                                <MdDeleteOutline  class="w-5 h-5"/>
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
 
@@ -104,8 +134,8 @@ export default function Instructortable() {
                                         aria-label="Previous"
                                     >
                                         <svg
-                                            aria-hidden="true"
                                             class="w-4 h-4 fill-current"
+                                            aria-hidden="true"
                                             viewBox="0 0 20 20"
                                         >
                                             <path
@@ -139,30 +169,6 @@ export default function Instructortable() {
                                 </li>
                                 <li>
                                     <button
-                                        class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
-                                    >
-                                        4
-                                    </button>
-                                </li>
-                                <li>
-                                    <span class="px-3 py-1">...</span>
-                                </li>
-                                <li>
-                                    <button
-                                        class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
-                                    >
-                                        8
-                                    </button>
-                                </li>
-                                <li>
-                                    <button
-                                        class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
-                                    >
-                                        9
-                                    </button>
-                                </li>
-                                <li>
-                                    <button
                                         class="px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple"
                                         aria-label="Next"
                                     >
@@ -183,7 +189,9 @@ export default function Instructortable() {
                         </nav>
                     </span>
                 </div>
+                <EditModal isOpen={isOpen} setIsOpen={setIsOpen} />
             </div>
+
 
 
         </>
@@ -192,45 +200,3 @@ export default function Instructortable() {
 
 
 
-
-
-// <tr class="text-gray-700 dark:text-gray-400">
-//                                 <td class="px-4 py-3">
-//                                     <div class="flex items-center text-sm">
-//                                         {/* <!-- Avatar with inset shadow --> */}
-//                                         <div
-//                                             class="relative hidden w-8 h-8 mr-3 rounded-full md:block"
-//                                         >
-//                                             <img
-//                                                 class="object-cover w-full h-full rounded-full"
-//                                                 src="https://images.unsplash.com/photo-1566411520896-01e7ca4726af?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
-//                                                 alt=""
-//                                                 loading="lazy"
-//                                             />
-//                                             <div
-//                                                 class="absolute inset-0 rounded-full shadow-inner"
-//                                                 aria-hidden="true"
-//                                             ></div>
-//                                         </div>
-//                                         <div>
-//                                             <p class="font-semibold">Hitney Wouston</p>
-//                                             <p class="text-xs text-gray-600 dark:text-gray-400">
-//                                                 Singer
-//                                             </p>
-//                                         </div>
-//                                     </div>
-//                                 </td>
-//                                 <td class="px-4 py-3 text-sm">
-//                                     $ 863.45
-//                                 </td>
-//                                 <td class="px-4 py-3 text-xs">
-//                                     <span
-//                                         class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"
-//                                     >
-//                                         Approved
-//                                     </span>
-//                                 </td>
-//                                 <td class="px-4 py-3 text-sm">
-//                                     6/10/2020
-//                                 </td>
-//                             </tr>

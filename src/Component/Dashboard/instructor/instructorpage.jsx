@@ -2,11 +2,14 @@ import React from 'react'
 import { Link } from "react-router-dom";
 import Sidenav from '../navbar/sidenav';
 import Topnav from '../navbar/topnavbar';
+import { FaEdit } from "react-icons/fa";
+import { FaChalkboardTeacher } from "react-icons/fa";
 
 import Card from '../card';
 
 import { MdPendingActions } from "react-icons/md";
 import Instructortable from './instructortable';
+import EditTable from './InstructorEditTable';
 export default function Instructorpage() {
     return (
 
@@ -42,15 +45,18 @@ export default function Instructorpage() {
                             {/* <!-- Cards --> */}
                             <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
                                 {/* <!-- Card --> */}
-                                <Card title={"total course"} count={6} Icon={<MdPendingActions/>}/>
+                                <Card title={"Total Instructor"} count={6} Icon={<FaChalkboardTeacher />} color={'green-500'} />
                                 {/* <!-- Card --> */}
-                                <Card title={"total course"} count={6} Icon={<MdPendingActions/>}/>
+                                <Card title={"Total pending approvals"} count={6} Icon={<MdPendingActions />} />
                                 {/* <!-- Card --> */}
-                                <Card title={"total course"} count={6} Icon={<MdPendingActions/>}/>
+                                <Card title={"Total Edit request"} count={6} Icon={<FaEdit  />} />
+                                {/* <!-- Card --> */}
+                                
                             </div>
 
                             {/* <!--  Table --> */}
-                            <Instructortable />
+                            {/* <Instructortable /> */}
+                            <EditTable />
                             {/* <!-- Charts --> */}
 
 

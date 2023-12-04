@@ -43,13 +43,13 @@ export default function DashboardHome() {
               {/* <!-- Cards --> */}
               <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
                 {/* <!-- Card --> */}
-                <Card title={"total course"} count={6} Icon={<MdPendingActions/>} color={'green-500'}/>
+                <Card title={"Total course"} count={6} Icon={<MdPendingActions/>} color={'green-500'}/>
                 {/* <!-- Card --> */}
-                <Card title={"total course"} count={6} Icon={<MdPendingActions/>}/>
+                <Card title={"Total Students"} count={6} Icon={<MdPendingActions/>}/>
                 {/* <!-- Card --> */}
-                <Card title={"total course"} count={6} Icon={<MdPendingActions/>}/>
+                <Card title={"Total pending approvals"} count={6} Icon={<MdPendingActions/>}/>
                 {/* <!-- Card --> */}
-                <Card title={"total course"} count={6} Icon={<MdPendingActions/>}/>
+                <Card title={"Total course"} count={6} Icon={<MdPendingActions/>}/>
               </div>
 
               {/* <!--  Table --> */}
