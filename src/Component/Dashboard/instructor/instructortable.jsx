@@ -57,7 +57,7 @@ export default function Instructortable() {
                                                 ></div>
                                             </div>
                                             <div>
-                                                <p class="font-semibold">{instructor.first_name}</p>
+                                                <p class="font-semibold">{instructor.fname}</p>
                                                 <p class="text-xs text-gray-600 dark:text-gray-400">
                                                 {instructor.occupation}
                                                 </p>

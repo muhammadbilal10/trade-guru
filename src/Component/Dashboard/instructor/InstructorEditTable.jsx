@@ -5,22 +5,29 @@ import app from "../../../database/firebase";
 import { fetchUserData } from '../js file/instructor';
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
-import { Dialog } from '@headlessui/react'
 import EditModal from './EditModal';
-
+import DeleteModal from './deletemodal';
 
 export default function EditTable() {
 
-    const [isOpen, setIsOpen] = useState(false)
-    const [instructor, setInstructor] = useState([]);
+    const [IsEditOpen, setIsEditOpen] = useState(false)
+    const [IsDelOpen, setIsDelOpen] = useState(false)
+    const [user, setUser] = useState([]);
+    const [uid, setUid] = useState(null);
     const db = getFirestore(app);
 
     useEffect(() => {
-        fetchUserData(db,'Instructor').then((res) => {
-            setInstructor(res)
+        fetchUserData(db, 'Instructor').then((res) => {
+            setUser(res)
         })
-    },[]);
+    }, []);
 
+     // Function to handle delete button click
+     const handleDeleteClick = (userId) => {
+        console.log(userId);
+        setUid(userId); // Set the UID of the user to be deleted
+        setIsDelOpen(true); // Open the delete modal
+    };
 
     return (
         <>
@@ -46,7 +53,7 @@ export default function EditTable() {
                         <tbody
                             class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
                         >
-                            {instructor?.map((instructor) => (
+                            {user?.map((user) => (
                                 <tr class="text-gray-700 dark:text-gray-400">
                                     <td class="px-4 py-3">
                                         <div class="flex items-center text-sm">
@@ -66,15 +73,15 @@ export default function EditTable() {
                                                 ></div>
                                             </div>
                                             <div>
-                                                <p class="font-semibold">{instructor.fname}</p>
+                                                <p class="font-semibold">{user.fname}</p>
                                                 <p class="text-xs text-gray-600 dark:text-gray-400">
-                                                    10x Developer
+                                                    {user.occupation}
                                                 </p>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 text-sm">
-                                        $ 863.45
+                                        {user.totalCourse}
                                     </td>
                                     <td class="px-4 py-3 text-xs">
                                         <span
@@ -91,22 +98,26 @@ export default function EditTable() {
                                     <td class="px-4 py-3">
 
                                         <div class="flex items-center space-x-4 text-sm">
-                                           
+
                                             <button
                                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                                 aria-label="Edit"
-                                                onClick={()=> setIsOpen(true)}
+                                                onClick={() => setIsEditOpen(true)}
                                             >
-                                                
-                                                <FaEdit class="w-5 h-5"/>
+
+                                                <FaEdit class="w-5 h-5" />
 
                                             </button>
 
                                             <button
                                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                                 aria-label="Delete"
+                                                onClick={() => handleDeleteClick(user.id)}
+                                                key={user.id}
+                                                
                                             >
-                                                <MdDeleteOutline  class="w-5 h-5"/>
+                                                <MdDeleteOutline class="w-5 h-5" />
+
                                             </button>
                                         </div>
                                     </td>
@@ -189,7 +200,10 @@ export default function EditTable() {
                         </nav>
                     </span>
                 </div>
-                <EditModal isOpen={isOpen} setIsOpen={setIsOpen} />
+                <EditModal IsEditOpen={IsEditOpen} setIsEditOpen={setIsEditOpen} />
+                <DeleteModal IsDelOpen={IsDelOpen} setIsDelOpen={setIsDelOpen} id={uid} setId={setUid}  />
+                
+
             </div>
 
 

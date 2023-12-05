@@ -1,13 +1,12 @@
 import { useState } from 'react'
 import { Dialog } from '@headlessui/react'
 
-function EditModal({ isOpen, setIsOpen }) {
-  //let [isOpen, setIsOpen] = useState(true)
+function EditModal({ IsEditOpen, setIsEditOpen }) {
 
   return (
     <Dialog
-      open={isOpen}
-      onClose={() => setIsOpen(false)}
+      open={IsEditOpen}
+      onClose={() => setIsEditOpen(false)}
       className="relative z-50"
     >
       {/* The backdrop, rendered as a fixed sibling to the panel container */}
