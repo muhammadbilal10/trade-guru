@@ -18,6 +18,7 @@ export default function DeleteModal({ IsDelOpen, setIsDelOpen ,id, setId}) {
 
             // Delete the document
             await deleteDoc(documentRef);
+            window.location.reload();
 
             console.log(`Document with UID ${uid} deleted successfully!`);
         } catch (error) {
