@@ -22,12 +22,19 @@ export default function EditTable() {
         })
     }, []);
 
-     // Function to handle delete button click
-     const handleDeleteClick = (userId) => {
+    // Function to handle delete button click
+    const handleDeleteClick = (userId) => {
         console.log(userId);
         setUid(userId); // Set the UID of the user to be deleted
         setIsDelOpen(true); // Open the delete modal
     };
+    const handleEditClick = (userId) => {
+        console.log(userId);
+        setUid(userId); // Set the UID of the user to be deleted
+        setIsEditOpen(true); // Open the delete modal
+        setUser(user)
+    };
+
 
     return (
         <>
@@ -102,7 +109,8 @@ export default function EditTable() {
                                             <button
                                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                                 aria-label="Edit"
-                                                onClick={() => setIsEditOpen(true)}
+                                                onClick={() => handleEditClick(user.id,user)}
+                                                key={user.id}
                                             >
 
                                                 <FaEdit class="w-5 h-5" />
@@ -114,7 +122,7 @@ export default function EditTable() {
                                                 aria-label="Delete"
                                                 onClick={() => handleDeleteClick(user.id)}
                                                 key={user.id}
-                                                
+
                                             >
                                                 <MdDeleteOutline class="w-5 h-5" />
 
@@ -200,9 +208,9 @@ export default function EditTable() {
                         </nav>
                     </span>
                 </div>
-                <EditModal IsEditOpen={IsEditOpen} setIsEditOpen={setIsEditOpen} />
-                <DeleteModal IsDelOpen={IsDelOpen} setIsDelOpen={setIsDelOpen} id={uid} setId={setUid}  />
-                
+                <EditModal IsEditOpen={IsEditOpen} setIsEditOpen={setIsEditOpen} id={uid} setId={setUid} />
+                <DeleteModal IsDelOpen={IsDelOpen} setIsDelOpen={setIsDelOpen} id={uid} setId={setUid} data={user} setData={user} />
+
 
             </div>
 
