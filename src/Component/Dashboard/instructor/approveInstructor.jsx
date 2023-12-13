@@ -10,6 +10,7 @@ import Card from '../card';
 import { MdPendingActions } from "react-icons/md";
 import Instructortable from './instructortable';
 import EditTable from './InstructorEditTable';
+import ApprovalTable from './approvetable';
 
 
 
@@ -74,8 +75,7 @@ export default function ApproveInstructor() {
                                 <Card title={"Total pending approvals"} count={5} Icon={<MdPendingActions />} />
                                 <Card title={"Total Edit request"} count={6} Icon={<FaEdit />} />
                             </div>
-                            <EditTable />
-                            {/* <!-- Charts --> */}
+                            <ApprovalTable/>
 
 
                         </div>
