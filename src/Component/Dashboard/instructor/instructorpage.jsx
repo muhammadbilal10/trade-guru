@@ -46,7 +46,6 @@ export default function Instructorpage() {
                             <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                                 Admin Dashboard
                             </h2>
-                            {/* <!-- CTA --> */}
                             <a
                                 class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple"
                                 href=""
@@ -65,24 +64,13 @@ export default function Instructorpage() {
                                 </div>
                                 <span>View more &RightArrow;</span>
                             </a>
-                            {/* <!-- Cards --> */}
+
                             <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
-                                {/* <!-- Card --> */}
                                 <Card title={"Total Instructor"} count={count} Icon={<FaChalkboardTeacher />} color={'green-500'} />
-                                {/* <!-- Card --> */}
                                 <Card title={"Total pending approvals"} count={5} Icon={<MdPendingActions />} />
-                                {/* <!-- Card --> */}
                                 <Card title={"Total Edit request"} count={6} Icon={<FaEdit />} />
-                                {/* <!-- Card --> */}
-
                             </div>
-
-                            {/* <!--  Table --> */}
-                            {/* <Instructortable /> */}
                             <EditTable />
-                            {/* <!-- Charts --> */}
-
-
                         </div>
                     </main>
                 </div>
