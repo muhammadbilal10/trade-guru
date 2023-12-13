@@ -21,7 +21,7 @@ import Sidebar from "./Component/sidebar/Sidebar";
 import AddCourseForm from "./Component/course/AddCourseForm";
 import CourseOffer from "./Component/course/CourseOffer";
 import FileUpload from "./Component/Resources/ResourceUpload";
-
+import ApproveInstructor from "./Component/Dashboard/instructor/approveInstructor";
 const CourseRoutes = () => {
   return (
     <div className="bg-[#eaeef3] min-h-screen flex">
@@ -46,6 +46,10 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <DashboardHome />,
+  },
+  {
+    path: "/approveinstructor",
+    element: <ApproveInstructor />,
   },
   {
     path: "/signup",
