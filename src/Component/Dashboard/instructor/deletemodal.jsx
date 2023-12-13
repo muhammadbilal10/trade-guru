@@ -73,13 +73,9 @@ export default function DeleteModal({ IsDelOpen, setIsDelOpen ,id, setId}) {
                         </button>
                     </footer>
 
-
-
-
                     {/* ... */}
                 </Dialog.Panel >
             </div >
         </Dialog >
     )
 }
-
