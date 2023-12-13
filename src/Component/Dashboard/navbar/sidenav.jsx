@@ -91,7 +91,7 @@ export default function Sidenav() {
                     </li>
                   </Link>
 
-                  <Link to={'/instructorpage'}>
+                  <Link to={'/approveinstructor'}>
                     <li
                       class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                     >
