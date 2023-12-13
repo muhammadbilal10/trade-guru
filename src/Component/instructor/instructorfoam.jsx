@@ -12,6 +12,12 @@ export default function Instructorform() {
     const [lname, setLname] = useState('');
     const [gender, setGender] = useState('');
     const [lang, setLang] = useState('');
+    const [experiance, setExperiance] = useState('');
+    const [approval, setApproval] = useState(false);
+    const [about, setAbout] = useState('');
+    const [address, setAddress] = useState('');
+    const [count, setCount] = useState(0)
+
     const db = getFirestore(app);
     const handlesubmit = async () => {
         try {
@@ -20,9 +26,10 @@ export default function Instructorform() {
                 fname: fname,
                 lname: lname,
                 language: lang,
-                experiance: 15,
+                experiance: experiance,
                 gender: gender,
-                // occupasion: occupasion,
+                status: approval,
+                totalCourse: count
             };
             // Use addDoc to add the data without specifying a custom ID
             const docRef = await addDoc(collectionRef, data);
@@ -109,22 +116,12 @@ export default function Instructorform() {
                                     </select>
                                 </label>
 
-
-                                <label class="block mt-4 text-sm">
-                                    <span class="text-gray-700 dark:text-gray-400">Biography</span>
-                                    <textarea
-                                        class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                                        rows="3"
-                                        placeholder="Enter some long form content."
-                                    ></textarea>
-                                </label>
-
                                 <label class="block mt-4 text-sm">
                                     <span class="text-gray-700 dark:text-gray-400">
                                         Language
                                     </span>
                                     <select
-                                        class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                                        class="block w-full  py-2 mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
                                         required
                                         value={lang}
                                         onChange={(e) => { setLang(e.target.value) }}
@@ -135,6 +132,43 @@ export default function Instructorform() {
                                         <option>Arabic</option>
                                     </select>
                                 </label>
+
+                                <label class="block text-sm">
+                                    <span class="text-gray-700 dark:text-gray-400">Experiance</span>
+                                    <input
+                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                        placeholder=">0"
+                                        pattern="[0-9]{2}"
+                                        required
+                                        value={experiance}
+                                        onChange={(e) => { setExperiance(e.target.value) }}
+                                    />
+
+                                </label>
+
+                                <label class="block mt-4 text-sm">
+                                    <span class="text-gray-700 dark:text-gray-400">Adress</span>
+                                    <textarea
+                                        class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                                        rows="2"
+                                        placeholder="h#88, st#1 model city faislabad"
+                                        value={address}
+                                        onChange={(e) => { setAddress(e.target.value) }}
+                                    ></textarea>
+                                </label>
+
+
+                                <label class="block mt-4 text-sm">
+                                    <span class="text-gray-700 dark:text-gray-400">Write somthing about your self</span>
+                                    <textarea
+                                        class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                                        rows="3"
+                                        placeholder="Brifly explain about yourself"
+                                        value={about}
+                                        onChange={(e) => { setAbout(e.target.value) }}
+                                    ></textarea>
+                                </label>
+
 
                                 <div>
                                     <button
