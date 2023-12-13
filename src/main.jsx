@@ -47,10 +47,10 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: <DashboardHome />,
   },
-  {
-    path: "/approveinstructor",
-    element: <ApproveInstructor />,
-  },
+  // {
+  //   path: "/approveinstructor",
+  //   element: <ApproveInstructor />,
+  // },
   {
     path: "/signup",
     element: <TempSignup />,
