@@ -1,22 +1,17 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 import app from "../../../database/firebase";
-// import { fetchUserData } from '../js file/instructor';
 import { getFirestore,query, collection, where, getDocs } from 'firebase/firestore';
-import { FaEdit } from "react-icons/fa";
-import { MdDeleteOutline } from "react-icons/md";
-import EditModal from './EditModal';
-import DeleteModal from './deletemodal';
-
+import ApproveModal from './approvalModal';
+import { FcApproval } from "react-icons/fc";
 export default function ApprovalTable() {
 
-    const [IsEditOpen, setIsEditOpen] = useState(false)
-    const [IsDelOpen, setIsDelOpen] = useState(false)
+  
+    const [Open, setOpen] = useState(false)
     const [user, setUser] = useState(null);
-    const [currentuser, setCurrentUser] = useState(null);
     const [uid, setUid] = useState(null);
+   
     const db = getFirestore(app);
-
     useEffect(() => {
         // Assuming 'Instructor' is the name of your collection
         const collectionName = 'Instructor';
@@ -36,18 +31,12 @@ export default function ApprovalTable() {
         };
     
         fetchData();
-    }, [db]);
+    }, []);
 
-    // Function to handle delete button click
-    const handleDeleteClick = (userId) => {
-        console.log(userId);
-        setUid(userId); // Set the UID of the user to be deleted
-        setIsDelOpen(true); // Open the delete modal
-    };
-    const handleEditClick = (cuser) => {
-        console.log(cuser);
-        setCurrentUser(cuser);
-        setIsEditOpen(true);
+    const handleClick = (id) => {
+        console.log(id);
+        setUid(id);
+        setOpen(true);
     };
 
 
@@ -68,7 +57,7 @@ export default function ApprovalTable() {
                                 <th class="px-4 py-3">Name</th>
                                 <th class="px-4 py-3">total course</th>
                                 <th class="px-4 py-3">Status</th>
-                                <th class="px-4 py-3">Date</th>
+                                <th class="px-4 py-3">Request Date</th>
                                 <th class="px-4 py-3">Actions</th>
                             </tr>
                         </thead>
@@ -116,7 +105,7 @@ export default function ApprovalTable() {
                                         </span>
                                     </td>
                                     <td class="px-4 py-3 text-sm">
-                                        6/10/2020
+                                    {user.date}
                                     </td>
 
 
@@ -127,24 +116,13 @@ export default function ApprovalTable() {
                                             <button
                                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                                 aria-label="Edit"
-                                                onClick={() => handleEditClick(user)}
                                                 key={user.id}
+                                                onClick={() => handleClick(user.id)}
                                             >
 
-                                                <FaEdit class="w-5 h-5" />
+                                                <FcApproval class="w-5 h-5" />
 
-                                            </button>
-
-                                            <button
-                                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                                                aria-label="Delete"
-                                                onClick={() => handleDeleteClick(user.id)}
-                                                key={user.id}
-
-                                            >
-                                                <MdDeleteOutline class="w-5 h-5" />
-
-                                            </button>
+                                            </button>  
                                         </div>
                                     </td>
                                 </tr>
@@ -226,11 +204,11 @@ export default function ApprovalTable() {
                         </nav>
                     </span>
                 </div>
-                {
-                    IsEditOpen &&
-                    <EditModal IsEditOpen={IsEditOpen} setIsEditOpen={setIsEditOpen} user={currentuser} />
-                }
-                <DeleteModal IsDelOpen={IsDelOpen} setIsDelOpen={setIsDelOpen} id={uid} setId={setUid} data={user} setData={user} />
+              {
+                
+                <ApproveModal IsOpen={Open} setIsOpen={setOpen} id={uid} setId={setUid} />
+              }
+                
 
 
             </div>

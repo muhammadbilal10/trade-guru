@@ -5,7 +5,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { collection, addDoc } from 'firebase/firestore';
 import { useState } from "react";
 import app from '../../database/firebase';
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, Timestamp } from "firebase/firestore";
 export default function Instructorform() {
 
     const [fname, setFname] = useState('');
@@ -22,14 +22,20 @@ export default function Instructorform() {
     const handlesubmit = async () => {
         try {
             const collectionRef = collection(db, "Instructor");
+            // Create a document with a date field in the desired format
+            const currentDate = new Date();
+            const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`;
+
             const data = {
+                
                 fname: fname,
                 lname: lname,
                 language: lang,
                 experiance: experiance,
                 gender: gender,
                 status: approval,
-                totalCourse: count
+                totalCourse: count,
+                date: formattedDate,
             };
             // Use addDoc to add the data without specifying a custom ID
             const docRef = await addDoc(collectionRef, data);
