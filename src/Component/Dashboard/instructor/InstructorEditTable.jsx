@@ -12,7 +12,8 @@ export default function EditTable() {
 
     const [IsEditOpen, setIsEditOpen] = useState(false)
     const [IsDelOpen, setIsDelOpen] = useState(false)
-    const [user, setUser] = useState([]);
+    const [user, setUser] = useState(null);
+    const [currentuser, setCurrentUser] = useState(null);
     const [uid, setUid] = useState(null);
     const db = getFirestore(app);
 
@@ -28,11 +29,10 @@ export default function EditTable() {
         setUid(userId); // Set the UID of the user to be deleted
         setIsDelOpen(true); // Open the delete modal
     };
-    const handleEditClick = (userId) => {
-        console.log(userId);
-        setUid(userId); // Set the UID of the user to be deleted
-        setIsEditOpen(true); // Open the delete modal
-        setUser(user)
+    const handleEditClick = (cuser) => {
+        console.log(cuser);
+        setCurrentUser(cuser);
+        setIsEditOpen(true);
     };
 
 
@@ -82,7 +82,7 @@ export default function EditTable() {
                                             <div>
                                                 <p class="font-semibold">{user.fname}</p>
                                                 <p class="text-xs text-gray-600 dark:text-gray-400">
-                                                    {user.occupation}
+                                                    {user.experiance}
                                                 </p>
                                             </div>
                                         </div>
@@ -91,10 +91,13 @@ export default function EditTable() {
                                         {user.totalCourse}
                                     </td>
                                     <td class="px-4 py-3 text-xs">
-                                        <span
-                                            class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"
+                                    <span
+                                            className={`px-2 py-1 font-semibold leading-tight rounded-full ${user.status
+                                                ? 'text-green-700 bg-green-100 dark:bg-green-700 dark:text-green-100'
+                                                : 'text-red-700 bg-red-100 dark:bg-red-700 dark:text-red-100'
+                                                }`}
                                         >
-                                            Approved
+                                            {user.status ? 'approved' : 'not approved'}
                                         </span>
                                     </td>
                                     <td class="px-4 py-3 text-sm">
@@ -109,7 +112,7 @@ export default function EditTable() {
                                             <button
                                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                                 aria-label="Edit"
-                                                onClick={() => handleEditClick(user.id,user)}
+                                                onClick={() => handleEditClick(user)}
                                                 key={user.id}
                                             >
 
@@ -208,7 +211,10 @@ export default function EditTable() {
                         </nav>
                     </span>
                 </div>
-                <EditModal IsEditOpen={IsEditOpen} setIsEditOpen={setIsEditOpen} id={uid} setId={setUid} />
+                {
+                    IsEditOpen &&
+                    <EditModal IsEditOpen={IsEditOpen} setIsEditOpen={setIsEditOpen} user={currentuser} />
+                }
                 <DeleteModal IsDelOpen={IsDelOpen} setIsDelOpen={setIsDelOpen} id={uid} setId={setUid} data={user} setData={user} />
 
 
