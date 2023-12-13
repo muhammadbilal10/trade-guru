@@ -18,4 +18,3 @@ export const fetchUserData = async (db,table) => {
 
 
 
-
