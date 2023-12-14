@@ -47,6 +47,7 @@ export default function Signup() {
                     id: uid,
                     phn: phn,
                     occupation : profession,
+                    
                 });
 
                 console.log('Document added with custom ID: ', customDocId);

@@ -36,6 +36,9 @@ export default function Instructorform() {
                 status: approval,
                 totalCourse: count,
                 date: formattedDate,
+                id:docRef.id,
+            
+                
             };
             // Use addDoc to add the data without specifying a custom ID
             const docRef = await addDoc(collectionRef, data);
