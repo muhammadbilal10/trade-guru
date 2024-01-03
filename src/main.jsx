@@ -81,7 +81,7 @@ const router = createBrowserRouter([
     element: <CourseRegistration />,
   },
   {
-    path: "/instructoform",
+    path: "/instructorform",
     element: <Instructorform />,
     // element: <Login/>,
   },

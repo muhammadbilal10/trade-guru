@@ -26,6 +26,7 @@ export default function Navbar() {
                         <button className="border rounded-md px-4 py-1 border-white hover:bg-white hover:text-blue-900 transition duration-300">Signup</button>
                     </Link>
                     <Link to={'/instructorform'}>
+                        
                         <button className="border rounded-md px-4 py-1 border-white hover:bg-white hover:text-blue-900 transition duration-300">Become Instructor</button>
                     </Link>
                 </div>
