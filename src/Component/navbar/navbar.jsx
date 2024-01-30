@@ -15,8 +15,10 @@ export default function Navbar() {
                     <Link to={'/Regesteration'}><button className="hover:scale-110 transform transition duration-300">Registration</button></Link>
                     <Link to={'/dashboard'}><button className="hover:scale-110 transform transition duration-300">Dashboard</button></Link>
                     <Link to={'/Makepayment'}><button className="hover:scale-110 transform transition duration-300">Make Payemnt</button></Link>
-                    <button className="hover:scale-110 transform transition duration-300">Stocks</button>
-                    <button className="hover:scale-110 transform transition duration-300">Portfolio</button>
+                    <Link to={'/terminal'}><button className="hover:scale-110 transform transition duration-300">Stocks</button></Link>
+                    <Link to={'/portfolio_main_page'}><button className="hover:scale-110 transform transition duration-300">Portfolio</button></Link>
+
+                
                 </div>
                 <div className="flex items-center space-x-4">
                     <Link to={'/login'}>

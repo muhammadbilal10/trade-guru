@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import app from "../../database/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import Cookies from 'universal-cookie';
 
 export default function TempLogin() {
     const [error, setError] = useState({
@@ -16,11 +17,11 @@ export default function TempLogin() {
     const [isLoggedIn, setIsLoggedIn] = useState(null);
     const navigate = useNavigate();
     const auth = getAuth(app);
-
+    const cookies = new Cookies();
     const handleLogin = () => {
         setError({
-            status : false,
-            message : 'Invalid Password!'
+            status: false,
+            message: 'Invalid Password!'
         })
         if (email == "admin@gmail.com" && password == "admin") {
             navigate("/dashboard");
@@ -31,16 +32,20 @@ export default function TempLogin() {
                 .then((userCredential) => {
                     // Signed in 
                     const user = userCredential.user;
+                    const uid = user.uid;
                     console.log(user);
                     setIsLoggedIn(true);
+                    
+                    cookies.set('uid', uid);
+                    console.log(cookies.get('uid')); 
                     navigate("/");
                     // ...
                 })
                 .catch((error) => {
                     console.log("wrong password");
                     setError({
-                        status : true,
-                        message : 'Invalid Password!'
+                        status: true,
+                        message: 'Invalid Password!'
                     })
                     const errorCode = error.code;
                     const errorMessage = error.message;

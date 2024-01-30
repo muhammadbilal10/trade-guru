@@ -22,6 +22,9 @@ import AddCourseForm from "./Component/course/AddCourseForm";
 import CourseOffer from "./Component/course/CourseOffer";
 import FileUpload from "./Component/Resources/ResourceUpload";
 import ApproveInstructor from "./Component/Dashboard/instructor/approveInstructor";
+import Chart from "./Component/Charts/chart";
+import Terminal from "./Component/terminal/terminal";
+import Portfolio_Main_Page from "./Component/Portfolio/portfolio_main_page";
 const CourseRoutes = () => {
   return (
     <div className="bg-[#eaeef3] min-h-screen flex">
@@ -75,7 +78,6 @@ const router = createBrowserRouter([
       </>
     ),
   },
-
   {
     path: "/Regesteration",
     element: <CourseRegistration />,
@@ -83,8 +85,15 @@ const router = createBrowserRouter([
   {
     path: "/instructorform",
     element: <Instructorform />,
-    // element: <Login/>,
   },
+  {
+    path: "/terminal",
+    element: <Terminal />,
+  },
+{
+  path:'/portfolio_main_page',
+  element:<Portfolio_Main_Page/>,
+}
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
