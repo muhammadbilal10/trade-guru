@@ -6,7 +6,7 @@ export default function OverviewCard() {
         <>
             <div className="p-6">
 
-                <div className="bg-white shadow-md p-6 rounded-lg w-80">
+                <div className="bg-gray-50 shadow-md p-6 rounded-lg w-80">
                     <div className="text-lg font-semibold mb-2">Account Summary</div>
 
                     <div className="mb-2 ">
