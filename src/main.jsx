@@ -4,7 +4,8 @@ import { Routes, Route } from "react-router-dom";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import "alpinejs";
-
+import Temp_page from "./Component/Portfolio/temp";
+import Payment from "./Component/payment/payment";
 import Navbar from "./Component/navbar/navbar";
 import Login from "./Component/login/login";
 import Signup from "./Component/signup/signup";
@@ -93,6 +94,15 @@ const router = createBrowserRouter([
 {
   path:'/portfolio_main_page',
   element:<Portfolio_Main_Page/>,
+},
+
+{
+  path:'/temp_page',
+  element:<Temp_page/>,
+},
+{
+  path:'/payment_main_page',
+  element:<Payment/>,
 }
 ]);
 
