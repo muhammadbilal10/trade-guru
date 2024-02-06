@@ -11,7 +11,7 @@ export default function Payment() {
 
             <Navbar />
 
-            (
+            
             <div className="bg-purple-200 p-8">
                 <h1 className="text-6xl font-bold mb-6 text-center">Secure Payment Information</h1>
 

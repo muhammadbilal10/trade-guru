@@ -6,8 +6,8 @@ import Cookies from 'universal-cookie';
 export default function Home() {
 
     const cookies = new Cookies();
-    console.log(cookies.get('uid')); 
-    console.log(cookies.get('uid')); 
+    console.log(cookies.get('uid'));
+    console.log(cookies.get('uid'));
     return (
         <div className="bg-gradient-to-r from-purple-600 to-blue-900 min-h-screen flex flex-col text-white">
             <Navbar />
