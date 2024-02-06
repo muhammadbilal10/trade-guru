@@ -1,15 +1,82 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from "../navbar/navbar";
 import Optionbar from "./optionbar";
+import app from '../../database/firebase';
+import { getFirestore } from "firebase/firestore";
+import { collection, addDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 const Temp_page = () => {
+
+  const data = [
+    { symbol: 'AAPL', quantity: 10, purchase_price: 150, purchase_date: new Date() },
+    { symbol: 'GOOGL', quantity: 5, purchase_price: 2800, purchase_date: new Date() }
+  ];
+  const [symbol, setSymbol] = useState('');
+  const [quantity, setQuantity] = useState('');
+
+
+  const [userId, setUserId] = useState('RvITOTp9JrsehfH8iGcq');
+  const db = getFirestore(app);
+
+  const handlesubmit = async () => {
+    try {
+      const userDocRef = doc(db, "portfolio", userId);
+
+      // Check if the user document exists
+      const userDocSnap = await getDoc(userDocRef);
+
+      if (!userDocSnap.exists()) {
+        // If the user document doesn't exist, create a new document with the provided user ID
+        await setDoc(userDocRef, { transactions: [] });
+      }
+
+      const newTransaction = {
+        symbol: 'syml',
+        quantity: 745,
+        // date: date,
+        price: 5
+      };
+      // Add the new transaction to the existing or newly created transactions array
+      if (userDocSnap.exists()) {
+        // If the document exists, update it by adding the new transaction to the 'transactions' array
+        await updateDoc(userDocRef, {
+          transactions: [...userDocSnap.data().transactions, newTransaction]
+        });
+      } else {
+        // If the document didn't exist and has just been created, set the 'transactions' array with the new transaction
+        await setDoc(userDocRef, { transactions: [newTransaction] });
+      }
+
+      console.log('Transaction added successfully to user portfolio:', userId);
+    } catch (error) {
+      console.error('Error adding transaction:', error.message);
+    }
+  };
+
 
   return (
     <>
 
       <Navbar />
       <Optionbar />
-      {/* <button onClick={addOrUpdatePortfolio(userId, portfolioData)}>click me to test database</button> */}
+      <div>
+        <h2>Add Stock to Portfolio</h2>
+        <input
+          type="text"
+          placeholder="Symbol"
+          value={symbol}
+          onChange={(e) => setSymbol(e.target.value)}
+        />
+        <input
+          type="number"
+          placeholder="Quantity"
+          value={quantity}
+          onChange={(e) => setQuantity(e.target.value)}
+        />
+        <button onClick={handlesubmit}>Add Stock</button>
+      </div>
+      {/* <button onClick={handlesubmit}>click me to test database</button> */}
 
 
       <div class="flex flex-col">
