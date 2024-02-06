@@ -25,6 +25,7 @@ import ApproveInstructor from "./Component/Dashboard/instructor/approveInstructo
 import Chart from "./Component/Charts/chart";
 import Terminal from "./Component/terminal/terminal";
 import Portfolio_Main_Page from "./Component/Portfolio/portfolio_main_page";
+import Temp_page from "./Component/Portfolio/temp";
 const CourseRoutes = () => {
   return (
     <div className="bg-[#eaeef3] min-h-screen flex">
@@ -93,6 +94,11 @@ const router = createBrowserRouter([
 {
   path:'/portfolio_main_page',
   element:<Portfolio_Main_Page/>,
+}
+,
+{
+  path:'/temp_page',
+  element:<Temp_page/>,
 }
 ]);
 
