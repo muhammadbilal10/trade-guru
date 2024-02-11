@@ -63,8 +63,10 @@ export default function Portfolio_Main_Page() {
 
     
     const getprice = async () => {
-        const response = await fetch(`http://localhost:8000/current_price/${symbol}`);
+        const response = await fetch(`http://127.0.0.1:8000/current_price/${symbol}`);
+        // console.log(response);
         const data = await response.json();
+        // console.log(data);
         setPrice(data);
 
     };

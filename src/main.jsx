@@ -4,7 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import "alpinejs";
-import Temp_page from "./Component/Portfolio/temp";
+import Positions_page from "./Component/Portfolio/temp";
 import Payment from "./Component/payment/payment";
 import Navbar from "./Component/navbar/navbar";
 import Login from "./Component/login/login";
@@ -26,7 +26,7 @@ import ApproveInstructor from "./Component/Dashboard/instructor/approveInstructo
 import Chart from "./Component/Charts/chart";
 import Terminal from "./Component/terminal/terminal";
 import Portfolio_Main_Page from "./Component/Portfolio/portfolio_main_page";
-import Temp_page from "./Component/Portfolio/temp";
+import Trade from "./Component/Portfolio/trade_page";
 const CourseRoutes = () => {
   return (
     <div className="bg-[#eaeef3] min-h-screen flex">
@@ -98,18 +98,22 @@ const router = createBrowserRouter([
 },
 
 {
-  path:'/temp_page',
-  element:<Temp_page/>,
+  path:'/trade',
+  element:<Trade/>,
+},
+{
+  path:'/positions_page',
+  element:<Positions_page/>,
 },
 {
   path:'/payment_main_page',
   element:<Payment/>,
 }
-,
-{
-  path:'/temp_page',
-  element:<Temp_page/>,
-}
+// ,
+// {
+//   path:'/temp_page',
+//   element:<Temp_page/>,
+// }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

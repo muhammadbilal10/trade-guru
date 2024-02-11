@@ -6,7 +6,7 @@ import { getFirestore } from "firebase/firestore";
 import { collection, addDoc } from 'firebase/firestore';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
-const Temp_page = () => {
+const Positions_page = () => {
 
   const data = [
     { symbol: 'AAPL', quantity: 10, purchase_price: 150, purchase_date: new Date() },
@@ -15,85 +15,67 @@ const Temp_page = () => {
   const [symbol, setSymbol] = useState('');
   const [quantity, setQuantity] = useState('');
 
+  const getprice = async (symbol) => {
+    const response = await fetch(`http://127.0.0.1:8000/current_price/${symbol}`);
+    const data = await response.json();
+    return data;
 
-  const [userId, setUserId] = useState('RvITOTp9JrsehfH8iGcq');
-  const db = getFirestore(app);
-
-  const handlesubmit = async () => {
-    try {
-      const userDocRef = doc(db, "portfolio", userId);
-
-      // Check if the user document exists
-      const userDocSnap = await getDoc(userDocRef);
-
-      if (!userDocSnap.exists()) {
-        // If the user document doesn't exist, create a new document with the provided user ID
-        await setDoc(userDocRef, { transactions: [] });
-      }
-
-      const newTransaction = {
-        symbol: 'syml',
-        quantity: 745,
-        // date: date,
-        price: 5
-      };
-      // Add the new transaction to the existing or newly created transactions array
-      if (userDocSnap.exists()) {
-        // If the document exists, update it by adding the new transaction to the 'transactions' array
-        await updateDoc(userDocRef, {
-          transactions: [...userDocSnap.data().transactions, newTransaction]
-        });
-      } else {
-        // If the document didn't exist and has just been created, set the 'transactions' array with the new transaction
-        await setDoc(userDocRef, { transactions: [newTransaction] });
-      }
-
-      console.log('Transaction added successfully to user portfolio:', userId);
-    } catch (error) {
-      console.error('Error adding transaction:', error.message);
-    }
   };
+  // const [userId, setUserId] = useState('RvITOTp9JrsehfH8iGcq');
+  const [userId, setUserId] = useState('QnX0VHVG9AQXldtoyV2PgTmvW422');
+  const db = getFirestore(app);
+  const [transactions, setTransactions] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userDocRef = doc(db, "portfolio", userId);
+        const userDocSnap = await getDoc(userDocRef);
 
+        if (userDocSnap.exists()) {
+          setTransactions(userDocSnap.data().transactions || []);
+        } else {
+          console.error('User document not found');
+        }
+      } catch (error) {
+        console.error('Error fetching user portfolio data:', error.message);
+      }
+    };
+
+    fetchData();
+  }, [userId]);
 
   return (
     <>
 
       <Navbar />
       <Optionbar />
-      <div>
-        <h2>Add Stock to Portfolio</h2>
-        <input
-          type="text"
-          placeholder="Symbol"
-          value={symbol}
-          onChange={(e) => setSymbol(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Quantity"
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
-        />
-        <button onClick={handlesubmit}>Add Stock</button>
-      </div>
-      {/* <button onClick={handlesubmit}>click me to test database</button> */}
 
-
-      <div class="flex flex-col">
+      <div class="bg-slate-100 flex flex-col">
         <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
             <div class="overflow-hidden">
               <table class="min-w-full text-left text-sm font-light">
                 <thead class="border-b bg-purple-600 font-medium text-white  dark:border-neutral-500">
                   <tr>
+                    {/* asset share price current price dy chag  */}
                     <th scope="col" class="px-6 py-4">#</th>
-                    <th scope="col" class="px-6 py-4">First</th>
-                    <th scope="col" class="px-6 py-4">Last</th>
-                    <th scope="col" class="px-6 py-4">Handle</th>
+                    <th scope="col" class="px-6 py-4">Symbol</th>
+                    <th scope="col" class="px-6 py-4">shares</th>
+                    <th scope="col" class="px-6 py-4">price</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr
+                  {transactions.map((transaction, index) => (
+                    <tr
+                    class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600" 
+                    key={index}>
+                      <td class="whitespace-nowrap px-6 py-4 font-medium">{index+1}</td>
+                      <td class="whitespace-nowrap px-6 py-4">{transaction.symbol}</td>
+                      <td class="whitespace-nowrap px-6 py-4">{transaction.quantity}</td>
+                      <td class="whitespace-nowrap px-6 py-4">{transaction.price}</td>
+                    </tr>
+                  ))}
+                  {/* <tr
                     class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600">
                     <td class="whitespace-nowrap px-6 py-4 font-medium">1</td>
                     <td class="whitespace-nowrap px-6 py-4">Mark</td>
@@ -113,13 +95,20 @@ const Temp_page = () => {
                     <td class="whitespace-nowrap px-6 py-4">Larry</td>
                     <td class="whitespace-nowrap px-6 py-4">Wild</td>
                     <td class="whitespace-nowrap px-6 py-4">@twitter</td>
-                  </tr>
+                  </tr> */}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
+      <section class="w-2/12 bg-blue-300 overflow-y-auto flex flex-col justify-end">
+        <button class="p-2 bg-green-500">BUY</button>
+        <button class="p-2 bg-red-700">SELL</button>
+        <button class="p-2 bg-orange-500">SHORT</button>
+      </section>
+
+
 
     </>
 
@@ -131,4 +120,4 @@ const Temp_page = () => {
 
 
 
-export default Temp_page;
+export default Positions_page;
