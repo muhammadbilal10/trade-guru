@@ -69,7 +69,16 @@ export default function Portfolio_Main_Page() {
         // console.log(data);
         setPrice(data);
 
-    };
+     }
+
+    // const getchange = async () => {
+    //     const response = await fetch(`http://127.0.0.1:8000/current_price_change/${symbol}`);
+    //     // console.log(response);
+    //     const data = await response.json();
+    //      console.log(data);
+    //     setPrice(25);
+
+    // };
 
 
     return (

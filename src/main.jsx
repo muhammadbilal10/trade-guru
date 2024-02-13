@@ -23,7 +23,6 @@ import AddCourseForm from "./Component/course/AddCourseForm";
 import CourseOffer from "./Component/course/CourseOffer";
 import FileUpload from "./Component/Resources/ResourceUpload";
 import ApproveInstructor from "./Component/Dashboard/instructor/approveInstructor";
-import Chart from "./Component/Charts/chart";
 import Terminal from "./Component/terminal/terminal";
 import Portfolio_Main_Page from "./Component/Portfolio/portfolio_main_page";
 import Trade from "./Component/Portfolio/trade_page";
