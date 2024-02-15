@@ -12,7 +12,7 @@ export default function Instructorform() {
     const [lname, setLname] = useState('');
     const [gender, setGender] = useState('');
     const [lang, setLang] = useState('');
-    const [experiance, setExperiance] = useState('');
+    const [experience, setExperience] = useState('');
     const [approval, setApproval] = useState(false);
     const [about, setAbout] = useState('');
     const [address, setAddress] = useState('');
@@ -27,18 +27,18 @@ export default function Instructorform() {
             const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`;
 
             const data = {
-                
+
                 fname: fname,
                 lname: lname,
                 language: lang,
-                experiance: experiance,
+                experiance: experience,
                 gender: gender,
                 status: approval,
                 totalCourse: count,
                 date: formattedDate,
                 //id:docRef.id,
-            
-                
+
+
             };
             // Use addDoc to add the data without specifying a custom ID
             const docRef = await addDoc(collectionRef, data);
@@ -52,7 +52,10 @@ export default function Instructorform() {
 
 
     return (
+
+
         <>
+        
             <Navbar />
             <div class="flex h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden': isSideMenuOpen "
                 onSubmit={(e) => e.preventDefault()}>
@@ -149,8 +152,8 @@ export default function Instructorform() {
                                         placeholder=">0"
                                         pattern="[0-9]{2}"
                                         required
-                                        value={experiance}
-                                        onChange={(e) => { setExperiance(e.target.value) }}
+                                        value={experience}
+                                        onChange={(e) => { setExperience(e.target.value) }}
                                     />
 
                                 </label>
@@ -200,5 +203,17 @@ export default function Instructorform() {
 
 
         </>
+
     )
 }
+
+
+
+
+
+
+
+
+
+
+

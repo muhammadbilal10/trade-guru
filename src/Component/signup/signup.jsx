@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "../navbar/navbar";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
@@ -7,172 +8,263 @@ import app from "../../database/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
+import Cookies from 'universal-cookie';
 
 
 export default function Signup() {
 
-    const [fname, setFname] = useState('');
-    const [lname, setLname] = useState('');
-    const [phn, setPhn] = useState('');
-    const [profession , setProfession ] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [fname, setFname] = useState(null);
+    const [lname, setLname] = useState(null);
+    const [email, setEmail] = useState();
+    const [gender, setGender] = useState(null);
+    const [uid, setUid] = useState(null);
+    const [occupasion, setOccupasion] = useState(null);
+    const [profilePicture, setProfilePicture] = useState(null);
+    const [socialMedia, setSocialMedia] = useState([null]);
+    const [password, setPassword] = useState(null);
+    const [confirm_pass, setConfirm_pass] = useState(null);
+
+    const cookies = new Cookies();
     const navigate = useNavigate();
 
     const auth = getAuth(app);
     const db = getFirestore(app);
-    const handlesignup = () => {
 
+    const addNewDocument = async (uid) => {
+        try {
+            const collectionRef = doc(db, "User", uid);
+            await setDoc(collectionRef, {
+                fname: fname,
+                lname: lname,
+                email: email,
+                gender: gender,
+                uid: uid,
+                occupasion: occupasion,
+                profilePicture: profilePicture,
+                socialMedia: socialMedia,
+                isInstructor: false
+            });
+
+            console.log('Document added with UID: ', uid);
+        } catch (error) {
+            console.error('Error adding document: ', error);
+        }
+    }
+
+
+    const validateSignUp = () => {
+        // Check if email is valid
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            console.error('Invalid email address');
+            return false;
+        }
+
+        if (password !== confirm_pass) {
+            console.error('Password and confirm password do not match');
+            return false;
+        }
+        return true;
+    }
+
+    const handlesignup = () => {
+        if (!validateSignUp()) {
+            return;
+        }
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
                 console.log(user);
                 const uid = user.uid;
+                setUid(uid);
                 addNewDocument(uid);
+                cookies.set('userId', uid);
+                cookies.set('isAuthorized', 'true');
                 navigate("/");
-                // ...
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
+                console.error('Error signing up: ', errorMessage);
             });
-
-        const addNewDocument = async (uid) => {
-            try {
-                const collectionRef = doc(db, "User", uid);
-                await setDoc(collectionRef, {
-                    first_name: fname,
-                    last_name: lname,
-                    email: email,
-                    id: uid,
-                    phn: phn,
-                    occupation : profession,
-                    
-                });
-
-                console.log('Document added with custom ID: ', customDocId);
-            } catch (error) {
-                console.error('Error adding document with custom ID: ', error);
-            }
-        }
-
-
     }
+
 
     return (
         <>
             <Navbar />
-            <form className="bg-white w-1/2  rounded-lg px-6 py-8 mx-auto shadow-lg " onSubmit={(e) => e.preventDefault()}>
-                <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
-                    Fill the form
-                </h1>
-                <div class="relative z-0 w-full mb-6 group">
-                    <input type="email"
-                        name="floating_email"
-                        id="floating_email"
-                        class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" "
-                        required
-                        value={email}
-                        onChange={(e) => { setEmail(e.target.value) }} />
-                    <label for="floating_email"
-                        class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" >Email address</label>
-                </div>
-                <div class="relative z-0 w-full mb-6 group">
-                    <input type="password"
-                        name="floating_password"
-                        id="floating_password"
-                        class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" "
-                        required
-                        value={password}
-                        onChange={(e) => { setPassword(e.target.value) }} />
-                    <label for="floating_password" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" >
-                        Password</label>
-                </div>
-                <div class="relative z-0 w-full mb-6 group">
-                    <input
-                        type="password"
-                        name="repeat_password"
-                        id="floating_repeat_password"
-                        class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" " required />
-                    <label
-                        for="floating_repeat_password"
-                        class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                        Confirm password</label>
-                </div>
-                <div class="grid md:grid-cols-2 md:gap-6">
-                    <div class="relative z-0 w-full mb-6 group">
-                        <input
-                            type="text"
-                            name="floating_first_name"
-                            id="floating_first_name"
-                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder=" "
-                            required 
-                            value={fname}
-                            onChange={(e) => { setFname(e.target.value) }}/>
-                        <label
-                            for="floating_first_name"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                            First name
-                        </label>
-                    </div>
-                    <div class="relative z-0 w-full mb-6 group">
-                        <input type="text"
-                            name="floating_last_name"
-                            id="floating_last_name"
-                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder=" "
-                            required 
-                            value={lname}
-                            onChange={(e) => { setLname(e.target.value) }}/>
-                        <label
-                            for="floating_last_name"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                            Last name
-                        </label>
-                    </div>
-                </div>
-                <div class="grid md:grid-cols-2 md:gap-6">
-                    <div class="relative z-0 w-full mb-6 group">
-                        <input type="tel"
-                            pattern="[0-9]{4}-[0-9]{7}"
-                            name="floating_phone"
-                            id="floating_phone"
-                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder=" " 
-                            required 
-                            value={phn}
-                            onChange={(e) => { setPhn(e.target.value) }}/>
-                        <label
-                            for="floating_phone"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                            Phone number (03xx-xxxxxxx)
-                        </label>
-                    </div>
-                    <div class="relative z-0 w-full mb-6 group">
-                        <input type="text"
-                            name="floating_company"
-                            id="floating_company"
-                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder=" "
-                            required 
-                            value={profession}
-                            onChange={(e) => { setProfession(e.target.value) }}/>
-                        <label for="floating_company"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                            Company (Ex. Google)
-                        </label>
-                    </div>
-                </div>
-                <button type="submit"
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    onClick={handlesignup}>Submit
-                </button>
-            </form>
+            <div class="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900"
+                onSubmit={(e) => e.preventDefault()}>
+                <div
+                    class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800"
+                >
+                    <div class="flex flex-col overflow-y-auto md:flex-row">
+                        <div class="h-32 md:h-auto md:w-1/2">
+                            <img
+                                aria-hidden="true"
+                                class="object-cover w-full h-full dark:hidden"
+                                src="/assets/img/create-account-office.jpeg"
+                                alt="Office"
+                            />
+                            <img
+                                aria-hidden="true"
+                                class="hidden object-cover w-full h-full dark:block"
+                                src="/assets/img/create-account-office-dark.jpeg"
+                                alt="Office"
+                            />
+                        </div>
+                        <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
+                            <div class="w-full">
+                                <h1
+                                    class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200"
+                                >
+                                    Create account
+                                </h1>
+                                {/* first name */}
+                                <label class="block text-sm">
+                                    <span class="text-gray-700 dark:text-gray-400">first name</span>
+                                    <input
+                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                        placeholder="xyz"
+                                        required
+                                        value={fname}
+                                        onChange={(e) => { setFname(e.target.value) }}
+                                    />
+                                </label>
+                                {/* last name */}
+                                <label class="block text-sm">
+                                    <span class="text-gray-700 dark:text-gray-400">last name</span>
+                                    <input
+                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                        placeholder="xyz"
+                                        required
+                                        value={lname}
+                                        onChange={(e) => { setLname(e.target.value) }}
+                                    />
+                                </label>
+                                {/* setGender */}
+                                <label class="block text-sm">
+                                    <span class="text-gray-700 dark:text-gray-400">Gender</span>
+                                    <select
+                                        className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                        required
+                                        value={gender}
+                                        onChange={(e) => {
+                                            const selectedValue = e.target.value === "null" ? null : e.target.value;
+                                            setGender(selectedValue);
+                                        }}
+                                    >
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="null">Not to answer</option>
+                                    </select>
+                                </label>
 
+                                <label class="block text-sm">
+                                    <span class="text-gray-700 dark:text-gray-400">Email</span>
+                                    <input
+                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                        placeholder="xyz@gmail.com"
+                                        required
+                                        value={email}
+                                        onChange={(e) => { setEmail(e.target.value) }}
+                                    />
+                                </label>
+                                <label class="block mt-4 text-sm">
+                                    <span class="text-gray-700 dark:text-gray-400">Password</span>
+                                    <input
+                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                        placeholder="***************"
+                                        type="password"
+                                        required
+                                        value={password}
+                                        onChange={(e) => { setPassword(e.target.value) }}
+                                    />
+                                </label>
+                                <label class="block mt-4 text-sm">
+                                    <span class="text-gray-700 dark:text-gray-400">
+                                        Confirm password
+                                    </span>
+                                    <input
+                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                        placeholder="***************"
+                                        type="password"
+                                        required
+                                        value={confirm_pass}
+                                        onChange={(e) => { setConfirm_pass(e.target.value) }}
+                                    />
+                                </label>
+
+                                <div class="flex mt-6 text-sm">
+                                    <label class="flex items-center dark:text-gray-400">
+                                        <input
+                                            type="checkbox"
+                                            class="text-purple-600 form-checkbox focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                                        />
+                                        <span class="ml-2">
+                                            I agree to the
+                                            <span class="underline">privacy policy</span>
+                                        </span>
+                                    </label>
+                                </div>
+
+
+                                <button
+                                    class="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                    onClick={handlesignup}
+                                >
+                                    Create account
+                                </button>
+
+                                <hr class="my-8" />
+
+                                <button
+                                    class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
+                                >
+                                    <svg
+                                        class="w-4 h-4 mr-2"
+                                        aria-hidden="true"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                    >
+                                        <path
+                                            d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+                                        />
+                                    </svg>
+                                    Github
+                                </button>
+                                <button
+                                    class="flex items-center justify-center w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
+                                >
+                                    <svg
+                                        class="w-4 h-4 mr-2"
+                                        aria-hidden="true"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                    >
+                                        <path
+                                            d="M23.954 4.569c-.885.389-1.83.654-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.896-.959-2.173-1.559-3.591-1.559-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-.427.722-.666 1.561-.666 2.475 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 0-.615-.03-.916-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.39 0-.779-.023-1.17-.067 2.189 1.394 4.768 2.209 7.557 2.209 9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63.961-.689 1.8-1.56 2.46-2.548l-.047-.02z"
+                                        />
+                                    </svg>
+                                    Twitter
+                                </button>
+
+                                <p class="mt-4">
+
+                                    <Link to="/login">
+                                        <button
+                                            class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"
+
+                                        >
+                                            Already have an account? Login
+                                        </button>
+                                    </Link>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div >
         </>
     );
 }

@@ -8,13 +8,13 @@ import Positions_page from "./Component/Portfolio/temp";
 import Payment from "./Component/payment/payment";
 import Navbar from "./Component/navbar/navbar";
 import Login from "./Component/login/login";
-import Signup from "./Component/signup/signup";
+
 import Home from "./Component/home/home";
 import CourseForm from "./Component/course/CourseForm";
 import CourseRegistration from "./Component/course/CourseRegistration";
 import UploadResource from "./Component/Resources/UploadResource";
 import TempLogin from "./Component/login/Templogin";
-import TempSignup from "./Component/signup/Tempsignup";
+import Signup from "./Component/signup/signup";
 import DashboardHome from "./Component/Dashboard/home";
 import Instructorform from "./Component/instructor/instructorfoam";
 import Instructorpage from "./Component/Dashboard/instructor/instructorpage";
@@ -57,8 +57,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/signup",
-    element: <TempSignup />,
-    // element: <Signup/>,
+    element: <Signup />,
   },
   {
     path: "/instructorpage",
