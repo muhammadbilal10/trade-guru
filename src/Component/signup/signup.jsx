@@ -53,17 +53,20 @@ export default function Signup() {
 
 
     const validateSignUp = () => {
-        // Check if email is valid
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             console.error('Invalid email address');
             return false;
         }
-
+        if (password.length < 6) {
+            console.error('Password must be at least 6 characters long');
+            return false;
+        }
         if (password !== confirm_pass) {
             console.error('Password and confirm password do not match');
             return false;
         }
+
         return true;
     }
 
@@ -71,6 +74,7 @@ export default function Signup() {
         if (!validateSignUp()) {
             return;
         }
+
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
@@ -79,7 +83,7 @@ export default function Signup() {
                 setUid(uid);
                 addNewDocument(uid);
                 cookies.set('userId', uid);
-                cookies.set('isAuthorized', 'true');
+                cookies.set('islogin', true);
                 navigate("/");
             })
             .catch((error) => {
@@ -118,7 +122,7 @@ export default function Signup() {
                                 <label className="block text-sm">
                                     <span className="text-gray-700 dark:text-gray-400">First Name</span>
                                     <input
-                                        className="block w-full mt-1 text-sm form-input"
+                                        className="block w-full mt-1 text-sm   focus:border-purple-400 focus:outline-none focus:shadow-outline-purple form-input"
                                         placeholder="Enter your first name"
                                         required
                                         value={fname}
@@ -128,7 +132,7 @@ export default function Signup() {
                                 <label className="block mt-4 text-sm">
                                     <span className="text-gray-700 dark:text-gray-400">Last Name</span>
                                     <input
-                                        className="block w-full mt-1 text-sm form-input"
+                                        className="block w-full mt-1 text-sm   focus:border-purple-400 focus:outline-none focus:shadow-outline-purple form-input"
                                         placeholder="Enter your last name"
                                         required
                                         value={lname}
@@ -138,7 +142,7 @@ export default function Signup() {
                                 <label className="block mt-4 text-sm">
                                     <span className="text-gray-700 dark:text-gray-400">Gender</span>
                                     <select
-                                        className="block w-full mt-1 text-sm form-select"
+                                        className="block w-full mt-1 text-sm   focus:border-purple-400 focus:outline-none focus:shadow-outline-purple form-input"
                                         required
                                         value={gender}
                                         onChange={(e) => setGender(e.target.value)}
@@ -151,7 +155,7 @@ export default function Signup() {
                                 <label className="block mt-4 text-sm">
                                     <span className="text-gray-700 dark:text-gray-400">Email</span>
                                     <input
-                                        className="block w-full mt-1 text-sm form-input"
+                                        className="block w-full mt-1 text-sm   focus:border-purple-400 focus:outline-none focus:shadow-outline-purple form-input"
                                         placeholder="Enter your email"
                                         required
                                         type="email"
@@ -162,7 +166,7 @@ export default function Signup() {
                                 <label className="block mt-4 text-sm">
                                     <span className="text-gray-700 dark:text-gray-400">Password</span>
                                     <input
-                                        className="block w-full mt-1 text-sm form-input"
+                                        className="block w-full mt-1 text-sm   focus:border-purple-400 focus:outline-none focus:shadow-outline-purple form-input"
                                         placeholder="Enter your password"
                                         type="password"
                                         required
@@ -173,7 +177,7 @@ export default function Signup() {
                                 <label className="block mt-4 text-sm">
                                     <span className="text-gray-700 dark:text-gray-400">Confirm Password</span>
                                     <input
-                                        className="block w-full mt-1 text-sm form-input"
+                                        className="block w-full mt-1 text-sm   focus:border-purple-400 focus:outline-none focus:shadow-outline-purple form-input"
                                         placeholder="Confirm your password"
                                         type="password"
                                         required

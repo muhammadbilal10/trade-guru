@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import app from "../../database/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { Link } from "react-router-dom";
 import Cookies from 'universal-cookie';
 
 export default function TempLogin() {
@@ -12,47 +13,60 @@ export default function TempLogin() {
         status: false,
         message: ''
     })
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [isLoggedIn, setIsLoggedIn] = useState(null);
     const navigate = useNavigate();
     const auth = getAuth(app);
     const cookies = new Cookies();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const handleLogin = () => {
+        // Check if email is in valid format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setError({
+                status: true,
+                message: 'Invalid email format!'
+            });
+            return; // Stop further execution
+        }
+
+        // Check if password meets minimum length requirement
+        if (password.length < 6) {
+            setError({
+                status: true,
+                message: 'Password must be at least 6 characters long!'
+            });
+            return; // Stop further execution
+        }
+
+        // Clear any previous errors
         setError({
             status: false,
-            message: 'Invalid Password!'
-        })
-        if (email == "admin@gmail.com" && password == "admin") {
-            navigate("/dashboard");
+            message: ''
+        });
 
-        }
-        else {
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    // Signed in 
-                    const user = userCredential.user;
-                    const uid = user.uid;
-                    console.log(user);
-                    setIsLoggedIn(true);
-                    
-                    cookies.set('uid', uid);
-                    console.log(cookies.get('uid')); 
-                    navigate("/");
-                    // ...
-                })
-                .catch((error) => {
-                    console.log("wrong password");
-                    setError({
-                        status: true,
-                        message: 'Invalid Password!'
-                    })
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
+        // Perform authentication
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Signed in 
+                const user = userCredential.user;
+                const uid = user.uid;
+                console.log(user);
+                setIsLoggedIn(true);
+
+                cookies.set('userId', uid);
+                cookies.set('islogin', true);
+                navigate("/");
+
+            })
+            .catch((error) => {
+                console.log("Authentication error:", error);
+                setError({
+                    status: true,
+                    message: 'Invalid email or password!'
                 });
-        }
+            });
+    };
 
-    }
     return (
         <>
             <div class="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900" onSubmit={(e) => e.preventDefault()}>
@@ -72,14 +86,14 @@ export default function TempLogin() {
                         </div>
                         <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
                             <div class="w-full">
-                                <h1 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
+                                <h1 class="mb-4 text-2xl font-bold text-gray-700 dark:text-gray-200">
                                     Login
                                 </h1>
                                 <label class="block text-sm">
                                     <span class="text-gray-700 dark:text-gray-400">Email</span>
                                     <input
                                         class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                        placeholder="xyz@gmial.com"
+                                        placeholder="xyz@gmail.com"
                                         value={email}
                                         onChange={(e) => { setEmail(e.target.value) }} />
                                 </label>
@@ -105,28 +119,27 @@ export default function TempLogin() {
                                 </button>
 
                                 <hr class="my-8" />
+                                <Link to={'/'}>
+                                    <p class="mt-4">
+                                        <button class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline focus:outline-none">
+                                            Forgot your password?
+                                        </button>
+                                    </p>
+                                </Link>
+                                <Link to={'/'}>
+                                    <p class="mt-1">
+                                        <button class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline focus:outline-none">
+                                            Create account
+                                        </button>
+                                    </p>
+                                </Link>
 
-
-
-                                <p class="mt-4">
-                                    <a class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"
-                                        href="./forgot-password.html">
-                                        Forgot your password?
-                                    </a>
-                                </p>
-                                <p class="mt-1">
-                                    <a class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"
-                                        href="./create-account.html"
-                                    >
-                                        Create account
-                                    </a>
-                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </>
+
     );
 }

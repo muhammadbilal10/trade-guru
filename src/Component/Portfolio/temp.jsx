@@ -6,7 +6,9 @@ import { getFirestore } from "firebase/firestore";
 import { collection, addDoc } from 'firebase/firestore';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
-const Positions_page = () => {
+import {  getprice ,getchange ,getSectorBySymbol ,Is_symbol_exist} from './apiFuntion/api_funtion';
+
+export default function Positions_page () {
   const [chnage_value, setValue] = useState(0);
   const [stockData, setStockData] = useState([]);
   const [processedSymbols, setProcessedSymbols] = useState(new Set());
@@ -17,20 +19,6 @@ const Positions_page = () => {
   const [userId, setUserId] = useState('RvITOTp9JrsehfH8iGcq');
   //const [userId, setUserId] = useState('QnX0VHVG9AQXldtoyV2PgTmvW422');
   const db = getFirestore(app);
-
-
-  const getchange = async (symbol) => {
-    const response = await fetch(`http://127.0.0.1:8000/current_price_change/${symbol}`);
-    const data = await response.json();
-    return data
-  };
-  const getprice = async (symbol) => {
-    const response = await fetch(`http://127.0.0.1:8000/current_price/${symbol}`);
-    const data = await response.json();
-    return data;
-
-  };
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,7 +79,7 @@ const Positions_page = () => {
     </>
   );
 };
-export default Positions_page;
+
 
 
 

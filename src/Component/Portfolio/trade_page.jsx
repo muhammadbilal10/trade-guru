@@ -5,9 +5,10 @@ import app from '../../database/firebase';
 import { getFirestore } from "firebase/firestore";
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { LineChart, Line, XAxis, YAxis, PieChart, Pie, Tooltip, Legend } from 'recharts';
+import {  getprice ,getchange ,getSectorBySymbol ,Is_symbol_exist} from './apiFuntion/api_funtion';
 
 
-const Trade = () => {
+export default function Trade() {
   const [symbol, setSymbol] = useState('HBL');
   const [quantity, setQuantity] = useState(0);
   const [price, setPrice] = useState(0);
@@ -15,6 +16,7 @@ const Trade = () => {
   const [change_value, setValue] = useState(0);
   const [symbols, setSymbols] = useState([]);
 
+  //to be used 
   const [todayGainLoss, setTodaygain] = useState(250000);
   const [netWorth, setNetworth] = useState(1025459);
   const [totalCash, setTotalcash] = useState(500000);
@@ -23,104 +25,82 @@ const Trade = () => {
   const [userId, setUserId] = useState('RvITOTp9JrsehfH8iGcq');
   //const [userId, setUserId] = useState('QnX0VHVG9AQXldtoyV2PgTmvW422');
 
-
   const db = getFirestore(app);
 
-  const getprice = async (symbol) => {
-    const response = await fetch(`http://127.0.0.1:8000/current_price/${symbol}`);
-    const data = await response.json();
-    return data;
-  };
-
-  const getchange = async (symbol) => {
-    const response = await fetch(`http://127.0.0.1:8000/current_price_change/${symbol}`);
-    const data = await response.json();
-    return data
-  };
-  function getSectorBySymbol(symbol) {
-    const obj = symbols.find(item => item.symbol === symbol);
-    if (obj) {
-      return obj.sectorName;
-    } else {
-      return null;
-    }
-  };
-  function Is_symbol_exist(symbol) {
-    return symbols.some(item => item.symbol === symbol);
-  }
-
+  
   const handleBuy = async () => {
     try {
-      console.log('symbol exist ');
-      console.log(Is_symbol_exist(symbol.toLocaleUpperCase()))
+      // Check if the symbol exists and if the quantity is valid
+      if (Is_symbol_exist(symbol.toLocaleUpperCase()) && quantity >= 10) {
+        // Retrieve the user document reference
+        const userDocRef = doc(db, "portfolio", userId);
+        // Retrieve the user document snapshot
+        const userDocSnap = await getDoc(userDocRef);
 
-      // Retrieve the user document reference
-      const userDocRef = doc(db, "portfolio", userId);
-      // Retrieve the user document snapshot
-      const userDocSnap = await getDoc(userDocRef);
+        // Fetch the latest stock price and calculate total price
+        const change = await getchange(symbol.toUpperCase());
+        const price = change[0];
+        const totalPrice = price * quantity;
+        setPercent(change[2]);
+        setValue(change[1]);
+        setPrice(change[0]);
 
-      // Fetch the latest stock price and calculate total price
-      const change = await getchange(symbol.toUpperCase());
-      const price = change[0];
-      const totalPrice = price * quantity;
-      setPercent(change[2]);
-      setValue(change[1]);
-      setPrice(change[0]);
+        // Check if user document snapshot exists
+        if (userDocSnap.exists()) {
+          // Retrieve user's wallet data
+          const userWallet = userDocSnap.data().wallet;
 
-      // Check if user document snapshot exists
-      if (userDocSnap.exists()) {
-        // Retrieve user's wallet data
-        const userWallet = userDocSnap.data().wallet;
+          // Check if user has sufficient cash in hand to make the purchase
+          if (totalPrice > userWallet.cash_in_hand) {
+            throw new Error("Insufficient funds in cash_in_hand");
+          }
 
-        // Check if user has sufficient cash in hand to make the purchase
-        if (totalPrice > userWallet.cash_in_hand) {
-          throw new Error("Insufficient funds in cash_in_hand");
-        }
-
-        // Create the new transaction object
-        const newTransaction = {
-          symbol: symbol.toUpperCase(),
-          quantity: Number(quantity),
-          price: price,
-          totalPrice: totalPrice,
-          sector: getSectorBySymbol(symbol.toUpperCase()),
-          date: new Date().toISOString()
-        };
-
-        // Add the new transaction to the existing transactions array
-        await updateDoc(userDocRef, {
-          transactions: [...(userDocSnap.data().transactions || []), newTransaction],
-          "wallet.cash_in_hand": userWallet.cash_in_hand - totalPrice,
-          "wallet.net_worth": userWallet.net_worth - userWallet.cash_in_hand + (userWallet.cash_in_hand - totalPrice)
-        });
-
-      } else {
-        // If the user document doesn't exist, create a new document with the provided user ID
-        await setDoc(userDocRef, {
-          transactions: [{
+          // Create the new transaction object
+          const newTransaction = {
             symbol: symbol.toUpperCase(),
-            quantity: quantity,
+            quantity: Number(quantity),
             price: price,
             totalPrice: totalPrice,
+            sector: getSectorBySymbol(symbol.toUpperCase()),
             date: new Date().toISOString()
-          }],
-          wallet: {
-            currency: "INR",
-            balance: 100000, // Initial balance of 100k rupees
-            cash_in_hand: 100000 - totalPrice, // Subtract the purchase price from initial balance
-            net_worth: 100000, // Initial net worth
-            total_gain_loss: 0 // Initial total gain/loss
-          }
-        });
-      }
+          };
 
-      console.log('Transaction added successfully to user portfolio:', userId);
+          // Add the new transaction to the existing transactions array
+          await updateDoc(userDocRef, {
+            transactions: [...(userDocSnap.data().transactions || []), newTransaction],
+            "wallet.cash_in_hand": userWallet.cash_in_hand - totalPrice,
+            "wallet.net_worth": userWallet.net_worth - userWallet.cash_in_hand + (userWallet.cash_in_hand - totalPrice)
+          });
+
+        } else {
+          // If the user document doesn't exist, create a new document with the provided user ID
+          await setDoc(userDocRef, {
+            transactions: [{
+              symbol: symbol.toUpperCase(),
+              quantity: quantity,
+              price: price,
+              totalPrice: totalPrice,
+              date: new Date().toISOString()
+            }],
+            wallet: {
+              currency: "INR",
+              balance: 100000, // Initial balance of 100k rupees
+              cash_in_hand: 100000 - totalPrice, // Subtract the purchase price from initial balance
+              net_worth: 100000, // Initial net worth
+              total_gain_loss: 0 // Initial total gain/loss
+            }
+          });
+        }
+
+        console.log('Transaction added successfully to user portfolio:', userId);
+      } else {
+        console.log('Symbol does not exist or quantity is less than 10. Skipping transaction.');
+      }
 
     } catch (error) {
       console.error("Error adding transaction:", error.message);
     }
   };
-
 
 
   useEffect(() => {
@@ -138,17 +118,19 @@ const Trade = () => {
     };
 
     const temp = async () => {
-      const change = await getchange(symbol.toUpperCase());
+
+      const change = await getchange('HBL');
+      // const change = await getchange(symbol.toUpperCase());
       setPercent(change[2]);
       setValue(change[1]);
       setPrice(change[0]);
-      // console.log(change);
-      // console.log(price);
+      console.log(change);
+      console.log(price);
     }
 
     fetch_symbol();
     temp();
-  }, [1]);
+  }, []);
 
 
 
@@ -256,5 +238,3 @@ const Trade = () => {
 
   );
 };
-
-export default Trade;
