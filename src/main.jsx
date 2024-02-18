@@ -18,6 +18,7 @@ import Instructorpage from "./Component/Dashboard/instructor/instructorpage";
 import Sidebar from "./Component/sidebar/Sidebar";
 import AddCourseForm from "./Component/course/AddCourseForm";
 import CourseOffer from "./Component/course/CourseOffer";
+import Advertisments from "./Component/Dashboard/advertisement/Advertisement";
 import FileUpload from "./Component/Resources/ResourceUpload";
 import ApproveInstructor from "./Component/Dashboard/instructor/approveInstructor";
 import Terminal from "./Component/terminal/terminal";
@@ -73,7 +74,11 @@ const router = createBrowserRouter([
     path: "/instructorpage",
     element: <Instructorpage />,
   },
-
+  {
+    path: "/login",
+    element: <TempLogin />,
+    // element: <Login/>,
+  },
   {
     path: "/course/*",
     // element: <CourseForm/>,
@@ -84,6 +89,7 @@ const router = createBrowserRouter([
       </>
     ),
   },
+
   {
     path: "/Regesteration",
     element: <CourseRegistration />,
