@@ -22,7 +22,9 @@ import FileUpload from "./Component/Resources/ResourceUpload";
 import ApproveInstructor from "./Component/Dashboard/instructor/approveInstructor";
 import Terminal from "./Component/terminal/terminal";
 import Portfolio_Main_Page from "./Component/Portfolio/portfolio_main_page";
-import Trade from "./Component/Portfolio/trade_page";
+import MarketSummaryPage from "./Component/Portfolio/MarketSummary";
+
+import OverviewPage from "./Component/Portfolio/OverviewPage";
 const CourseRoutes = () => {
   return (
     <div className="bg-[#eaeef3] min-h-screen flex">
@@ -107,17 +109,39 @@ const router = createBrowserRouter([
     element: <Portfolio_Main_Page />,
   },
   {
-    path: '/trade',
-    element: <Trade />,
+    path: '/overview_page',
+    element: <OverviewPage />,
   },
   {
     path: '/positions_page',
     element: <Positions_page />,
   },
   {
+    path: '/MarketSummaryPage',
+    element: <MarketSummaryPage />,
+  },
+
+
+
+
+  {
     path: '/payment_main_page',
     element: <Payment />,
   }
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////ZAIN NAZIRS WORK RELATED PATHS/////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
