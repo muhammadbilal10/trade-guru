@@ -74,6 +74,11 @@ const router = createBrowserRouter([
     path: "/instructorpage",
     element: <Instructorpage />,
   },
+  //advertisment related path
+  {
+    path: "/advertisement",
+    element: <Advertisments />,
+  },
   {
     path: "/login",
     element: <TempLogin />,

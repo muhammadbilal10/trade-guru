@@ -299,11 +299,11 @@ export default function Sidenav() {
                   class="transition-all ease-in-out duration-300 p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
                   aria-label="submenu"
                 >
-                  <Link to={'/instructorpage'}>
+                  <Link to={'/advertisement'}>
                     <div
                       class="px-2 py-1 w-full transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                     >
-                      ad
+                     manage add 
                     </div>
                   </Link>
                 </ul>
