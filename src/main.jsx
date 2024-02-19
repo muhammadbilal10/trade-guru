@@ -29,6 +29,7 @@ import OverviewPage from "./Component/Portfolio/OverviewPage";
 import NewCourseCard from "./Component/course/NewCourseCard";
 import OfferCourseCard from "./Component/course/OfferCourseCard";
 import Navbar from "./Component/navbar/navbar";
+import Footer from "./Component/footer/Footer";
 import Hero from "./Component/home/Hero";
 const CourseRoutes = () => {
   return (
@@ -48,7 +49,12 @@ const CourseRoutes = () => {
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: (
+      <>
+        <Home />
+        <Footer />
+      </>
+    ),
   },
 
   {
@@ -98,6 +104,7 @@ const router = createBrowserRouter([
         <Navbar />
         <Hero />
         <CourseOffer />
+        <Footer />
       </>
     ),
   },
