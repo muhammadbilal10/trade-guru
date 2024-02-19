@@ -26,6 +26,10 @@ import Portfolio_Main_Page from "./Component/Portfolio/portfolio_main_page";
 import MarketSummaryPage from "./Component/Portfolio/MarketSummary";
 
 import OverviewPage from "./Component/Portfolio/OverviewPage";
+import NewCourseCard from "./Component/course/NewCourseCard";
+import OfferCourseCard from "./Component/course/OfferCourseCard";
+import Navbar from "./Component/navbar/navbar";
+import Hero from "./Component/home/Hero";
 const CourseRoutes = () => {
   return (
     <div className="bg-[#eaeef3] min-h-screen flex">
@@ -46,7 +50,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <Home />,
   },
-  
+
   {
     path: "/signup",
     element: <Signup />,
@@ -57,14 +61,13 @@ const router = createBrowserRouter([
     // element: <Login/>,
   },
 
-
   ///dashboard paths
   {
     path: "/dashboard",
     element: <DashboardHome />,
   },
 
-  //dashboard 
+  //dashboard
   //instructor related paths
   {
     path: "/approveinstructor",
@@ -84,14 +87,17 @@ const router = createBrowserRouter([
     element: <TempLogin />,
     // element: <Login/>,
   },
-  
+
   {
     path: "/course/*",
     // element: <CourseForm/>,
     element: (
       <>
-        <Sidebar />
-        <CourseRoutes />
+        {/* <Sidebar />
+        <CourseRoutes /> */}
+        <Navbar />
+        <Hero />
+        <CourseOffer />
       </>
     ),
   },
@@ -106,54 +112,41 @@ const router = createBrowserRouter([
     element: <Instructorform />,
   },
 
-
   //terminal folder
   {
     path: "/terminal",
     element: <Terminal />,
   },
 
-
-
   //portfolio paths
   {
-    path: '/portfolio_main_page',
+    path: "/portfolio_main_page",
     element: <Portfolio_Main_Page />,
   },
   {
-    path: '/overview_page',
+    path: "/overview_page",
     element: <OverviewPage />,
   },
   {
-    path: '/positions_page',
+    path: "/positions_page",
     element: <Positions_page />,
   },
   {
-    path: '/MarketSummaryPage',
+    path: "/MarketSummaryPage",
     element: <MarketSummaryPage />,
   },
 
-
-
-
   {
-    path: '/payment_main_page',
+    path: "/payment_main_page",
     element: <Payment />,
-  }
+  },
 
-
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////ZAIN NAZIRS WORK RELATED PATHS/////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////ZAIN NAZIRS WORK RELATED PATHS/////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
