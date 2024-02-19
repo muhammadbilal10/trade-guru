@@ -7,7 +7,7 @@ const Navbar = () => {
   const navLinks = [
     { title: "Home", to: "/" },
     { title: "Courses", to: "/course" },
-    { title: "Registration", to: "/registration" },
+    // { title: "Registration", to: "/registration" },
     { title: "Dashboard", to: "/dashboard" },
     { title: "Payment", to: "/payment_main_page" },
     { title: "Stocks", to: "/terminal" },
@@ -22,7 +22,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-white text-black shadow-lg">
-      <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
@@ -41,10 +41,6 @@ const Navbar = () => {
               aria-expanded="false"
             >
               <span className="sr-only">Open main menu</span>
-              {/* Icon when menu is closed. */}
-              {/* Heroicon name: outline/menu */}
-              {/* Icon when menu is open. */}
-              {/* Heroicon name: outline/x */}
               <svg
                 className={`${isOpen ? "hidden" : "block"} h-6 w-6`}
                 xmlns="http://www.w3.org/2000/svg"
@@ -77,7 +73,7 @@ const Navbar = () => {
               </svg>
             </button>
           </div>
-          <div className="hidden lg:flex sm:items-center sm:space-x-6">
+          <div className="hidden lg:flex sm:items-center">
             {navLinks.map((link, index) => (
               <Link to={link.to} key={index}>
                 <button className="hover:text-white hover:bg-primary px-4 py-1 rounded-md transition duration-300">
