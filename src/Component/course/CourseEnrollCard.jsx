@@ -84,15 +84,15 @@ const CourseEnrollCard = ({
       </div>
       <div className="px-6 py-4">
         {EnrollCardDetails.map((item, index) => (
-          <div>
-            <div className="flex items-center" key={item.id}>
+          <div key={item.id}>
+            <div className="flex items-center">
               {React.createElement(item.icon, {
                 className: "text-secondary mr-2",
               })}
               <span className="text-gray-700 font-medium text-lg">
                 {item.title}
               </span>
-              <span className="ml-auto font-bold text-gray-500">
+              <span className="ml-auto font-semibold text-gray-500">
                 {item.value}
               </span>
             </div>

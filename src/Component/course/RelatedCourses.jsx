@@ -30,7 +30,7 @@ const courses = [
 
 const CourseCard = ({ course }) => {
   return (
-    <div className="bg-white overflow-hidden flex items-center">
+    <div className="bg-white flex items-center">
       <div className="w-20 h-20 rounded-md">
         <img
           src={course.image}
@@ -59,7 +59,7 @@ const CourseCard = ({ course }) => {
 
 const RelatedCourses = () => {
   return (
-    <div className="p-4 bg-white rounded-md shadow-lg">
+    <div className="p-4 bg-white rounded-md shadow-lg w-full">
       <h4 className="text-2xl font-bold mb-4">Related Courses</h4>
       <div className="space-y-4">
         {courses.map((course, index) => (

@@ -29,9 +29,9 @@ const Footer = () => {
     <footer className="mt-20 bg-darkBlue text-white py-12 px-4 bg-[#0c1427]">
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         <div>
-          <h2 className="text-3xl font-bold mb-4">TechGuru</h2>
+          <h2 className="text-3xl font-bold mb-4">TradeGuru</h2>
           <p className="mb-4">
-            Tech Guru is your gateway to mastering the future. Empowering
+            Trade Guru is your gateway to mastering the future. Empowering
             learning through an extensive library of tech courses
           </p>
           <div className="flex space-x-4">
