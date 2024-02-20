@@ -31,18 +31,15 @@ import OfferCourseCard from "./Component/course/OfferCourseCard";
 import Navbar from "./Component/navbar/navbar";
 import Footer from "./Component/footer/Footer";
 import Hero from "./Component/home/Hero";
+import CourseDetails from "./Component/course/CourseDetails";
 const CourseRoutes = () => {
   return (
-    <div className="bg-[#eaeef3] min-h-screen flex">
-      <div className="flex-1 ml-72">
-        <Routes>
-          <Route path="/add" element={<AddCourseForm />} />
-          <Route path="/offer" element={<CourseOffer />} />
-          <Route path="/uploadResources" element={<FileUpload />} />
-          {/* Add other main routes here */}
-        </Routes>
-      </div>
-    </div>
+    <Routes>
+      <Route path="/" element={<CourseOffer />} />
+      <Route path="/course-details/:id" element={<CourseDetails />} />
+      {/* <Route path="/offer" element={<CourseOffer />} />
+      <Route path="/uploadResources" element={<FileUpload />} /> */}
+    </Routes>
   );
 };
 
@@ -99,11 +96,10 @@ const router = createBrowserRouter([
     // element: <CourseForm/>,
     element: (
       <>
-        {/* <Sidebar />
-        <CourseRoutes /> */}
+        {/* <Sidebar /> */}
         <Navbar />
         <Hero />
-        <CourseOffer />
+        <CourseRoutes />
         <Footer />
       </>
     ),
