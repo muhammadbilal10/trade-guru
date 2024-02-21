@@ -39,7 +39,7 @@ const Footer = () => {
               <a
                 key={item.id}
                 href={item.link}
-                className="hover:opacity-80 hover:bg-primary p-2 bg-[#1f2638] rounded-md"
+                className="hover:opacity-80 hover:bg-primary-600 p-2 bg-[#1f2638] rounded-md"
               >
                 {item.icon}
               </a>
@@ -70,7 +70,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Legal Section */}
         <div>
           <h3 className="text-xl font-semibold mb-4">Legal</h3>
           <ul>
@@ -105,7 +104,7 @@ const Footer = () => {
               placeholder="Enter your mail"
               className="w-full px-4 py-2 rounded-md text-black"
             />
-            <button className="bg-primary hover:bg-primary-700 text-white px-4 py-2 rounded-md transition duration-300">
+            <button className="bg-primary hover:bg-primary-600 text-white px-4 py-2 rounded-md transition duration-300">
               Subscribe Now
             </button>
           </div>

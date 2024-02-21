@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import InstructorDetailsCard from "../instructor/InstructorDetailsCard";
 import OverviewTab from "./OverviewTab";
 import CurriculumTab from "./CurriculumTab";
+import ReviewsTab from "./ReviewsTab";
 
 const TabButton = ({ active, onClick, children }) => (
   <button
-    className={`px-4 py-2 text-lg font-medium rounded-t-lg border-b-2 ${
+    className={`px-4 py-2 text-md font-medium rounded-t-lg border-b-2 ${
       active
         ? "text-red-600 border-red-600"
         : "text-gray-600 border-transparent"
@@ -21,7 +22,7 @@ const CourseTabs = ({ InstructorDetails }) => {
   console.log(InstructorDetails);
   return (
     <div>
-      <div className="flex space-x-1 bg-gray-100 p-1">
+      <div className="flex flex-col sm:flex-row sm:space-x-10 bg-gray-100 p-1">
         <TabButton
           active={activeTab === "overview"}
           onClick={() => setActiveTab("overview")}
@@ -64,7 +65,11 @@ const CourseTabs = ({ InstructorDetails }) => {
             <InstructorDetailsCard {...InstructorDetails} />
           </div>
         )}
-        {activeTab === "reviews" && <div>Reviews Content</div>}
+        {activeTab === "reviews" && (
+          <div>
+            <ReviewsTab />
+          </div>
+        )}
       </div>
     </div>
   );

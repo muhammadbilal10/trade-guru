@@ -19,8 +19,8 @@ const LearningList = () => (
   <div className="space-y-2">
     {learnings.map((learning, index) => (
       <div key={index} className="flex items-center">
-        <FaCheck className="text-green-500 mr-2" />
-        <span className="text-gray-700">{learning}</span>
+        <FaCheck className="text-secondary mr-2" />
+        <span className="text-gray-500">{learning}</span>
       </div>
     ))}
   </div>

@@ -114,12 +114,12 @@ const CurriculumTab = () => {
   return (
     <div className="bg-white">
       <h2 className="text-2xl font-semibold mb-4">Course Description</h2>
-      <div className="mb-4">
+      <div className="mb-4 max-sm:flex max-sm:flex-col">
         <span className="text-lg text-gray-500 font-medium px-2 py-1">
           Level Beginner
         </span>
         <span className="text-lg mx-2 text-gray-500">12 Lectures</span>
-        <span className="text-lg text-gray-500">
+        <span className="mx-2 text-lg text-gray-500">
           Total: 5 Hours 56 Minutes 24 Seconds
         </span>
       </div>

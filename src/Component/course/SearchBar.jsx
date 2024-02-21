@@ -11,7 +11,7 @@ const SearchBar = () => {
           placeholder="Search keyword..."
         />
 
-        <button className="flex items-center justify-center px-4 bg-primary">
+        <button className="flex items-center justify-center px-4 bg-primary hover:bg-primary-600 rounded-md">
           <FaSearch className="text-white" />
         </button>
       </div>

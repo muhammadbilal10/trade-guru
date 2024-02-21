@@ -24,7 +24,7 @@ const SkillLevelFilter = () => {
               type="checkbox"
               checked={isChecked}
               onChange={() => handleChange(level)}
-              className="form-checkbox h-5 w-5 text-gray-600 rounded border-gray-300"
+              className="h-5 w-5 text-primary rounded border-gray-300"
             />
             <span className="text-gray-500 capitalize text-lg">{`${level} Level (82)`}</span>
           </label>

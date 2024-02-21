@@ -65,7 +65,7 @@ const CourseEnrollCard = ({
   ];
 
   return (
-    <div className="max-w-full rounded overflow-hidden shadow-lg bg-white p-4">
+    <div className=" rounded shadow-lg bg-white p-4">
       <div className="relative">
         <img
           className="w-full rounded-md h-[220px] object-cover"
@@ -78,7 +78,7 @@ const CourseEnrollCard = ({
       </div>
       <div className="px-6 py-4">
         <div className="font-bold text-2xl mb-4">{price}</div>
-        <button className="bg-primary  hover:outline text-white font-bold py-2 px-4 rounded w-full">
+        <button className="bg-primary hover:bg-primary-600  hover:outline text-white font-bold py-2 px-4 rounded w-full">
           Enroll Now
         </button>
       </div>

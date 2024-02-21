@@ -12,9 +12,6 @@ const PriceFilter = () => {
         max="6000"
         value={price}
         onChange={(e) => setPrice(e.target.value)}
-        style={{
-          "--tw-range-thumb-background": { background: "bg-black" }, // Tailwind CSS JIT support for custom properties
-        }}
         className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer  dark:bg-gray-700"
       />
       <div className="flex justify-between text-sm font-medium mt-2">

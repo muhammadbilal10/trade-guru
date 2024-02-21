@@ -20,7 +20,7 @@ const RatingFilter = () => {
           <input
             type="checkbox"
             id={`rating-${rating}`}
-            className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            className="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-blue-500"
             checked={selectedRatings[rating] || false}
             onChange={() => toggleRating(rating)}
           />

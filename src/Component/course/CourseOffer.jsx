@@ -53,7 +53,7 @@ const CourseOffer = () => {
       imageUrl: AI,
       professor: "Muhammad Ali",
       enrollment: "70",
-      price: "72.39",
+      price: "$72.39",
     },
     {
       id: 5,
@@ -92,11 +92,21 @@ const CourseOffer = () => {
       price: "$29.28",
     },
   ];
+
+  const initialDisplayCourses = 6;
+  const numberOfCourseToDisplay = 4;
+  const [displayCourses, setDisplayCourses] = React.useState(
+    initialDisplayCourses
+  );
+
+  const handleLoadMore = () => {
+    setDisplayCourses((prevCount) => prevCount + numberOfCourseToDisplay);
+  };
   return (
     <div className="bg-white px-4 rounded-lg mx-auto max-w-xl md:max-w-2xl lg:max-w-6xl mt-8">
       <div className="grid grid-cols-12 gap-[30px]">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-[30px] lg:col-span-8 col-span-12">
-          {offerCourseList.map((course) => (
+          {offerCourseList.slice(0, displayCourses).map((course) => (
             <div key={course.id}>
               <NewCourseCard {...course} />
             </div>
@@ -110,6 +120,16 @@ const CourseOffer = () => {
           <LanguageFilter />
           <RatingFilter />
         </div>
+        {displayCourses < offerCourseList.length && (
+          <div className="flex justify-center  col-span-8">
+            <button
+              onClick={handleLoadMore}
+              className="bg-primary text-white font-semibold px-10 py-4 rounded-lg shadow hover:bg-primary-600 transition duration-300"
+            >
+              Load More
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

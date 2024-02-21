@@ -35,7 +35,7 @@ const InstructorDetailsCard = ({
   ];
   return (
     <div className="">
-      <div className="flex gap-4 mb-4">
+      <div className="flex flex-col sm:flex-row gap-4 mb-4">
         <div className="h-[310px] w-[300px]">
           <img
             src={`https://bestwpware.com/html/tf/edumim/assets/images/all-img/ux.png`}

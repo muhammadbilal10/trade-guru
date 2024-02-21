@@ -27,7 +27,7 @@ const LanguageFilter = () => {
               type="checkbox"
               checked={selectedLanguages[language.id] || false}
               onChange={() => toggleLanguage(language.id)}
-              className="form-checkbox h-5 w-5 text-gray-600 rounded border-gray-300"
+              className="form-checkbox h-5 w-5 text-primary-600 rounded border-gray-300"
             />
             <span className="text-gray-500">{language.label}</span>
           </label>

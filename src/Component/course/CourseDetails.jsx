@@ -9,7 +9,6 @@ import CourseTabs from "./CourseTabs";
 export default function CourseDetails() {
   const { id } = useParams();
 
-  console.log(id);
   const CourseDetails = {
     id: id,
     title: "Machine Learning",
@@ -37,12 +36,12 @@ export default function CourseDetails() {
   };
 
   return (
-    <div className="grid grid-cols-12 gap-10 px-5 md:max-w-4xl lg:max-w-7xl mx-auto">
+    <div className="grid grid-cols-12 gap-5 px-5 md:max-w-4xl lg:max-w-7xl mx-auto">
       <div className="bg-white  col-span-12 lg:col-span-8 space-y-6">
         <img
           src={ML}
           alt="UI/UX Design and Graphics Learning Bootcamp 2022"
-          className="w-full xl:h-[470px] h-[350px] object-cover"
+          className="rounded-xl w-full xl:h-[470px] h-[350px] object-cover"
         />
         <p className="text-white bg-secondary w-32 font-bold text-center py-1 rounded-md text-sm  tracking-wide">
           Data Science
