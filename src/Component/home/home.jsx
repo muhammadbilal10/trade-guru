@@ -2,12 +2,32 @@
 import React from 'react';
 import Navbar from '../navbar/navbar';
 import Cookies from 'universal-cookie';
+import { useState } from "react";
 
 export default function Home() {
 
     const cookies = new Cookies();
-    console.log(cookies.get('uid'));
-    console.log(cookies.get('uid'));
+    //User collection 
+    // {
+    //     email: "zubair@gmial.com"(string)
+    //     fname: "zubair"(string)
+    //     gender: "female"(string)
+    //     isInstructor: false(Boolean)
+    //     lname: "haseeb"(string)
+    //     occupasion: null
+    //     profilePicture: null
+
+    //     socialMedia(array)
+    //     uid: "r6SQliH0isTz7qhgS1lggXERJ9E3"
+    // }
+
+    const [uid, setUid] = useState('r6SQliH0isTz7qhgS1lggXERJ9E3');
+    cookies.set('userId', uid);
+    cookies.set('islogin', true);
+    console.log(cookies.get('userId'));
+    console.log(cookies.get('islogin'));
+
+
     return (
         <div className="bg-gradient-to-r from-purple-600 to-blue-900 min-h-screen flex flex-col text-white">
             <Navbar />
