@@ -32,6 +32,7 @@ import Navbar from "./Component/navbar/navbar";
 import Footer from "./Component/footer/Footer";
 import Hero from "./Component/home/Hero";
 import CourseDetails from "./Component/course/CourseDetails";
+import MyCourses from "./Component/student/MyCourses";
 const CourseRoutes = () => {
   return (
     <Routes>
@@ -92,20 +93,6 @@ const router = createBrowserRouter([
   },
 
   {
-    path: "/course/*",
-    // element: <CourseForm/>,
-    element: (
-      <>
-        {/* <Sidebar /> */}
-        <Navbar />
-        <Hero />
-        <CourseRoutes />
-        <Footer />
-      </>
-    ),
-  },
-
-  {
     path: "/Regesteration",
     element: <CourseRegistration />,
   },
@@ -150,6 +137,30 @@ const router = createBrowserRouter([
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////
+  {
+    path: "/course/*",
+    // element: <CourseForm/>,
+    element: (
+      <>
+        {/* <Sidebar /> */}
+        <Navbar />
+        <Hero />
+        <CourseRoutes />
+        <Footer />
+      </>
+    ),
+  },
+  {
+    path: "/my-courses",
+    element: (
+      <>
+        <Navbar />
+        <Hero />
+        <MyCourses />
+        <Footer />
+      </>
+    ),
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

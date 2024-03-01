@@ -8,7 +8,7 @@ const TabButton = ({ active, onClick, children }) => (
   <button
     className={`px-4 py-2 text-md font-medium rounded-t-lg border-b-2 ${
       active
-        ? "text-red-600 border-red-600"
+        ? "text-primary border-primary"
         : "text-gray-600 border-transparent"
     } focus:outline-none`}
     onClick={onClick}
@@ -19,7 +19,7 @@ const TabButton = ({ active, onClick, children }) => (
 
 const CourseTabs = ({ InstructorDetails }) => {
   const [activeTab, setActiveTab] = useState("overview");
-  console.log(InstructorDetails);
+
   return (
     <div>
       <div className="flex flex-col sm:flex-row sm:space-x-10 bg-gray-100 p-1">

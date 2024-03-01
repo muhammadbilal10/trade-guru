@@ -10,6 +10,10 @@ const navLinks = [
   { title: "Payment", to: "/payment_main_page" },
   { title: "Stocks", to: "/terminal" },
   { title: "Portfolio", to: "/portfolio_main_page" },
+  {
+    title: "Learning",
+    to: "/my-courses",
+  },
 ];
 
 const navButtons = [
