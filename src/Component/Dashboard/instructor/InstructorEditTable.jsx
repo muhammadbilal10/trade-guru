@@ -18,7 +18,7 @@ export default function EditTable() {
     const db = getFirestore(app);
 
     useEffect(() => {
-        fetchUserData(db, 'Instructor').then((res) => {
+        fetchUserData(db, 'Instructo').then((res) => {
             setUser(res)
         })
     }, []);

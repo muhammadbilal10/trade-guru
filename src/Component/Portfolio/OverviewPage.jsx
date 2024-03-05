@@ -6,17 +6,55 @@ import { getFirestore } from "firebase/firestore";
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { LineChart, Line, XAxis, YAxis, PieChart, Pie, Tooltip, Legend } from 'recharts';
 // import { getprice, getchange, getSectorBySymbol, Is_symbol_exist } from './apiFuntion/api_funtion';
-import TradeBar from './MakeTradeBar';
+import TradeBar from './MakeTrade/MakeTradeBar';
 
 export default function OverviewPage() {
-  //to be used 
-  const [todayGainLoss, setTodaygain] = useState(250000);
-  const [netWorth, setNetworth] = useState(1025459);
-  const [totalCash, setTotalcash] = useState(500000);
-  const [totalGainLoss, setTotalgain] = useState(789542);
-
+  const [todayGainLoss, setTodaygain] = useState(0);
+  const [netWorth, setNetworth] = useState(0);
+  const [totalCash, setTotalcash] = useState(0);
+  const [totalGainLoss, setTotalgain] = useState(0);
+  const [walletData, setWalletData] = useState(null);
   const [userId, setUserId] = useState('RvITOTp9JrsehfH8iGcq');
   //const [userId, setUserId] = useState('QnX0VHVG9AQXldtoyV2PgTmvW422');
+  const db = getFirestore(app);
+  const getWalletData = async () => {
+    try {
+      const userDocRef = doc(db, 'portfolio', userId);
+      const userDocSnap = await getDoc(userDocRef);
+      if (userDocSnap.exists()) {
+        const data = userDocSnap.data().wallet;
+        return data;
+      } else {
+        console.warn('User document does not exist.');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error fetching wallet data:', error.message);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getWalletData(userId);
+        if (data) {
+          setNetworth(data.net_worth);
+          setTotalcash(data.cash_in_hand);
+          setTotalgain(data.total_gain_loss);
+        } else {
+          setNetworth(0);
+          setTotalcash(0);
+          setTotalgain(0);
+        }
+      } catch (error) {
+        console.error("Error fetching wallet data:", error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+
 
 
 
@@ -82,8 +120,8 @@ export default function OverviewPage() {
             </div>
           </div>
 
-          <TradeBar/>
-          
+          <TradeBar />
+
         </div>
       </div>
     </>

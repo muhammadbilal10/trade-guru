@@ -12,6 +12,96 @@ export default function Portfolio_Main_Page() {
         // Add more dummy data for additional cards
     ];
 
+
+    function convertTimestamps(list) {
+        // Function to convert timestamp to time only in PST
+        const convertToTimeOnly = (timestamp) => {
+            const date = new Date(timestamp * 1000); // Convert timestamp to milliseconds
+            const options = {
+                timeZone: 'Asia/Karachi', // Set timezone to Pakistan Standard Time
+                hour12: false, // Use 24-hour format
+                hour: '2-digit', // Display hour in 2-digit format
+                minute: '2-digit', // Display minute in 2-digit format
+                second: '2-digit', // Display second in 2-digit format
+            };
+            return date.toLocaleTimeString('en-US', options);
+        };
+
+        // Map over the input list and convert timestamps
+        return list.map(item => {
+            const timestamp = item[0];
+            const convertedTime = convertToTimeOnly(timestamp);
+            return [convertedTime, ...item.slice(1)]; // Replace timestamp with converted time
+        });
+    }
+
+    // Example usage
+    const inputList = [
+        [1709294546, 117.06, 30], [1709294431, 117.06, 300], [1709294400, 117.06, 0],
+        [1709292599, 116.85, 25], [1709292592, 117, 10000], [1709292579, 117, 16000],
+        [1709292573, 116.99, 2000], [1709292508, 116.8, 47], [1709292502, 117, 9953],
+        [1709292470, 117, 100],
+        [1709292467, 117.2, 700]
+    ];
+
+    function convertToCandlestickData(data, intervalInMinutes) {
+        const candlestickData = [];
+        let currentInterval = null;
+        let currentHigh = Number.MIN_SAFE_INTEGER;
+        let currentLow = Number.MAX_SAFE_INTEGER;
+
+        for (const [timestamp, price, volume] of data) {
+            const time = new Date(timestamp * 1000).toLocaleTimeString('en-US', {
+                timeZone: 'Asia/Karachi',
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+
+            // If currentInterval is null or time exceeds current interval, create a new interval
+            if (!currentInterval || currentInterval.time !== time) {
+                if (currentInterval) {
+                    candlestickData.push([currentInterval.time, currentInterval.open, currentHigh, currentLow, currentInterval.close]);
+                }
+                currentInterval = {
+                    time,
+                    open: price,
+                    high: price,
+                    low: price,
+                    close: price
+                };
+                // Reset current high and low
+                currentHigh = price;
+                currentLow = price;
+            } else { // Update currentInterval with new price
+                currentInterval.high = Math.max(currentInterval.high, price);
+                currentInterval.low = Math.min(currentInterval.low, price);
+                currentInterval.close = price;
+                // Update current high and low
+                currentHigh = Math.max(currentHigh, price);
+                currentLow = Math.min(currentLow, price);
+            }
+        }
+
+        // Push the last interval if exists
+        if (currentInterval) {
+            candlestickData.push([currentInterval.time, currentInterval.open, currentHigh, currentLow, currentInterval.close]);
+        }
+
+        return candlestickData;
+    }
+
+    // Example usage
+    const candlestickData = convertToCandlestickData(inputList, 1);
+    console.log(candlestickData);
+
+
+
+
+
+
+
     return (
         <div className="flex flex-col min-h-screen bg-white text-black">
             <Navbar />
@@ -24,84 +114,7 @@ export default function Portfolio_Main_Page() {
                 ))}
             </div>
         </div>
+
+
     );
 }
-
-
-
-
-
-
-
-
-// const rawData = [
-//     [1706852965, 143.65, 1000], [1706852963, 143.66, 1], [1706852947, 143.66, 300],
-//     [1706852920, 143.65, 1058], [1706852917, 143.7, 15], [1706852915, 143.65, 200],
-//     [1706852914, 143.7, 24], [1706852907, 143.7, 500], [1706852900, 143.7, 11], [1706852882, 143.7, 89],
-//     [1706852874, 143.65, 1000], [1706852870, 143.7, 1], [1706852852, 143.7, 10], [1706852851, 143.7, 100],
-//     [1706852847, 143.7, 400], [1706852840, 143.7, 1000], [1706852833, 143.7, 100], [1706852829, 143.7, 500],
-//     [1706852822, 143.75, 12000], [1706852813, 143.7, 110], [1706852807, 143.75, 12598], [1706852806, 143.85, 103],
-//     [1706852774, 143.85, 455], [1706852769, 143.9, 45], [1706852760, 143.9, 500],
-//     [1706852758, 143.9, 50], [1706852754, 143.9, 405], [1706852753, 143.9, 500],
-//     [1706852750, 143.9, 595], [1706852748, 143.95, 3500], [1706852744, 143.9, 300],
-//     [1706852741, 143.9, 1105], [1706852740, 143.9, 500], [1706852737, 143.9, 500], [1706852735, 143.9, 5],
-//     [1706852734, 143.9, 500], [1706852731, 143.9, 855], [1706852721, 143.95, 1], [1706852706, 143.9, 45], [1706852705, 143.9, 100], [1706852696, 143.95, 3000], [1706852691, 143.89, 500], [1706852688, 143.81, 2000], [1706852684, 143.9, 2],
-//     [1706852681, 143.9, 2095], [1706852679, 143.9, 200], [1706852678, 143.9, 2500], [1706852655, 143.95, 5],
-//     [1706852654, 143.95, 500], [1706852653, 143.9, 200], [1706852650, 143.95, 100], [1706852631, 143.95, 300],
-//     [1706852627, 144, 50], [1706852624, 143.95, 3000], [1706852622, 144, 6985], [1706852607, 144, 5],
-//     [1706852598, 144, 10], [1706852595, 144, 3000], [1706852593, 144, 1500], [1706852592, 144, 1000], [1706852590, 143.97, 5000], [1706852587, 143.95, 300], [1706852586, 143.95, 1400], [1706852578, 143.95, 500], [1706852575, 143.95, 1500], [1706852573, 143.95, 1000], [1706852569, 143.95, 4000], [1706852568, 143.95, 1000], [1706852567, 143.95, 2500], [1706852563, 143.9, 15], [1706852562, 143.95, 1000], [1706852561, 143.95, 2000], [1706852559, 143.95, 2000], [1706852558, 143.95, 500], [1706852555, 143.85, 6500], [1706852554, 144, 2000], [1706852548, 143.9, 500], [1706852546, 144, 2100], [1706852540, 144, 87], [1706852536, 144, 2000], [1706852518, 144.01, 500], [1706852516, 144, 300], [1706852513, 144, 500], [1706852504, 144, 23], [1706852503, 144, 190], [1706852500, 144, 30], [1706852499, 144, 500], [1706852493, 144, 100], [1706852490, 144, 52], [1706852477, 144, 1450], [1706852476, 144, 1000], [1706852474, 144.01, 1000], [1706852469, 144.05, 1023], [1706852468, 144.01, 800], [1706852461, 144, 500], [1706852454, 144, 100], [1706852450, 144, 3000], [1706852435, 144, 2000], [1706852433, 144, 580], [1706852426, 144, 1000], [1706852419, 144, 100], [1706852417, 144, 2000], [1706852413, 144, 500], [1706852399, 144, 1990], [1706852369, 144.2, 100], [1706852365, 144, 853], [1706852358, 144, 24147], [1706852357, 144, 3102], [1706852356, 144.01, 100], [1706852353, 144.01, 5], [1706852352, 144.01, 1500], [1706852349, 144.01, 5], [1706852346, 144.01, 277], [1706852338, 144.2, 10], [1706852336, 144.01, 6000], [1706852333, 144.05, 10], [1706852327, 144.15, 500], [1706852324, 144.05, 1500], [1706852320, 144.2, 510], [1706852317, 144.2, 1], [1706852310, 144.2, 2], [1706852301, 144.2, 3200],
-//     [1706852288, 144.2, 1000], [1706852282, 144.36, 500], [1706852281, 144.36, 500]
-// ];
-
-//   const formattedData = rawData.map(([timestamp, price, volume]) => {
-//     const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
-//     const formattedDate = date.toLocaleString('en-US', {
-//       weekday: 'short',
-//       month: 'short',
-//       day: '2-digit',
-//       year: 'numeric',
-//       hour: '2-digit',
-//       minute: '2-digit',
-//       hour12: true
-//     });
-//     return [formattedDate, price, volume];
-//   });
-
-//   console.log(formattedData);
-
-
-// const timestamp = 1706847597; // Example timestamp
-// const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
-// const formattedDate = date.toLocaleString('en-US', {
-//     weekday: 'short',
-//     month: 'short',
-//     day: '2-digit',
-//     year: 'numeric',
-//     hour: '2-digit',
-//     minute: '2-digit',
-//     hour12: true
-// });
-
-// console.log(formattedDate); // Output: Fri, Feb 2, 2024 5:04 PM
-
-
-
-// const getprice = async () => {
-//     setLoading(true);
-//     try {
-//         const response = await fetch(`http://127.0.0.1:8000/current_price/${symbol}`);
-//         if (!response.ok) {
-//             throw new Error('Failed to fetch price');
-//         }
-//         const data = await response.json();
-//         setPrice(data);
-//     } catch (error) {
-//         setError(error.message);
-//     } finally {
-//         setLoading(false);
-//     }
-// }
-
-// useEffect(() => {
-//     getprice();
-// }, [symbol]);

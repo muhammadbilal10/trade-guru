@@ -1,23 +1,57 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import Navbar from "../navbar/navbar";
 import Optionbar from "./optionbar";
-import TradingViewCandlestickChart from './crt';
+import CandlestickChart from './crt';
+import TradeBar from './MakeTrade/MakeTradeBar';
+// import { getprice, getchange, getSectorBySymbol, Is_symbol_exist } from './apiFuntion/api_funtion';
+import { getcandlestick_data } from './apiFuntion/api_funtion';
 
 export default function MarketSummaryPage() {
 
-    const rawData = [
-        [1708084841, 110.06, 112.06, 109.24, 110.55],
-        [1708084800, 110.06, 111.30, 109.89, 110.50],
-        [1708082950, 109.25, 110.42, 108.67, 109.50],
-        
-        
-        // Add more data points as needed
-    ];
+   
+    // // Sort the data by timestamp in
+    // const sortedData = inputList.sort((a, b) => a[0] - b[0]);
+   
+    const [candle, setCandle] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await getcandlestick_data('HBL');
+            console.log(data);
+            setCandle(data); // Update state with fetched data
+        };
+
+        fetchData();
+    }, []);
+
+    // const temp = async () => {
+    //     console.log(candle);
+    // };
+
     return (
         <div className="flex flex-col min-h-screen bg-white text-black">
             <Navbar />
             <Optionbar />
-            <div className="flex-1 flex justify-center p-4">
+            <div className="flex-1 flex">
+                <div className="flex-1 flex flex-col justify-center p-4">
+                    <div className="p-4">
+                        <h1 className="text-2xl font-bold mb-4">TradingView Candlestick Chart Example</h1>
+                        <CandlestickChart data={candle} />
+                    </div>
+                </div>
+                <TradeBar />
+            </div>
+        </div>
+    );
+    
+}
+
+
+
+
+
+
+
 {/* 
                 <object
                     className='bg-gray-200'
@@ -46,12 +80,3 @@ export default function MarketSummaryPage() {
                     type="text/html">
                     Company Snapshot
                 </object> */}
-                <div>
-                    <h1>TradingView Candlestick Chart Example</h1>
-                    <TradingViewCandlestickChart rawData={rawData} />
-                </div>
-            </div>
-
-        </div>
-    );
-}
