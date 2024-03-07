@@ -27,7 +27,6 @@ import MarketSummaryPage from "./Component/Portfolio/MarketSummary";
 import Student from "./Component/Dashboard/student/managestudent";
 import OverviewPage from "./Component/Portfolio/OverviewPage";
 
-
 ///////////zains///////////////////
 import NewCourseCard from "./Component/course/NewCourseCard";
 import OfferCourseCard from "./Component/course/OfferCourseCard";
@@ -36,6 +35,8 @@ import Footer from "./Component/footer/Footer";
 import Hero from "./Component/home/Hero";
 import CourseDetails from "./Component/course/CourseDetails";
 import MyCourses from "./Component/student/MyCourses";
+import CoursePage from "./Component/Dashboard/Course/CoursePage";
+import CurriculumSection from "./Component/Dashboard/Course/CurriculumSection";
 const CourseRoutes = () => {
   return (
     <Routes>
@@ -52,7 +53,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <Home />,
   },
-  
+
   {
     path: "/signup",
     element: <Signup />,
@@ -63,14 +64,13 @@ const router = createBrowserRouter([
     // element: <Login/>,
   },
 
-
   ///dashboard paths
   {
     path: "/dashboard",
     element: <DashboardHome />,
   },
 
-  //dashboard 
+  //dashboard
   //instructor related paths
   {
     path: "/approveinstructor",
@@ -91,15 +91,13 @@ const router = createBrowserRouter([
     // element: <Login/>,
   },
 
-   //dashboard 
+  //dashboard
   //Student related paths
   {
     path: "/student_page",
     element: <Student />,
   },
 
-
-  
   // {
   //   path: "/course/*",
   //   // element: <CourseForm/>,
@@ -121,48 +119,36 @@ const router = createBrowserRouter([
     element: <Instructorform />,
   },
 
-
   //terminal folder
   {
     path: "/terminal",
     element: <Terminal />,
   },
 
-
-
   //portfolio paths
   {
-    path: '/portfolio_main_page',
+    path: "/portfolio_main_page",
     element: <Portfolio_Main_Page />,
   },
   {
-    path: '/overview_page',
+    path: "/overview_page",
     element: <OverviewPage />,
   },
   {
-    path: '/positions_page',
+    path: "/positions_page",
     element: <Positions_page />,
   },
   {
-    path: '/MarketSummaryPage',
+    path: "/MarketSummaryPage",
     element: <MarketSummaryPage />,
   },
 
-
-
-
   {
-    path: '/payment_main_page',
+    path: "/payment_main_page",
     element: <Payment />,
   },
 
-
-
-
-
-
-
- /////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////ZAIN NAZIRS WORK RELATED PATHS/////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -191,6 +177,14 @@ const router = createBrowserRouter([
         <Footer />
       </>
     ),
+  },
+  {
+    path: "/coursepage",
+    element: <CoursePage />,
+  },
+  {
+    path: "/curriculumpage",
+    element: <CurriculumSection />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(
