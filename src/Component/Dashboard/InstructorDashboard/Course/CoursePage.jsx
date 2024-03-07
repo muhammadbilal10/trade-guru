@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import Sidenav from "../navbar/sidenav";
-import Topnav from "../navbar/topnavbar";
+import { React, useState } from "react";
+import Sidenav from "../../navbar/sidenav";
+import Topnav from "../../navbar/topnavbar";
 import AddCourse from "./AddCourse";
 import CurriculumSection from "./CurriculumSection";
 

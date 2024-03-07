@@ -35,8 +35,8 @@ import Footer from "./Component/footer/Footer";
 import Hero from "./Component/home/Hero";
 import CourseDetails from "./Component/course/CourseDetails";
 import MyCourses from "./Component/student/MyCourses";
-import CoursePage from "./Component/Dashboard/Course/CoursePage";
-import CurriculumSection from "./Component/Dashboard/Course/CurriculumSection";
+import CoursePage from "./Component/Dashboard/InstructorDashboard/Course/CoursePage";
+import CurriculumSection from "./Component/Dashboard/InstructorDashboard/Course/CurriculumSection";
 const CourseRoutes = () => {
   return (
     <Routes>
