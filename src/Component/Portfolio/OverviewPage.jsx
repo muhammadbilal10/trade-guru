@@ -4,8 +4,8 @@ import Navbar from "../navbar/navbar";
 import app from '../../database/firebase';
 import { getFirestore } from "firebase/firestore";
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-import { LineChart, Line, XAxis, YAxis, PieChart, Pie, Tooltip, Legend } from 'recharts';
-// import { getprice, getchange, getSectorBySymbol, Is_symbol_exist } from './apiFuntion/api_funtion';
+import { LineChart, Line, XAxis, YAxis, PieChart, Pie, Tooltip, Legend , Cell} from 'recharts';
+import { getprice, getchange, getSectorBySymbol, Is_symbol_exist,fetchStocks } from './apiFuntion/api_funtion';
 import TradeBar from './MakeTrade/MakeTradeBar';
 
 export default function OverviewPage() {
@@ -16,7 +16,15 @@ export default function OverviewPage() {
   const [walletData, setWalletData] = useState(null);
   const [userId, setUserId] = useState('RvITOTp9JrsehfH8iGcq');
   //const [userId, setUserId] = useState('QnX0VHVG9AQXldtoyV2PgTmvW422');
+  // Define an array of colors
+const colors = ['	#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#d0ed57'];
+
   const db = getFirestore(app);
+
+
+
+  const [stockHoldings, setStockHoldings] = useState([]);
+
   const getWalletData = async () => {
     try {
       const userDocRef = doc(db, 'portfolio', userId);
@@ -51,12 +59,51 @@ export default function OverviewPage() {
         console.error("Error fetching wallet data:", error);
       }
     };
-  
+
+    const fetchStockHoldings = async () => {
+      try {
+        // Fetch user portfolio document
+        const userDocRef = doc(db, 'portfolio', userId);
+        const userDocSnap = await getDoc(userDocRef);
+
+        // Get stock holdings data from the document
+        const stockHoldingsData = userDocSnap.data().stockHoldings;
+
+        console.log(stockHoldingsData);
+        const transformedData = Object.keys(stockHoldingsData).map(symbol => ({
+          name: symbol, // Use the symbol as the name
+          value: stockHoldingsData[symbol].totalQuantity, // Use the totalQuantity as the value
+        }));
+
+        // Update state with transformed data
+        setStockHoldings(transformedData);
+      } catch (error) {
+        console.error('Error fetching stock holdings:', error);
+      }
+    };
+
+
+    fetchStockHoldings();
+
     fetchData();
   }, []);
 
 
 
+  const [stocksData, setStocksData] = useState(null);
+  const symbol = 'HBL'; // Replace 'yourSymbol' with the actual symbol
+  const startDate = '2020, 1, 1'; // Replace 'yourStartDate' with the actual start date
+  const endDate = 'yourEndDate'; // Replace 'yourEndDate' with the actual end date
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchStocks(symbol, startDate, endDate);
+      console.log(data);
+      setStocksData(data);
+    };
+
+    fetchData();
+  }, []);
 
   const lineChartData = [
     { name: 'Day 1', value: 100 },
@@ -65,12 +112,7 @@ export default function OverviewPage() {
     // Add more data points as needed
   ];
 
-  const pieChartData = [
-    { name: 'Stock A', value: 200 },
-    { name: 'Stock B', value: 300 },
-    { name: 'Stock C', value: 150 },
-    // Add more data points as needed
-  ];
+
 
   return (
     <>
@@ -111,11 +153,20 @@ export default function OverviewPage() {
                 </LineChart>
               </section>
               <section className="w-full md:w-6/12 lg:w-6/12 h-[300px] border border-gray-400 rounded-lg">
+                <h2>Stock Holdings</h2>
                 <PieChart width={400} height={300}>
-                  <Pie dataKey="value" data={pieChartData} fill="#FFA500" label />
+                  <Pie dataKey="value" data={stockHoldings} label>
+                    {stockHoldings.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                    ))}
+                  </Pie>
                   <Tooltip />
                   <Legend />
                 </PieChart>
+                {/* <PieChart width={730} height={250}>
+                  <Pie data={data01} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={50} fill="#8884d8" />
+                  <Pie data={data02} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={80} fill="#82ca9d" label />
+                </PieChart> */}
               </section>
             </div>
           </div>

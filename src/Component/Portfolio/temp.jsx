@@ -6,15 +6,15 @@ import { getFirestore } from "firebase/firestore";
 import { collection, addDoc } from 'firebase/firestore';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
-import {  getprice ,getchange ,getSectorBySymbol ,Is_symbol_exist} from './apiFuntion/api_funtion';
+import { getprice, getchange, getSectorBySymbol, Is_symbol_exist } from './apiFuntion/api_funtion';
 
-export default function Positions_page () {
+export default function Positions_page() {
   const [chnage_value, setValue] = useState(0);
   const [stockData, setStockData] = useState([]);
   const [processedSymbols, setProcessedSymbols] = useState(new Set());
   const [symbol, setSymbol] = useState('');
   const [quantity, setQuantity] = useState('');
-  const [transactions, setTransactions] = useState([]);
+  const [stockHoldings, setStockHoldings] = useState([]);
 
   const [userId, setUserId] = useState('RvITOTp9JrsehfH8iGcq');
   //const [userId, setUserId] = useState('QnX0VHVG9AQXldtoyV2PgTmvW422');
@@ -27,7 +27,7 @@ export default function Positions_page () {
         const userDocSnap = await getDoc(userDocRef);
 
         if (userDocSnap.exists()) {
-          setTransactions(userDocSnap.data().transactions || []);
+          setStockHoldings(userDocSnap.data().stockHoldings || []);
 
         } else {
           console.error('User document not found');
@@ -58,17 +58,17 @@ export default function Positions_page () {
                 </tr>
               </thead>
               <tbody>
-                {transactions.map((transaction, index) => (
+                {Object.entries(stockHoldings).map(([symbol, holding], index) => (
                   <tr className="text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" key={index}>
-                    <td className="px-6 py-4">{index + 1}</td>
-                    <td className="px-6 py-4">{transaction.symbol}</td>
+                    <td className="px-6 py-4">{index}</td>
+                    <td className="px-6 py-4">{symbol}</td>
                     <td className="px-6 py-4">
-                      <span className={`px-2 py-1 font-semibold leading-tight rounded-full ${transaction.quantity < 10 ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'}`}>
-                        {transaction.quantity}
+                      <span className={`px-2 py-1 font-semibold leading-tight rounded-full ${holding.totalQuantity > 10 ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'}`}>
+                        {holding.totalQuantity}
                       </span>
                     </td>
-                    <td className="px-6 py-4">{transaction.price}</td>
-                    <td className="px-6 py-4">{transaction.dailyChange || 'Loading...'}</td>
+                    <td className="px-6 py-4">{holding.averagePrice}</td>
+                    {/* Add more columns for other data if needed */}
                   </tr>
                 ))}
               </tbody>

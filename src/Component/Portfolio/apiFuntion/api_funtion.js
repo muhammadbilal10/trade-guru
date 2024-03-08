@@ -30,3 +30,9 @@ export function Is_symbol_exist(SymbolsList,symbol) {
     return SymbolsList.some(item => item.symbol === symbol);
 }
 
+export async function fetchStocks(symbol, startDate, endDate) {
+    const response = await fetch(`http://127.0.0.1:8000/stocks/${symbol}`);
+    const data = await response.json();
+    return data
+
+}

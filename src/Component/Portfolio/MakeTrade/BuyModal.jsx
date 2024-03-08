@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState } from 'react';
 import { Dialog } from '@headlessui/react'
 import { getprice, getchange, getSectorBySymbol, Is_symbol_exist } from '../apiFuntion/api_funtion';
 import Cookies from 'universal-cookie';
@@ -8,6 +8,7 @@ import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice, setPercent, setValue, SymbolsList }) {
   const cookies = new Cookies();
+  let completeButtonRef = useRef(null)
   const [comment, setComment] = useState('');
   const [userId, setUserId] = useState(cookies.get('userId'));
   const db = getFirestore(app);
@@ -119,11 +120,10 @@ export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice
 
 
   return (
-    <Dialog
-      open={isOpen}
+    <Dialog open={isOpen}
       onClose={() => setIsOpen(false)}
     >
-      <Dialog.Panel className="fixed inset-0 flex items-center justify-center overflow-auto">
+      <Dialog.Panel className="fixed inset-0 flex items-center justify-center overflow-auto" >
         <div className="bg-white w-96 p-8 rounded-lg shadow-lg">
           <div className="mb-4">
             <label htmlFor="symbol" className="block mb-1">Symbol</label>
@@ -157,18 +157,19 @@ export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice
           </div>
           <div className="flex justify-end mt-6">
             <button
-              className="px-4 py-2 mr-2 text-white bg-purple-600 rounded hover:bg-purple-700"
+              className="px-4 py-2 mr-2 text-white bg-green-600 rounded hover:bg-green-700"
               onClick={handleConfirmBuy}
             >
               Confirm Buy
             </button>
             <button
-              className="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300"
+              className="px-4 py-2 text-white bg-red-600 rounded hover:bg-red-700"
               onClick={() => setIsOpen(false)}
             >
               Cancel
             </button>
           </div>
+          
         </div>
       </Dialog.Panel>
     </Dialog>

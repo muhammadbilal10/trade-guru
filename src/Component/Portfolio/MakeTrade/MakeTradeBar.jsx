@@ -16,7 +16,6 @@ export default function TradeBar() {
     const [symbolsList, setSymbolsList] = useState([]);
 
      const [userId, setUserId] = useState('RvITOTp9JrsehfH8iGcq');
-    //const [userId, setUserId] = useState('QnX0VHVG9AQXldtoyV2PgTmvW422');   
     const db = getFirestore(app);
     ////////Modal////////////
     const [IsBuyOpen, setIsBuyOpen] = useState(false)
@@ -29,24 +28,6 @@ export default function TradeBar() {
 
         setIsSellOpen(true);
     };
-
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////SELL funtionalities///////////////////////////////////////////////////////////////////
-    // Function to find transactions for a specific stock symbol
-
-
-
-
-  
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////SELL funtionalities///////////////////////////////////////////////////////////////////
-    // Function to find transactions for a specific stock symbol
-
-
-
     useEffect(() => {
         const fetch_symbol = async () => {
             try {
@@ -88,7 +69,7 @@ export default function TradeBar() {
                     onChange={(e) => setQuantity(e.target.value)} />
 
                 <div className="bg-gray-200 p-4 rounded">
-                    <p className="text-gray-700 font-semibold">Price: $ {price}</p>
+                    <p className="text-gray-700 font-semibold">Price: (Rs.) {price}</p>
                     <p className={`text-gray-700 ${change_percent >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                         Change (%): {change_percent}
                     </p>
@@ -113,20 +94,11 @@ export default function TradeBar() {
                 }
                 {/* sell modal */}
                 {
-                   IsSellOpen &&
+                  
                     <SellModal isOpen={IsSellOpen} setIsOpen={setIsSellOpen} symbol={symbol} quantity={quantity} SymbolsList={symbolsList} />
                 }
             </div>
-
-
-
-
-           
-
-
         </>
-
-
 
     );
 };
