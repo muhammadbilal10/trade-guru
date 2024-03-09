@@ -66,10 +66,9 @@ export default function ApprovalTable() {
                         >
                             
                             {user?.map((user) => {
-                                console.clear()
                                 console.log("User", user)
                                 return(
-                                    <tr class="text-gray-700 dark:text-gray-400">
+                                    <tr key={user.instructorId} class="text-gray-700 dark:text-gray-400">
                                     <td class="px-4 py-3">
                                         <div class="flex items-center text-sm">
                                             {/* <!-- Avatar with inset shadow --> */}
@@ -100,7 +99,7 @@ export default function ApprovalTable() {
                                     </td>
                                     <td class="px-4 py-3 text-xs">
                                     <span
-                                            className={`px-2 py-1 font-semibold leading-tight rounded-full ${user.status
+                                            className={`px-2 py-1 font-semibold leading-tight rounded-full ${user.approval
                                                 ? 'text-green-700 bg-green-100 dark:bg-green-700 dark:text-green-100'
                                                 : 'text-red-700 bg-red-100 dark:bg-red-700 dark:text-red-100'
                                                 }`}
@@ -120,8 +119,8 @@ export default function ApprovalTable() {
                                             <button
                                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                                 aria-label="Edit"
-                                                key={user.id}
-                                                onClick={() => handleClick(user.id)}
+                                                key={user.instructorId}
+                                                onClick={() => handleClick(user.instructorId)}
                                             >
 
                                                 <FcApproval class="w-5 h-5" />
