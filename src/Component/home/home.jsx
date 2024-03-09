@@ -39,7 +39,7 @@ export default function Home() {
 ///////////Temporary approved Instructor login//////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-
+// const [uid, setUid] = useState('r6SQliH0isTz7qhgS1lggXERJ9E3'); for now use this as user id 
 // cookies.set('userId', uid);
 // cookies.set('islogin', true);
 // cookies.set('isInstructor', true);
