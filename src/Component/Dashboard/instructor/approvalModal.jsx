@@ -13,7 +13,7 @@ export default function ApproveModal({ IsOpen, setIsOpen, id, setId }) {
 
         try {
             const docRef = doc(db, 'Instructor', uid);
-            await update(docRef, { status: true });
+            await update(docRef, { approval: true });
             console.log('Status updated successfully');
         } catch (error) {
             console.error('Error updating status:', error);

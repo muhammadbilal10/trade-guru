@@ -4,10 +4,12 @@ import Navbar from "../navbar/navbar";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import app from "../../database/firebase";
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Link } from "react-router-dom";
 import Cookies from 'universal-cookie';
-// //totste
+
+
 import '../../../node_modules/react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from "react-toastify";
 //import { ToastContainer, toast } from "react-toastify";
@@ -26,6 +28,7 @@ export default function TempLogin() {
 
     const navigate = useNavigate();
     const auth = getAuth(app);
+    const db = getFirestore(app);
     const cookies = new Cookies();
 
     const [email, setEmail] = useState('');
@@ -53,6 +56,22 @@ export default function TempLogin() {
 
 
     const handleLogin = () => {
+        const IsInstructorExist = async (uId) => {
+            try {
+                const docRef = doc(db, 'Instructor', uId);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const userData = docSnap.data();
+                    return !!userData.approval; // Convert status to boolean and return
+                } else {
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error checking document existence and status:', error);
+                return false; // Return false in case of any error
+            }
+        };
+
         // Check if email is in valid format
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
@@ -90,14 +109,17 @@ export default function TempLogin() {
         });
 
         signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
+            .then(async (userCredential) => {
                 // Signed in 
                 const user = userCredential.user;
                 const uid = user.uid;
-                console.log(user);
-                // setIsLoggedIn(true);
+                const isExist = await IsInstructorExist(uid); // Wait for the promise to resolve
+                console.log(isExist);
+                // Do something with isExist
                 cookies.set('userId', uid);
                 cookies.set('islogin', true);
+                cookies.set('isInstructor', isExist);
+                
                 navigate("/");
             })
             .catch((error) => {

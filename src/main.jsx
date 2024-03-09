@@ -18,7 +18,8 @@ import Instructorpage from "./Component/Dashboard/instructor/instructorpage";
 import Sidebar from "./Component/sidebar/Sidebar";
 import AddCourseForm from "./Component/course/AddCourseForm";
 import CourseOffer from "./Component/course/CourseOffer";
-import Advertisments from "./Component/Dashboard/advertisement/Advertisement";
+
+import Advertisement from "./Component/Dashboard/advertisement/Advertisement";
 import FileUpload from "./Component/Resources/ResourceUpload";
 import ApproveInstructor from "./Component/Dashboard/instructor/approveInstructor";
 import Terminal from "./Component/terminal/terminal";
@@ -26,6 +27,7 @@ import Portfolio_Main_Page from "./Component/Portfolio/portfolio_main_page";
 import MarketSummaryPage from "./Component/Portfolio/MarketSummary";
 import Student from "./Component/Dashboard/student/managestudent";
 import OverviewPage from "./Component/Portfolio/OverviewPage";
+
 
 ///////////zains///////////////////
 import NewCourseCard from "./Component/course/NewCourseCard";
@@ -48,12 +50,13 @@ const CourseRoutes = () => {
   );
 };
 
+
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
   },
-
+  
   {
     path: "/signup",
     element: <Signup />,
@@ -64,13 +67,14 @@ const router = createBrowserRouter([
     // element: <Login/>,
   },
 
+
   ///dashboard paths
   {
     path: "/dashboard",
     element: <DashboardHome />,
   },
 
-  //dashboard
+  //dashboard 
   //instructor related paths
   {
     path: "/approveinstructor",
@@ -83,7 +87,7 @@ const router = createBrowserRouter([
   //advertisment related path
   {
     path: "/advertisement",
-    element: <Advertisments />,
+    element: <Advertisement />,
   },
   {
     path: "/login",
@@ -91,13 +95,15 @@ const router = createBrowserRouter([
     // element: <Login/>,
   },
 
-  //dashboard
+   //dashboard 
   //Student related paths
   {
     path: "/student_page",
     element: <Student />,
   },
 
+
+  
   // {
   //   path: "/course/*",
   //   // element: <CourseForm/>,
@@ -119,34 +125,41 @@ const router = createBrowserRouter([
     element: <Instructorform />,
   },
 
+
   //terminal folder
   {
     path: "/terminal",
     element: <Terminal />,
   },
 
+
+
   //portfolio paths
   {
-    path: "/portfolio_main_page",
+    path: '/portfolio_main_page',
     element: <Portfolio_Main_Page />,
   },
   {
-    path: "/overview_page",
+    path: '/overview_page',
     element: <OverviewPage />,
   },
   {
-    path: "/positions_page",
+    path: '/positions_page',
     element: <Positions_page />,
   },
   {
-    path: "/MarketSummaryPage",
+    path: '/MarketSummaryPage',
     element: <MarketSummaryPage />,
   },
 
+
+
+
   {
-    path: "/payment_main_page",
+    path: '/payment_main_page',
     element: <Payment />,
   },
+
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -84,6 +84,7 @@ export default function Signup() {
                 addNewDocument(uid);
                 cookies.set('userId', uid);
                 cookies.set('islogin', true);
+                cookies.set('isInstructor', false);
                 navigate("/");
             })
             .catch((error) => {

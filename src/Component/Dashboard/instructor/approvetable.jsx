@@ -18,7 +18,7 @@ export default function ApprovalTable() {
         const myCollection = collection(db, collectionName);
     
         // Create a query to get documents with status false
-        const statusFalseQuery = query(myCollection, where('status', '==', false));
+        const statusFalseQuery = query(myCollection, where('approval', '==', false));
     
         const fetchData = async () => {
             try {
@@ -105,7 +105,7 @@ export default function ApprovalTable() {
                                                 : 'text-red-700 bg-red-100 dark:bg-red-700 dark:text-red-100'
                                                 }`}
                                         >
-                                            {user.status ? 'approved' : 'not approved'}
+                                            {user.approval ? 'approved' : 'not approved'}
                                         </span>
                                     </td>
                                     <td class="px-4 py-3 text-sm">
