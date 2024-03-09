@@ -23,7 +23,7 @@ export default function DashboardHome() {
               </h2>
               {/* <!-- CTA --> */}
               <a
-                class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-yellow-400 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple"
+                class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-primary rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple"
                 href=""
               >
                 <div class="flex items-center">
