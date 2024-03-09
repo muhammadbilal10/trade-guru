@@ -3,8 +3,18 @@ import Sidenav from "../../navbar/sidenav";
 import Topnav from "../../navbar/topnavbar";
 import AddCourse from "./AddCourse";
 import CurriculumSection from "./CurriculumSection";
+////////////////////////////////////////////
+import { setDoc, doc } from 'firebase/firestore';
+import { v4 as uuid } from 'uuid'; // Import the uuid library
+import app from "../../../../database/firebase";
+import { getFirestore, getDoc } from 'firebase/firestore';
+import Cookies from 'universal-cookie';
+    
 
 export default function CoursePage() {
+  const db = getFirestore(app);
+  const cookies = new Cookies();
+
   const [currentStep, setCurrentStep] = useState(1);
   const [sections, setSections] = useState([]);
   const [formData, setFormData] = useState({
@@ -48,6 +58,41 @@ export default function CoursePage() {
       prevStep={() => setCurrentStep((s) => s - 1)}
     />,
   ];
+
+
+
+
+  const handleAddCourse = async () => {
+    try {
+      const instructorId = cookies.get('userId');
+      // Generate a unique course ID
+      const courseId = uuid();
+
+      // Define the document reference with the course ID
+      const courseDocRef = doc(db, 'Course', courseId);
+
+      // Define the data structure for the course document
+      const courseData = {
+        courseId: courseId, // Include the course ID
+        formData: formData,
+        sections: sections.map(section => ({
+          ...section,
+          lectures: section.lectures.map((lecture, index) => ({ title: lecture.title, id: index + 1 })),
+        })),
+        // Add other fields as needed
+        instructorId: instructorId, // Use the instructor ID associated with the course
+      };
+
+      // Set the course data in the course document
+      await setDoc(courseDocRef, courseData);
+
+      console.log('Course added with ID:', courseId);
+    } catch (error) {
+      console.error('Error adding course:', error.message);
+    }
+  };
+
+
   return (
     <>
       <div className="flex h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden">
@@ -58,6 +103,8 @@ export default function CoursePage() {
             {formSteps[currentStep - 1]}
           </main>
         </div>
+        <button
+          onClick={handleAddCourse}>submit</button>
       </div>
     </>
   );

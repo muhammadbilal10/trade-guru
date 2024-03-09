@@ -3,8 +3,12 @@ import ImageUpload from "./ImageUpload";
 import CurriculumSection from "./CurriculumSection";
 import { useNavigate } from "react-router";
 
+
+
 const AddCourse = ({ formData, setFormData, nextStep }) => {
+
   console.log(formData);
+
   // const [formData, setFormData] = useState({
   //   courseType: "",
   //   courseName: "",

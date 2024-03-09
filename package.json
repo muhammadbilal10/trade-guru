@@ -25,7 +25,8 @@
     "react-toastify": "^10.0.4",
     "recharts": "^2.12.0",
     "tradingview-widget": "^0.0.1",
-    "universal-cookie": "^7.0.2"
+    "universal-cookie": "^7.0.2",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

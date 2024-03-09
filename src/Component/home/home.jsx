@@ -5,7 +5,7 @@ import Cookies from 'universal-cookie';
 import { useState } from "react";
 
 export default function Home() {
-
+   
     const cookies = new Cookies();
     //User collection 
     // {
