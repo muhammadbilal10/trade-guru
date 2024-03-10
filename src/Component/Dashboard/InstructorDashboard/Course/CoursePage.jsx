@@ -9,25 +9,28 @@ import { v4 as uuid } from "uuid";
 import app from "../../../../database/firebase";
 import { getFirestore, getDoc } from "firebase/firestore";
 import Cookies from "universal-cookie";
+import ImageUpload from "./ImageUpload";
 
 export default function CoursePage() {
   const db = getFirestore(app);
   const cookies = new Cookies();
+  const [image, setImage] = useState(null);
 
   const [currentStep, setCurrentStep] = useState(1);
   const [sections, setSections] = useState([]);
   const [formData, setFormData] = useState({
-    courseType: "",
-    courseName: "",
-    courseLevel: "",
-    courseCategory: "",
-    courseLanguage: "",
-    courseImage: "",
-    courseCode: "",
-    courseDetails: "",
+    type: "",
+    title: "",
+    level: "",
+    category: "",
+    language: "",
+    imageUrl: "",
+    description: "",
     startDate: "",
-    maxStudents: "",
-    courseDuration: "",
+    enroll: "30",
+    duration: "",
+    price: "",
+    rating: "4.8",
   });
 
   const nextStep = () => {
@@ -57,13 +60,7 @@ export default function CoursePage() {
       const courseData = {
         courseId: courseId, // Include the course ID
         formData: formData,
-        sections: sections.map((section) => ({
-          ...section,
-          lectures: section.lectures.map((lecture, index) => ({
-            title: lecture.title,
-            id: index + 1,
-          })),
-        })),
+        sections: sections,
         // Add other fields as needed
         instructorId: instructorId, // Use the instructor ID associated with the course
       };
@@ -82,6 +79,14 @@ export default function CoursePage() {
       formData={formData}
       setFormData={setFormData}
       nextStep={() => setCurrentStep((s) => s + 1)}
+    />,
+    <ImageUpload
+      formData={formData}
+      setFormData={setFormData}
+      image={image}
+      setImage={setImage}
+      nextStep={() => setCurrentStep((s) => s + 1)}
+      prevStep={() => setCurrentStep((s) => s - 1)}
     />,
     <CurriculumSection
       sections={sections}
@@ -102,7 +107,7 @@ export default function CoursePage() {
             {formSteps[currentStep - 1]}
           </main>
         </div>
-        {/* <button onClick={handleAddCourse}>submit</button> */}
+        <button onClick={() => alert(JSON.stringify(formData))}>submit</button>
       </div>
     </>
   );

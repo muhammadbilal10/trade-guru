@@ -3,10 +3,7 @@ import ImageUpload from "./ImageUpload";
 import CurriculumSection from "./CurriculumSection";
 import { useNavigate } from "react-router";
 
-
-
 const AddCourse = ({ formData, setFormData, nextStep }) => {
-
   console.log(formData);
 
   // const [formData, setFormData] = useState({
@@ -47,7 +44,6 @@ const AddCourse = ({ formData, setFormData, nextStep }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     nextStep();
   };
 
@@ -60,15 +56,15 @@ const AddCourse = ({ formData, setFormData, nextStep }) => {
             <div class="border-t border-gray-300 my-4"></div>
             <div className="mb-4">
               <label
-                htmlFor="courseType"
+                htmlFor="type"
                 className="block text-sm font-medium text-gray-600"
               >
                 What type of course are you making?
               </label>
               <select
-                id="courseType"
-                name="courseType"
-                value={formData.courseType}
+                id="type"
+                name="type"
+                value={formData.type}
                 onChange={handleChange}
                 required
                 className="mt-1 p-2 w-full border rounded-md"
@@ -88,9 +84,9 @@ const AddCourse = ({ formData, setFormData, nextStep }) => {
               </label>
               <input
                 type="text"
-                id="courseName"
-                name="courseName"
-                value={formData.courseName}
+                id="title"
+                name="title"
+                value={formData.title}
                 placeholder="e.g. Introduction to Computer Science"
                 onChange={handleChange}
                 required
@@ -105,9 +101,9 @@ const AddCourse = ({ formData, setFormData, nextStep }) => {
                 What category best fits the knowledge you'll share?
               </label>
               <select
-                id="courseCategory"
-                name="courseCategory"
-                value={formData.courseCategory}
+                id="category"
+                name="category"
+                value={formData.category}
                 onChange={handleChange}
                 required
                 className="mt-1 p-2 w-full border rounded-md"
@@ -147,9 +143,9 @@ const AddCourse = ({ formData, setFormData, nextStep }) => {
                 Course Level
               </label>
               <select
-                id="courseLevel"
-                name="courseLevel"
-                value={formData.courseLevel}
+                id="level"
+                name="level"
+                value={formData.level}
                 onChange={handleChange}
                 required
                 className="mt-1 p-2 w-full border rounded-md"
@@ -171,9 +167,9 @@ const AddCourse = ({ formData, setFormData, nextStep }) => {
                 Course Language
               </label>
               <select
-                id="courseLanguage"
-                name="courseLanguage"
-                value={formData.courseLanguage}
+                id="language"
+                name="language"
+                value={formData.language}
                 onChange={handleChange}
                 required
                 className="mt-1 p-2 w-full border rounded-md"
@@ -195,16 +191,16 @@ const AddCourse = ({ formData, setFormData, nextStep }) => {
                 Course Description
               </label>
               <textarea
-                id="courseDetails"
-                name="courseDetails"
-                value={formData.courseDetails}
+                id="description"
+                name="description"
+                value={formData.description}
                 onChange={handleChange}
                 rows="4"
                 className="mt-1 p-2 w-full border rounded-md"
               ></textarea>
             </div>
 
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label
                 htmlFor="courseImage"
                 className="block text-sm font-medium text-gray-600"
@@ -219,9 +215,9 @@ const AddCourse = ({ formData, setFormData, nextStep }) => {
                 accept="image/svg+xml, image/png, image/jpeg, image/gif"
                 className="mt-1 p-2 w-full border rounded-md"
               />
-            </div>
+            </div> */}
 
-            <ImageUpload />
+            {/* <ImageUpload /> */}
 
             <div className="mb-4">
               <label
@@ -243,23 +239,23 @@ const AddCourse = ({ formData, setFormData, nextStep }) => {
 
             <div className="mb-4">
               <label
-                htmlFor="maxStudents"
+                htmlFor="price"
                 className="block text-sm font-medium text-gray-600"
               >
-                Max Students
+                Price ($)
               </label>
               <input
                 type="number"
-                id="maxStudents"
-                name="maxStudents"
-                value={formData.maxStudents}
+                id="price"
+                name="price"
+                value={formData.price}
                 onChange={handleChange}
                 required
                 className="mt-1 p-2 w-full border rounded-md"
               />
             </div>
 
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label
                 htmlFor="courseDuration"
                 className="block text-sm font-medium text-gray-600"
@@ -275,7 +271,7 @@ const AddCourse = ({ formData, setFormData, nextStep }) => {
                 required
                 className="mt-1 p-2 w-full border rounded-md"
               />
-            </div>
+            </div> */}
             <div className="mt-6 text-end">
               <button
                 type="submit"

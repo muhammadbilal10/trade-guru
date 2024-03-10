@@ -2,12 +2,13 @@ import { FaUser, FaFile, FaStar, FaThumbsUp } from "react-icons/fa";
 import ML from "/assets/ML.png";
 
 const InstructorDetailsCard = ({
-  name,
+  fname,
   title,
   studentLearned,
   courses,
   reviews,
   rating,
+  totalCourse,
   description,
   img,
 }) => {
@@ -15,22 +16,22 @@ const InstructorDetailsCard = ({
     {
       id: 1,
       icon: FaFile,
-      value: courses + "+ Courses",
+      value: totalCourse + "+ Courses",
     },
     {
       id: 2,
       icon: FaUser,
-      value: studentLearned + "+ Students Learned",
+      value: !studentLearned + "+ Students Learned",
     },
     {
       id: 3,
       icon: FaStar,
-      value: reviews + " Reviews",
+      value: !reviews + " Reviews",
     },
     {
       id: 4,
       icon: FaThumbsUp,
-      value: rating,
+      value: rating || "4.9",
     },
   ];
   return (
@@ -45,8 +46,8 @@ const InstructorDetailsCard = ({
         </div>
 
         <div>
-          <h3 className="text-2xl font-semibold">{name}</h3>
-          <p className="text-primary">{title}</p>
+          <h3 className="text-2xl font-semibold">{fname}</h3>
+          <p className="text-primary">{title || "User Experience Designers"}</p>
           <div className="flex flex-col mt-2">
             {insitem.map((item) => (
               <div key={item.id} className="flex items-center mr-4">

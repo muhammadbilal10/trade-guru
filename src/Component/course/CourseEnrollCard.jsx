@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   FaUser,
   FaClock,
@@ -8,10 +8,8 @@ import {
   FaGlobe,
   FaAward,
 } from "react-icons/fa";
-
-import { getAuth } from "firebase/auth";
-import { doc, setDoc, addDoc, collection } from "firebase/firestore";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, collection, getDoc, doc } from "firebase/firestore";
+import app from "../../database/firebase";
 
 const CourseEnrollCard = ({
   id,
@@ -19,25 +17,48 @@ const CourseEnrollCard = ({
   description,
   imageUrl,
   lecture,
-  instructor,
+  instructorId,
   duration,
   level,
   language,
   enroll,
   price,
+  totalLecture,
 }) => {
+  const [instructor, setInstructor] = React.useState({});
+
+  useEffect(() => {
+    const db = getFirestore(app);
+    const getInstructor = async () => {
+      const docRef = doc(db, "Instructor", instructorId);
+      try {
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+          setInstructor({ id: docSnap.id, ...docSnap.data() });
+        } else {
+          console.log("No such document!");
+        }
+      } catch (error) {
+        console.error("Error getting document:", error);
+      }
+    };
+    getInstructor();
+  }, []);
+
   const EnrollCardDetails = [
     {
       id: 1,
       icon: FaUser,
       title: "Instructor",
-      value: instructor,
+      value: instructor?.fname || "John Doe",
     },
     {
       id: 2,
       icon: FaFile,
       title: "Lectures",
-      value: lecture,
+      value: totalLecture || lecture,
     },
     {
       id: 3,
@@ -94,7 +115,7 @@ const CourseEnrollCard = ({
         </button>
       </div>
       <div className="px-6 py-4">
-        <div className="font-bold text-2xl mb-4">{price}</div>
+        <div className="font-bold text-2xl mb-4">${price}</div>
         <button className="bg-primary hover:bg-primary-600  hover:outline text-white font-bold py-2 px-4 rounded w-full">
           Enroll Now
         </button>

@@ -1,4 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 import { FaCheck, FaFile } from "react-icons/fa";
 
 const Modal = ({ isOpen, onClose, onSave }) => {
@@ -51,12 +57,60 @@ const Modal = ({ isOpen, onClose, onSave }) => {
 
 const LectureModal = ({ isOpen, onClose, onSave }) => {
   const [title, setTitle] = useState("");
-  const [material, setMaterial] = useState("");
+  const [material, setMaterial] = useState(null);
+  const [disabled, setDisabled] = useState(false);
 
-  const handleSubmit = () => {
-    onSave({ title, material });
+  const uploadImage = async () => {
+    if (!material) {
+      alert("Please select an file to upload.");
+      return;
+    }
+
+    const storage = getStorage();
+    const storageReference = ref(storage, `material/${material.name}`);
+    const uploadTask = uploadBytesResumable(storageReference, material);
+
+    return new Promise((resolve, reject) => {
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+          }
+        },
+        (error) => {
+          console.error(error);
+          reject(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            resolve(downloadURL);
+          });
+        }
+      );
+    });
+  };
+  const handleFileChange = (e) => {
+    if (e.target.files[0]) {
+      setMaterial(e.target.files[0]);
+    }
+  };
+
+  const handleSubmit = async () => {
+    setDisabled(true);
+    const fileURL = await uploadImage();
+    await onSave({ title, material: fileURL });
     setTitle("");
     setMaterial("");
+    setDisabled(false);
     onClose();
   };
 
@@ -76,8 +130,17 @@ const LectureModal = ({ isOpen, onClose, onSave }) => {
           type="file"
           id="courseImage"
           name="courseImage"
-          onChange={(e) => setMaterial(e.target.value)}
-          accept="image/svg+xml, image/png, image/jpeg, image/gif"
+          onChange={handleFileChange}
+          accept="image/svg+xml, 
+    image/png, 
+    image/jpeg, 
+    image/gif, 
+    application/vnd.ms-powerpoint, 
+    application/vnd.openxmlformats-officedocument.presentationml.presentation, 
+    application/pdf,
+    video/mp4, 
+    video/x-msvideo, 
+    video/quicktime"
           className="mt-1 p-2 w-full border rounded-md"
         />
 
@@ -90,7 +153,10 @@ const LectureModal = ({ isOpen, onClose, onSave }) => {
           </button>
           <button
             onClick={handleSubmit}
-            className="bg-blue-500 text-white py-2 px-4 rounded-r"
+            disabled={disabled}
+            className={`py-2 px-4 rounded-r text-white ${
+              disabled ? "bg-gray-400" : "bg-secondary"
+            }`}
           >
             Save
           </button>

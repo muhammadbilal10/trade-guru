@@ -59,7 +59,8 @@ const accordionData = [
 ];
 
 const AccordionItem = ({ section, isActive, setActive }) => {
-  const Icon = section.items[0].preview ? FaPlayCircle : FaLock;
+  // const Icon = section.items[0].preview ? FaPlayCircle : FaLock;
+  const Icon = true ? FaPlayCircle : FaLock;
 
   return (
     <div className="mb-4">
@@ -71,15 +72,17 @@ const AccordionItem = ({ section, isActive, setActive }) => {
       >
         {isActive ? <FaChevronUp /> : <FaChevronDown />}
         <span className="flex-grow text-left mx-2 font-semibold text-lg">
-          {section.title}
+          {section?.title}
         </span>
-        <span className="text-lg">{section.lectures}</span>
+        <span className="text-lg">
+          {section.lectures.length} Lectures, 2:51:51 min
+        </span>
       </div>
       {isActive && (
         <div className="border-t border-gray-200 bg-gray-50 px-4 py-2">
           {/* <p className="text-gray-700 text-sm">{section.content}</p>
           <p className="text-gray-500 text-xs">{section.details}</p> */}
-          {section.items.map((item, index) => (
+          {section.lectures.map((item, index) => (
             <div key={index} className="flex items-center justify-between py-1">
               <span className="flex items-center">
                 <Icon className="mr-2 text-secondary" />
@@ -104,26 +107,38 @@ const AccordionItem = ({ section, isActive, setActive }) => {
   );
 };
 
-const CurriculumTab = () => {
+const CurriculumTab = ({ sections, courseDetails }) => {
+  console.log(sections);
+
   const [activeIndex, setActiveIndex] = useState(null);
 
   const handleSetActive = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
+  const sect = sections;
+  const totalLectures = sect?.reduce(
+    (acc, section) => acc + section.lectures.length,
+    0
+  );
+
+  console.log(sections);
   return (
     <div className="bg-white">
       <h2 className="text-2xl font-semibold mb-4">Course Description</h2>
       <div className="mb-4 max-sm:flex max-sm:flex-col">
         <span className="text-lg text-gray-500 font-medium px-2 py-1">
-          Level Beginner
+          Level {courseDetails?.level}
         </span>
-        <span className="text-lg mx-2 text-gray-500">12 Lectures</span>
+        <span className="text-lg mx-2 text-gray-500">
+          {totalLectures} Lectures
+        </span>
         <span className="mx-2 text-lg text-gray-500">
           Total: 5 Hours 56 Minutes 24 Seconds
         </span>
       </div>
-      {accordionData.map((section, index) => (
+
+      {sections?.map((section, index) => (
         <AccordionItem
           key={index}
           section={section}

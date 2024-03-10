@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import InstructorDetailsCard from "../instructor/InstructorDetailsCard";
 import OverviewTab from "./OverviewTab";
 import CurriculumTab from "./CurriculumTab";
 import ReviewsTab from "./ReviewsTab";
+import { getFirestore, collection, getDoc, doc } from "firebase/firestore";
+import app from "../../database/firebase";
 
 const TabButton = ({ active, onClick, children }) => (
   <button
@@ -17,8 +19,30 @@ const TabButton = ({ active, onClick, children }) => (
   </button>
 );
 
-const CourseTabs = ({ InstructorDetails }) => {
+const CourseTabs = ({ instructorId, sections, courseDetails }) => {
   const [activeTab, setActiveTab] = useState("overview");
+  const [InstructorDetails, setInstructorDetails] = useState({});
+
+  useEffect(() => {
+    const db = getFirestore(app);
+    const getInstructor = async () => {
+      const docRef = doc(db, "Instructor", instructorId);
+
+      try {
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+          setInstructorDetails({ id: docSnap.id, ...docSnap.data() });
+        } else {
+          console.log("No such document!");
+        }
+      } catch (error) {
+        console.error("Error getting document:", error);
+      }
+    };
+    getInstructor();
+  }, []);
 
   return (
     <div>
@@ -52,12 +76,12 @@ const CourseTabs = ({ InstructorDetails }) => {
       <div className="mt-10 rounded-xl shadow-xl">
         {activeTab === "overview" && (
           <div>
-            <OverviewTab />
+            <OverviewTab sections={sections} courseDetails={courseDetails} />
           </div>
         )}
         {activeTab === "curriculum" && (
           <div className="p-8">
-            <CurriculumTab />
+            <CurriculumTab sections={sections} courseDetails={courseDetails} />
           </div>
         )}
         {activeTab === "instructor" && (

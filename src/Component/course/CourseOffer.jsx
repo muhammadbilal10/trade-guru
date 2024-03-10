@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import OfferCourseCard from "./OfferCourseCard";
 import PhpImage from "/assets/img/login-office.jpeg";
 import OOP from "/assets/OOP.png";
@@ -16,6 +16,14 @@ import SkillLevelFilter from "./SkillLevelFilter";
 import LanguageFilter from "./LanguageFilter";
 import RatingFilter from "./RatingFilter";
 import CategoryList from "./CategoryList";
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+} from "firebase/firestore";
+import app from "../../database/firebase";
 
 const CourseOffer = () => {
   const offerCourseList = [
@@ -93,6 +101,30 @@ const CourseOffer = () => {
     },
   ];
 
+  const [courses, setCourses] = React.useState([]);
+
+  useEffect(() => {
+    const db = getFirestore(app);
+    const getCourse = async () => {
+      const collectionName = "Course";
+      const docRef = collection(db, collectionName);
+      try {
+        const querySnapshot = await getDocs(docRef);
+
+        const coursesArray = [];
+        querySnapshot.forEach((doc) => {
+          console.log(doc.id, " => ", doc.data());
+          coursesArray.push({ id: doc.id, ...doc.data() });
+        });
+        setCourses(coursesArray);
+        console.log(coursesArray);
+      } catch (error) {
+        console.log("Error getting documents: ", error);
+      }
+    };
+    getCourse();
+  }, []);
+
   const initialDisplayCourses = 6;
   const numberOfCourseToDisplay = 4;
   const [displayCourses, setDisplayCourses] = React.useState(
@@ -106,9 +138,19 @@ const CourseOffer = () => {
     <div className="bg-white px-4 rounded-lg mx-auto max-w-xl md:max-w-2xl lg:max-w-6xl mt-8">
       <div className="grid grid-cols-12 gap-[30px]">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-[30px] lg:col-span-8 col-span-12">
-          {offerCourseList.slice(0, displayCourses).map((course) => (
+          {/* {offerCourseList.slice(0, displayCourses).map((course) => (
             <div key={course.id}>
               <NewCourseCard {...course} />
+            </div>
+          ))} */}
+
+          {courses.slice(0, displayCourses).map((course) => (
+            <div key={course.id}>
+              <NewCourseCard
+                {...course.formData}
+                courseId={course.courseId}
+                sections={course.sections}
+              />
             </div>
           ))}
         </div>
@@ -120,7 +162,7 @@ const CourseOffer = () => {
           <LanguageFilter />
           <RatingFilter />
         </div>
-        {displayCourses < offerCourseList.length && (
+        {displayCourses < courses.length && (
           <div className="flex justify-center  col-span-8">
             <button
               onClick={handleLoadMore}
