@@ -137,7 +137,7 @@ const CourseOffer = () => {
   return (
     <div className="bg-white px-4 rounded-lg mx-auto max-w-xl md:max-w-2xl lg:max-w-6xl mt-8">
       <div className="grid grid-cols-12 gap-[30px]">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-[30px] lg:col-span-8 col-span-12">
+        <div className="col-span-12 grid grid-cols-1 md:grid-cols-2 gap-[30px] lg:col-span-8 ">
           {/* {offerCourseList.slice(0, displayCourses).map((course) => (
             <div key={course.id}>
               <NewCourseCard {...course} />
@@ -145,8 +145,9 @@ const CourseOffer = () => {
           ))} */}
 
           {courses.slice(0, displayCourses).map((course) => (
-            <div key={course.id}>
+            <div key={course.id} className="">
               <NewCourseCard
+                key={course.id}
                 {...course.formData}
                 courseId={course.courseId}
                 sections={course.sections}
