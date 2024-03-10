@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import Cookies from "universal-cookie";
+
+const cookies = new Cookies();
+const isLogin = cookies.get("islogin");
 
 const navLinks = [
   { title: "Home", to: "/" },
@@ -48,7 +52,7 @@ const Sheet = ({ isOpen, onClose }) => {
             </Link>
           ))}
         </div>
-        <div>
+        <div className={`${isLogin ? "hidden" : "block"}`}>
           {navButtons.map((button, index) => (
             <Link
               to={button.to}
@@ -70,7 +74,7 @@ const Navbar = () => {
   return (
     <nav className="bg-white text-black shadow-lg h-20 relative z-40">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+        <div className={`flex justify-between h-16`}>
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
               <a href="/" className="flex items-center font-bold">
@@ -121,7 +125,11 @@ const Navbar = () => {
               </svg>
             </button>
           </div>
-          <div className="hidden lg:flex sm:items-center">
+          <div
+            className={`${
+              isLogin && "flex-1 justify-center space-x-5"
+            } hidden lg:flex sm:items-center`}
+          >
             {navLinks.map((link, index) => (
               <Link to={link.to} key={index}>
                 <button className="hover:text-white hover:bg-primary-600 px-4 py-1 rounded-md transition duration-300">
@@ -130,7 +138,12 @@ const Navbar = () => {
               </Link>
             ))}
           </div>
-          <div className="hidden lg:flex sm:items-center sm:space-x-4">
+
+          <div
+            className={`${
+              isLogin ? "hidden" : "hidden lg:flex sm:items-center sm:space-x-4"
+            }`}
+          >
             {navButtons.map((button, index) => (
               <Link to={button.to} key={index}>
                 <button className="border rounded-md px-4 w-full py-2 bg-primary hover:bg-primary-600 text-white">

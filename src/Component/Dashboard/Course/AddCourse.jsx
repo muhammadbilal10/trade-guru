@@ -49,7 +49,7 @@ const AddCourse = ({ formData, setFormData, nextStep }) => {
 
   return (
     <div className="container mx-auto mt-8">
-      <div className="max-w-full">
+      <div className="max-w-full h-40">
         <form onSubmit={handleSubmit}>
           <div className="bg-white shadow-lg rounded-md p-8">
             <h2 className="text-2xl font-semibold mb-6">Course landing page</h2>

@@ -9,6 +9,10 @@ import {
   FaAward,
 } from "react-icons/fa";
 
+import { getAuth } from "firebase/auth";
+import { doc, setDoc, addDoc, collection } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
+
 const CourseEnrollCard = ({
   id,
   title,
@@ -22,8 +26,6 @@ const CourseEnrollCard = ({
   enroll,
   price,
 }) => {
-  console.log(language);
-
   const EnrollCardDetails = [
     {
       id: 1,
@@ -63,6 +65,21 @@ const CourseEnrollCard = ({
       value: language,
     },
   ];
+
+  const handleEnroll = async () => {
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const docRef = await addDoc(
+      collection(db, "customers"),
+      "00gPJEvDPTXHN9zLAaIfW0fg4xz1",
+      "checkout_sessions",
+      {
+        price: price,
+        success_url: "http://localhost:3000/success",
+        cancel_url: "http://localhost:3000/cancel",
+      }
+    );
+  };
 
   return (
     <div className=" rounded shadow-lg bg-white p-4">
