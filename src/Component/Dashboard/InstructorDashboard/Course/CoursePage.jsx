@@ -107,7 +107,6 @@ export default function CoursePage() {
             {formSteps[currentStep - 1]}
           </main>
         </div>
-        <button onClick={() => alert(JSON.stringify(formData))}>submit</button>
       </div>
     </>
   );
