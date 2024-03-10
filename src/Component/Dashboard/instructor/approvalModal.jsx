@@ -1,19 +1,16 @@
 import { useState } from 'react'
 import { Dialog } from '@headlessui/react'
 import app from "../../../database/firebase";
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
-
+import { getFirestore, getDoc } from 'firebase/firestore';
+import { doc,  updateDoc } from 'firebase/firestore';
 
 export default function ApproveModal({ IsOpen, setIsOpen, id, setId }) {
 
     const db = getFirestore(app);
     const handleApprove = async (uid) => {
-
-        console.log('UID:', uid);
-
         try {
             const docRef = doc(db, 'Instructor', uid);
-            await update(docRef, { status: true });
+            await updateDoc(docRef, { approval: true });
             console.log('Status updated successfully');
         } catch (error) {
             console.error('Error updating status:', error);

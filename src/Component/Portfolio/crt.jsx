@@ -47,7 +47,7 @@ const CandlestickChart = ({ data }) => {
     };
   }, [data]);
 
-  return <div ref={containerRef} style={{ width: '100%', height: '600px' }}></div>;
+  return <div ref={containerRef} style={{ width: '100%', height: '400px' }}></div>;
 
 };
 

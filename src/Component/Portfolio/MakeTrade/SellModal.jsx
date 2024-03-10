@@ -47,7 +47,7 @@ export default function SellModal({ isOpen, setIsOpen, symbol, quantity, Symbols
           quantity: quantity, // Negative quantity for sell transaction
           price: price,
           totalPrice: totalPrice,
-          sector: getSectorBySymbol(SymbolsList,symbol.toUpperCase()),
+          sector: getSectorBySymbol(SymbolsList, symbol.toUpperCase()),
           date: new Date().toISOString().split('T')[0],
           type: 'Sell'
         };
@@ -126,10 +126,10 @@ export default function SellModal({ isOpen, setIsOpen, symbol, quantity, Symbols
           </div>
           <div className="flex justify-end mt-6">
             <button
-              className="px-4 py-2 mr-2 text-white bg-purple-600 rounded hover:bg-purple-700"
-            onClick={handleConfirmSell}
+              className="px-4 py-2 mr-2 text-white bg-red-600 rounded hover:bg-red-700"
+              onClick={handleConfirmSell}
             >
-              Confirm Buy
+              Confirm Sell
             </button>
             <button
               className="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300"
@@ -138,6 +138,7 @@ export default function SellModal({ isOpen, setIsOpen, symbol, quantity, Symbols
               Cancel
             </button>
           </div>
+
         </div>
       </Dialog.Panel>
     </Dialog>

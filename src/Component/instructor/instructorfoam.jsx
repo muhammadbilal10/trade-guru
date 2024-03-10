@@ -1,13 +1,12 @@
-import React from 'react'
+import {React,useEffect,useState} from 'react'
 import Navbar from '../navbar/navbar'
 import { FaArrowRight } from "react-icons/fa";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc,getDoc  } from "firebase/firestore";
 import { collection, addDoc } from 'firebase/firestore';
-import { useState } from "react";
 import app from '../../database/firebase';
 import { getFirestore, Timestamp } from "firebase/firestore";
+import Cookies from 'universal-cookie';
 export default function Instructorform() {
-
     const [fname, setFname] = useState('');
     const [lname, setLname] = useState('');
     const [gender, setGender] = useState('');
@@ -19,10 +18,34 @@ export default function Instructorform() {
     const [count, setCount] = useState(0)
 
     const db = getFirestore(app);
+    const cookies = new Cookies();
+    const uid=cookies.get('userId')
+
+    const getUserData = async (uid) => {
+        try {
+            const userDocRef = doc(db, 'User', uid); // Replace 'users' with your actual collection name
+            const userDocSnap = await getDoc(userDocRef);
+            
+            if (userDocSnap.exists()) {
+                const userData = userDocSnap.data();
+                return userData;
+            } else {
+                console.log('User document not found');
+                return null;
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+            throw error;
+        }
+    };
+
     const handlesubmit = async () => {
         try {
-            const collectionRef = collection(db, "Instructor");
-            // Create a document with a date field in the desired format
+           
+
+            console.log(uid);
+            const collectionRef = doc(db, 'Instructor', uid);
+            
             const currentDate = new Date();
             const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`;
 
@@ -31,19 +54,20 @@ export default function Instructorform() {
                 fname: fname,
                 lname: lname,
                 language: lang,
+                instructorId:uid,
                 experiance: experience,
                 gender: gender,
-                status: approval,
+                approval: approval,
+                address:address,
+                about:about,
                 totalCourse: count,
                 date: formattedDate,
-                //id:docRef.id,
-
-
             };
-            // Use addDoc to add the data without specifying a custom ID
-            const docRef = await addDoc(collectionRef, data);
+            
+             await setDoc(collectionRef, data);
 
-            console.log('Document added with ID:', docRef.id);
+            console.log('Document added with ID:', collectionRef);
+            console.log('Document added with ID:', collectionRef.id);
         } catch (error) {
             console.error('Error adding document:', error.message);
         }
@@ -51,9 +75,28 @@ export default function Instructorform() {
 
 
 
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+              
+                const userData = await getUserData(uid); 
+
+                // Update state with user data
+                if (userData) {
+                    setFname(userData.fname || ''); // Set first name, defaulting to empty string if undefined
+                    setLname(userData.lname || ''); // Set last name, defaulting to empty string if undefined
+                    setGender(userData.gender || 'male'); // Set gender, defaulting to empty string if undefined
+                } else {
+                    console.log('User data not found');
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+        fetchUserData();
+    }, []); 
+
     return (
-
-
         <>
         
             <Navbar />
@@ -91,10 +134,13 @@ export default function Instructorform() {
                                     <span class="text-gray-700 dark:text-gray-400">First name</span>
                                     <input
                                         class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                        placeholder="xyz"
-                                        required
+                                        placeholder={fname}
                                         value={fname}
-                                        onChange={(e) => { setFname(e.target.value) }}
+                                        readOnly // Add readOnly attribute to prevent user input
+                                        // placeholder={fname}
+                                        // required
+                                        // value={fname}
+                                        // onChange={(e) => { setFname(e.target.value) }}
                                     />
 
                                 </label>

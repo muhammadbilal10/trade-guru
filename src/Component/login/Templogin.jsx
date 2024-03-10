@@ -4,71 +4,148 @@ import Navbar from "../navbar/navbar";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import app from "../../database/firebase";
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Link } from "react-router-dom";
 import Cookies from 'universal-cookie';
 
+
+import '../../../node_modules/react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+//import { ToastContainer, toast } from "react-toastify";
+
+
+
 export default function TempLogin() {
-    const [error, setError] = useState({
+    const [error_email, setError_email] = useState({
         status: false,
         message: ''
     })
+    const [error_password, setError_password] = useState({
+        status: false,
+        message: ''
+    })
+
     const navigate = useNavigate();
     const auth = getAuth(app);
+    const db = getFirestore(app);
     const cookies = new Cookies();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const ToastemailError = () => {
+        toast.error("Invalid email format!", {
+            position: "top-right",
+            className: "toast-message",
+        });
+    };
+    const ToastPasswordError = () => {
+        toast.error("invalid password", {
+            position: "top-right",
+            className: "toast-message",
+        });
+    };
+
+    const ToastInvalidCredentialError = () => {
+        toast.error("Invalid Credential", {
+            position: "top-right",
+            className: "toast-message",
+        });
+    };
+
+
     const handleLogin = () => {
+        const IsInstructorExist = async (uId) => {
+            try {
+                const docRef = doc(db, 'Instructor', uId);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const userData = docSnap.data();
+                    return !!userData.approval; // Convert status to boolean and return
+                } else {
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error checking document existence and status:', error);
+                return false; // Return false in case of any error
+            }
+        };
+
         // Check if email is in valid format
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            setError({
+            ToastemailError();
+            setEmail('');
+            setPassword('');
+            setError_email({
                 status: true,
                 message: 'Invalid email format!'
             });
-            return; // Stop further execution
+
+            return;
         }
 
         // Check if password meets minimum length requirement
         if (password.length < 6) {
-            setError({
+            ToastPasswordError();
+            setEmail('');
+            setPassword('');
+            setError_password({
                 status: true,
                 message: 'Password must be at least 6 characters long!'
             });
-            return; // Stop further execution
+            return;
         }
 
         // Clear any previous errors
-        setError({
+        setError_password({
+            status: false,
+            message: ''
+        });
+        setError_email({
             status: false,
             message: ''
         });
 
-        // Perform authentication
         signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
+            .then(async (userCredential) => {
                 // Signed in 
                 const user = userCredential.user;
                 const uid = user.uid;
-                console.log(user);
-                setIsLoggedIn(true);
-
+                const isExist = await IsInstructorExist(uid); // Wait for the promise to resolve
+                console.log(isExist);
+                // Do something with isExist
                 cookies.set('userId', uid);
                 cookies.set('islogin', true);
+                cookies.set('isInstructor', isExist);
+                
                 navigate("/");
-
             })
             .catch((error) => {
-                console.log("Authentication error:", error);
-                setError({
-                    status: true,
-                    message: 'Invalid email or password!'
-                });
+
+                if (error.code === "auth/invalid-credential" || error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
+                    ToastInvalidCredentialError();
+                    setEmail('');
+                    setPassword('');
+                    setError_email({
+                        status: true,
+                        message: 'Invalid email'
+                    });
+                    setError_password({
+                        status: true,
+                        message: 'Password must be at least 6 characters long!'
+                    });
+
+                } else {
+                    alert("An error occurred. Please try again later.");
+                }
             });
     };
 
     return (
         <>
+            <ToastContainer />
             <div class="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900" onSubmit={(e) => e.preventDefault()}>
                 <div class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800">
                     <div class="flex flex-col overflow-y-auto md:flex-row">
@@ -76,13 +153,15 @@ export default function TempLogin() {
                             <img
                                 aria-hidden="true"
                                 class="object-cover w-full h-full dark:hidden"
-                                src={'/assets/img/login-office.jpeg'}
-                                alt="Office Office" />
+                                src="https://www.investopedia.com/thmb/6yT9a8ymacj5LQMsBC5ty5OZseY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/TradingPlatforms_Chervov-dfe01706a3c5463aaa96883cc36e8722.jpg"
+                                alt="Office Office"
+                            />
                             <img
                                 aria-hidden="true"
                                 class="hidden object-cover w-full h-full dark:block"
-                                src="/assets/img/login-office-dark.jpeg"
-                                alt="Office" />
+                                src="https://www.investopedia.com/thmb/6yT9a8ymacj5LQMsBC5ty5OZseY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/TradingPlatforms_Chervov-dfe01706a3c5463aaa96883cc36e8722.jpg"
+                                alt="Office"
+                            />
                         </div>
                         <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
                             <div class="w-full">
@@ -97,6 +176,13 @@ export default function TempLogin() {
                                         value={email}
                                         onChange={(e) => { setEmail(e.target.value) }} />
                                 </label>
+
+                                {
+
+                                    error_email?.status &&
+                                    <p className="text-red-500 text-xs">{error_email?.message}</p>
+
+                                }
                                 <label class="block mt-4 text-sm">
                                     <span class="text-gray-700 dark:text-gray-400">Password</span>
                                     <input
@@ -108,8 +194,8 @@ export default function TempLogin() {
                                     />
                                 </label>
                                 {
-                                    error?.status &&
-                                    <p className="text-red-500 text-xs">{error?.message}</p>
+                                    error_password?.status &&
+                                    <p className="text-red-500 text-xs">{error_password?.message}</p>
                                 }
                                 <button
                                     class="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"

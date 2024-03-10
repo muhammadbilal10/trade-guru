@@ -4,46 +4,87 @@ import Optionbar from "./optionbar";
 import CandlestickChart from './crt';
 import TradeBar from './MakeTrade/MakeTradeBar';
 // import { getprice, getchange, getSectorBySymbol, Is_symbol_exist } from './apiFuntion/api_funtion';
-import { getcandlestick_data } from './apiFuntion/api_funtion';
-
+import { getcandlestick_data, fetchStocks } from './apiFuntion/api_funtion';
+// import CandlestickChartComponent from './chart';
+import CandlestickChartComponent from './temp-chart';
 export default function MarketSummaryPage() {
 
-   
+
     // // Sort the data by timestamp in
     // const sortedData = inputList.sort((a, b) => a[0] - b[0]);
-   
+
     const [candle, setCandle] = useState([]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const data = await getcandlestick_data('HBL');
-            console.log(data);
-            setCandle(data); // Update state with fetched data
-        };
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const data = await getcandlestick_data('HBL');
+    //         // console.log(data);
+    //         setCandle(data); // Update state with fetched data
+    //     };
 
-        fetchData();
-    }, []);
+    //     fetchData();
+
+    // }, []);
+
+
+    // const [stocksData, setStocksData] = useState(null);
+    // const symbol = 'HBL'; // Replace 'yourSymbol' with the actual symbol
+    // const startDate = '2020, 1, 1'; // Replace 'yourStartDate' with the actual start date
+    // const endDate = 'yourEndDate'; // Replace 'yourEndDate' with the actual end date
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const data = await fetchStocks(symbol, startDate, endDate);
+    //             // Verify that the fetched data is an array and not empty
+    //             if (Array.isArray(data) && data.length > 0) {
+    //                 // Map over the fetched data to format it according to the required format
+    //                 const formattedData = data.map(item => ({
+    //                     time: item.Date,
+    //                     open: item.Open,
+    //                     high: item.High,
+    //                     low: item.Low,
+    //                     close: item.Close,
+    //                 }));
+    //                 // Set the formatted data in the state
+    //                 setStocksData(formattedData);
+    //             } else {
+    //                 // Handle case where fetched data is empty or not in the expected format
+    //                 console.error('Fetched data is empty or not in the expected format');
+    //             }
+    //         } catch (error) {
+    //             // Handle fetch error
+    //             console.error('Error fetching data:', error);
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, []);
+
+
 
     // const temp = async () => {
     //     console.log(candle);
     // };
 
     return (
-        <div className="flex flex-col min-h-screen bg-white text-black">
+        <div className="min-h-screen flex flex-col">
             <Navbar />
             <Optionbar />
-            <div className="flex-1 flex">
-                <div className="flex-1 flex flex-col justify-center p-4">
-                    <div className="p-4">
-                        <h1 className="text-2xl font-bold mb-4">TradingView Candlestick Chart Example</h1>
-                        <CandlestickChart data={candle} />
-                    </div>
+            <div className="flex flex-1">
+                <div className="flex-grow bg-gray-100 overflow-y-auto">
+                    <CandlestickChartComponent
+                        symbol='HBL'
+                        startDate='DSF'
+                        endDate='SDF'
+                        style={{ width: '600%', height: '500px' }} // Adjust the height as needed
+                    />
                 </div>
                 <TradeBar />
             </div>
         </div>
     );
-    
+
 }
 
 

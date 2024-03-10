@@ -18,10 +18,6 @@ export default function Home() {
   //     occupasion: null
   //     profilePicture: null
 
-  //     socialMedia(array)
-  //     uid: "r6SQliH0isTz7qhgS1lggXERJ9E3"
-  // }
-
   const [uid, setUid] = useState("r6SQliH0isTz7qhgS1lggXERJ9E3");
   cookies.set("userId", uid);
   cookies.set("islogin", true);

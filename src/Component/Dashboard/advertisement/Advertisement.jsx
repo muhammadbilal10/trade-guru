@@ -1,225 +1,119 @@
-
-
-import React, { useState } from 'react';
-
-import { Link } from "react-router-dom";
-
-import Topnav from '../navbar/topnavbar';
-import Sidenav from '../navbar/sidenav';
+import { React, useState } from "react";
+import Sidenav from "../navbar/sidenav";
+import Topnav from "../navbar/topnavbar";
 import Card from '../card';
 
-const AdvertisementCard = ({ title, description, imageUrl, rating }) => (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-        {imageUrl && (
-            <img src={imageUrl} alt={title} className="w-full h-40 object-cover object-center" />
-        )}
-        <div className="p-4">
-            <h3 className="text-xl font-bold mb-2 text-purple-800">{title}</h3>
-            <p className="text-gray-700">{description}</p>
-            {rating && (
-                <div className="flex items-center mt-4">
-                    <span className="text-gray-600 mr-2">Rating:</span>
-                    <div className="flex">
-                        {[...Array(rating)].map((_, index) => (
-                            <svg key={index} className="w-6 h-6 text-yellow-500 fill-current" viewBox="0 0 20 20">
-                                <path
-                                    fillRule="evenodd"
-                                    clipRule="evenodd"
-                                    d="M19.363 7.727a1.136 1.136 0 0 0-1.032-.705l-6.214-.708L10.25.896a1.119 1.119 0 0 0-2.094 0l-1.866 5.418-6.214.708a1.136 1.136 0 0 0-.63 1.943l5.01 3.647-1.82 5.812a1.128 1.128 0 0 0 .436 1.196c.33.24.76.293 1.134.138L10 16.45l4.973 3.076c.38.235.853.188 1.186-.1a1.128 1.128 0 0 0 .437-1.196l-1.819-5.812 5.01-3.647c.363-.265.478-.766.234-1.143zm-6.613 3.197c.13.095.299.145.468.145.167 0 .335-.05.468-.145l1.878-1.368.79 2.527c.098.313-.015.651-.275.832-.117.085-.258.128-.399.128a.95.95 0 0 1-.468-.125l-1.856-1.148-1.855 1.148c-.13.08-.279.125-.43.125-.145 0-.284-.043-.402-.128a.98.98 0 0 1-.276-.832l.79-2.527 1.878 1.368z"
-                                />
-                            </svg>
-                        ))}
-                    </div>
+import { MdPendingActions } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import { FaChalkboardTeacher } from "react-icons/fa";
+import AddModal from "./Modals/AddModal";
+export default function Advertisement() {
+
+  const [IsOpen, setIsOpen] = useState(false)
+  const handleAddPlan = () => {
+    setIsOpen(true);
+  };
+  const handleEditPlan = () => {
+    // Logic for handling the "Edit Plan" button click
+    console.log("Edit Plan clicked");
+  };
+
+  const handleDeletePlan = () => {
+    // Logic for handling the "Delete Plan" button click
+    console.log("Delete Plan clicked");
+  };
+
+  return (
+    <>
+      {IsOpen && <AddModal isOpen={IsOpen} setIsOpen={setIsOpen} />}
+      <div className="flex h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden">
+        <Sidenav />
+        <div className="flex flex-col flex-1 w-full">
+          <Topnav />
+          <main className="h-full overflow-y-auto">
+            <div className="container px-6 mx-auto grid">
+              <h2 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                Advertisement Plan
+              </h2>
+              <a
+                className="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-primary rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple"
+                href=""
+              >
+                <div className="flex items-center">
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                    ></path>
+                  </svg>
+                  <span>instructor approvals here</span>
                 </div>
-            )}
+              </a>
+
+
+              {/* CTA */}
+              <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
+                <Card
+                  title={"Total Advertisement plan"}
+                  count={5}
+                  Icon={<FaChalkboardTeacher />}
+                  color={"green-500"}
+                />
+                <Card
+                  title={"Total ads running"}
+                  count={5}
+                  Icon={<MdPendingActions />}
+                />
+                <Card title={"Total requests"} count={6} Icon={<FaEdit />} />
+              </div>
+              <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
+                <button
+                  className="p-4 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  onClick={handleAddPlan}
+                >
+                  Add Plan
+                </button>
+                <button
+                  className="p-4 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                  onClick={handleEditPlan}
+                >
+                  Edit Plan
+                </button>
+                <button
+                  className="p-4 bg-red-500 text-white rounded hover:bg-red-600"
+                  onClick={handleDeletePlan}
+                >
+                  Delete Plan
+                </button>
+              </div>
+            </div>
+          </main>
         </div>
-    </div>
-);
-
-const Advertisements = () => {
-    const [advertisements, setAdvertisements] = useState([
-        {
-            title: "Learn React",
-            description: "Master React with our comprehensive online courses!",
-            imageUrl: "https://via.placeholder.com/300x200",
-            rating: 4,
-        },
-        {
-            title: "JavaScript Bootcamp",
-            description: "Become a JavaScript ninja in just 30 days!",
-            imageUrl: "https://via.placeholder.com/300x200",
-            rating: 5,
-        },
-        {
-            title: "Python for Beginners",
-            description: "Start your journey into Python programming!",
-            imageUrl: "https://via.placeholder.com/300x200",
-            rating: 3,
-        },
-    ]);
-    const [selectedAdvertisement, setSelectedAdvertisement] = useState(null);
-    const [advertisementForm, setAdvertisementForm] = useState({
-        title: '',
-        description: '',
-        imageUrl: '',
-        rating: 0,
-    });
-
-    const handleAdvertisementSelection = (advertisement) => {
-        setSelectedAdvertisement(advertisement);
-        setAdvertisementForm({
-            title: advertisement.title,
-            description: advertisement.description,
-            imageUrl: advertisement.imageUrl,
-            rating: advertisement.rating,
-        });
-    };
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setAdvertisementForm((prevForm) => ({
-            ...prevForm,
-            [name]: value,
-        }));
-    };
-
-    const handleAdvertisementSubmission = () => {
-        // Dummy submission logic, add new advertisement to the list
-        setAdvertisements([...advertisements, advertisementForm]);
-    };
-
-    const handleAdvertisementUpdate = () => {
-        // Dummy update logic, update advertisement in the list
-        const updatedAdvertisements = advertisements.map(advertisement =>
-            advertisement.title === selectedAdvertisement.title ? advertisementForm : advertisement
-        );
-        setAdvertisements(updatedAdvertisements);
-    };
-
-    const handleAdvertisementRemoval = () => {
-        // Dummy removal logic, remove advertisement from the list
-        const filteredAdvertisements = advertisements.filter(advertisement =>
-            advertisement.title !== selectedAdvertisement.title
-        );
-        setAdvertisements(filteredAdvertisements);
-    };
-
-    return (
-        <div className="container mx-auto py-8">
-            <h1 className="text-4xl font-bold mb-8 text-purple-800 text-center">Manage Advertisements</h1>
-
-            {/* Advertisements List */}
-            <section className="mb-8">
-                <h2 className="text-2xl font-bold mb-4 text-purple-700">Advertisements</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                    {advertisements.map((advertisement, index) => (
-                        <div key={index} onClick={() => handleAdvertisementSelection(advertisement)}>
-                            <AdvertisementCard {...advertisement} />
-                        </div>
-                    ))}
-                </div>
-            </section>
-
-            {/* Add New Advertisement Form */}
-            <section className="mb-8">
-                <h2 className="text-2xl font-bold mb-4 text-purple-700">Add New Advertisement</h2>
-                <div className="bg-white p-6 rounded-lg shadow-lg">
-                    <form onSubmit={handleAdvertisementSubmission} className="space-y-4">
-                        <input
-                            type="text"
-                            name="title"
-                            value={advertisementForm.title}
-                            onChange={handleInputChange}
-                            placeholder="Title"
-                            className="w-full border rounded p-2"
-                        />
-                        <input
-                            type="text"
-                            name="description"
-                            value={advertisementForm.description}
-                            onChange={handleInputChange}
-                            placeholder="Description"
-                            className="w-full border rounded p-2"
-                        />
-                        <input
-                            type="text"
-                            name="imageUrl"
-                            value={advertisementForm.imageUrl}
-                            onChange={handleInputChange}
-                            placeholder="Image URL"
-                            className="w-full border rounded p-2"
-                        />
-                        <input
-                            type="number"
-                            name="rating"
-                            value={advertisementForm.rating}
-                            onChange={handleInputChange}
-                            placeholder="Rating"
-                            className="w-full border rounded p-2"
-                        />
-                        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                            Submit
-                        </button>
-                    </form>
-                </div>
-            </section>
-
-            {/* Update Advertisement Form */}
-            <section className="mb-8">
-                <h2 className="text-2xl font-bold mb-4 text-purple-700">Update Advertisement</h2>
-                <div className="bg-white p-6 rounded-lg shadow-lg">
-                    <form onSubmit={handleAdvertisementUpdate} className="space-y-4">
-                        <input
-                            type="text"
-                            name="title"
-                            value={advertisementForm.title}
-                            onChange={handleInputChange}
-                            placeholder="Title"
-                            className="w-full border rounded p-2"
-                        />
-                        <input
-                            type="text"
-                            name="description"
-                            value={advertisementForm.description}
-                            onChange={handleInputChange}
-                            placeholder="Description"
-                            className="w-full border rounded p-2"
-                        />
-                        <input
-                            type="text"
-                            name="imageUrl"
-                            value={advertisementForm.imageUrl}
-                            onChange={handleInputChange}
-                            placeholder="Image URL"
-                            className="w-full border rounded p-2"
-                        />
-                        <input
-                            type="number"
-                            name="rating"
-                            value={advertisementForm.rating}
-                            onChange={handleInputChange}
-                            placeholder="Rating"
-                            className="w-full border rounded p-2"
-                        />
-                        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                            Update
-                        </button>
-                    </form>
-                </div>
-            </section>
-
-            {/* Remove Advertisement Section */}
-            <section className="mb-8">
-                <h2 className="text-2xl font-bold mb-4 text-purple-700">Remove Advertisement</h2>
-                <div className="bg-white p-6 rounded-lg shadow-lg">
-                    <button onClick={handleAdvertisementRemoval} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
-                        Remove
-                    </button>
-                </div>
-            </section>
-        </div>
-    );
+      </div>
+    </>
+  );
 }
 
-export default Advertisements;
 
+{/* <!-- CTA --> */ }
+{/* <a
+                class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple"
+                href=""
+              >
+                <div class="flex items-center">
+                  <svg
+                    class="w-5 h-5 mr-2"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                    ></path>
+                  </svg>
+                  <span>instructor approvals here</span>
+                </div>
+
+              </a> */}
