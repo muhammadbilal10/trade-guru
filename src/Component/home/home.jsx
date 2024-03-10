@@ -26,11 +26,9 @@ export default function Home() {
 
   useEffect(() => {
     const db = getFirestore(app);
-
     const getUser = async () => {
       const documentId = cookies.get("userId");
       const collectionName = "Instructor";
-
       const docRef = doc(db, collectionName, documentId);
       getDoc(docRef)
         .then((docSnap) => {

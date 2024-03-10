@@ -148,7 +148,12 @@ const CurriculumItem = ({ sectionId, lectures, onAddLecture }) => {
   );
 };
 
-const CurriculumSection = ({ nextStep, prevStep, sections, setSections }) => {
+const CurriculumSection = ({
+  prevStep,
+  sections,
+  setSections,
+  handleAddCourse,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const addSection = (section) => {
@@ -209,10 +214,10 @@ const CurriculumSection = ({ nextStep, prevStep, sections, setSections }) => {
           Prev
         </button>
         <button
-          onClick={nextStep}
+          onClick={handleAddCourse}
           className=" bg-primary w-24 hover:bg-primary-600 text-white p-3 rounded-md focus:outline-none focus:shadow-outline-blue "
         >
-          Next
+          Submit
         </button>
       </div>
     </div>

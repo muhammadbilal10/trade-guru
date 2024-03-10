@@ -44,20 +44,6 @@ export default function CoursePage() {
     console.log(formData);
   };
 
-  const formSteps = [
-    <AddCourse
-      formData={formData}
-      setFormData={setFormData}
-      nextStep={() => setCurrentStep((s) => s + 1)}
-    />,
-    <CurriculumSection
-      sections={sections}
-      setSections={setSections}
-      nextStep={() => setCurrentStep((s) => s + 1)}
-      prevStep={() => setCurrentStep((s) => s - 1)}
-    />,
-  ];
-
   const handleAddCourse = async () => {
     try {
       const instructorId = cookies.get("userId");
@@ -91,6 +77,21 @@ export default function CoursePage() {
     }
   };
 
+  const formSteps = [
+    <AddCourse
+      formData={formData}
+      setFormData={setFormData}
+      nextStep={() => setCurrentStep((s) => s + 1)}
+    />,
+    <CurriculumSection
+      sections={sections}
+      setSections={setSections}
+      nextStep={() => setCurrentStep((s) => s + 1)}
+      prevStep={() => setCurrentStep((s) => s - 1)}
+      handleAddCourse={handleAddCourse}
+    />,
+  ];
+
   return (
     <>
       <div className="flex h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden">
@@ -101,7 +102,7 @@ export default function CoursePage() {
             {formSteps[currentStep - 1]}
           </main>
         </div>
-        <button onClick={handleAddCourse}>submit</button>
+        {/* <button onClick={handleAddCourse}>submit</button> */}
       </div>
     </>
   );
