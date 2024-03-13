@@ -18,6 +18,7 @@ export default function AddModal({ isOpen, setIsOpen }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    
     setFormData({ ...formData, [name]: value });
   };
 
@@ -51,10 +52,10 @@ export default function AddModal({ isOpen, setIsOpen }) {
       <div className="bg-white p-8 rounded-lg shadow-md max-w-xl w-full">
         <h2 className="text-lg font-semibold mb-4">Add Advertisement Plan</h2>
         
-        {/* Input fields */}
+       
         <div className="mb-4">
-          <label htmlFor="advertiserName" className="block text-sm font-medium text-gray-700">
-            Advertiser Name
+          <label htmlFor="PlanName" className="block text-sm font-medium text-gray-700">
+            Plan name
           </label>
           <input
             type="text"
@@ -64,6 +65,19 @@ export default function AddModal({ isOpen, setIsOpen }) {
             className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:border-primary-600"
           />
         </div>
+        <div className="mb-4">
+          <label htmlFor="advertimentTyep" className="block text-sm font-medium text-gray-700">
+            Plan name
+          </label>
+          <input
+            type="text"
+            name="advertiserName"
+            value={formData.title}
+            onChange={handleChange}
+            className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:border-primary-600"
+          />
+        </div>
+        
         <div className="mb-4">
           <label htmlFor="description" className="block text-sm font-medium text-gray-700">
             Description
@@ -81,7 +95,7 @@ export default function AddModal({ isOpen, setIsOpen }) {
             Price
           </label>
           <input
-            type="text"
+            type="number"
             name="price"
             value={formData.price}
             onChange={handleChange}
@@ -90,7 +104,7 @@ export default function AddModal({ isOpen, setIsOpen }) {
         </div>
         <div className="mb-4">
           <label htmlFor="duration" className="block text-sm font-medium text-gray-700">
-            Duration
+            Placement Area
           </label>
           <input
             type="text"
@@ -104,7 +118,7 @@ export default function AddModal({ isOpen, setIsOpen }) {
         {/* Future Points */}
         <div className="mb-4">
           <label htmlFor="futurePoints" className="block text-sm font-medium text-gray-700">
-            Future Points
+          feature
           </label>
           {formData.Points.map((point, index) => (
             <div key={index} className="flex items-center mb-2">
