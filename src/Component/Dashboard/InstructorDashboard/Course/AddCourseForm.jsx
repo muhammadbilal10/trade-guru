@@ -3,22 +3,8 @@ import ImageUpload from "./ImageUpload";
 import CurriculumSection from "./CurriculumSection";
 import { useNavigate } from "react-router";
 
-const AddCourse = ({ formData, setFormData, nextStep }) => {
+const AddCourseForm = ({ formData, setFormData, nextStep, prevStep }) => {
   console.log(formData);
-
-  // const [formData, setFormData] = useState({
-  //   courseType: "",
-  //   courseName: "",
-  //   courseLevel: "",
-  //   courseCategory: "",
-  //   courseLanguage: "",
-  //   courseImage: "",
-  //   courseCode: "",
-  //   courseDetails: "",
-  //   startDate: "",
-  //   maxStudents: "",
-  //   courseDuration: "",
-  // });
 
   const courseCategory = [
     "Programming",
@@ -272,7 +258,13 @@ const AddCourse = ({ formData, setFormData, nextStep }) => {
                 className="mt-1 p-2 w-full border rounded-md"
               />
             </div> */}
-            <div className="mt-6 text-end">
+            <div className="mt-6 text-end flex justify-between">
+              <button
+                onClick={prevStep}
+                className=" bg-primary w-24 hover:bg-primary-600 text-white p-3 rounded-md focus:outline-none focus:shadow-outline-blue "
+              >
+                Prev
+              </button>
               <button
                 type="submit"
                 className=" bg-primary w-24 hover:bg-primary-600 text-white p-3 rounded-md focus:outline-none focus:shadow-outline-blue "
@@ -287,4 +279,4 @@ const AddCourse = ({ formData, setFormData, nextStep }) => {
   );
 };
 
-export default AddCourse;
+export default AddCourseForm;

@@ -1,7 +1,7 @@
 import React from "react";
 import OOP from "/assets/OOP.png";
-import { FaBook, FaClock, FaStar } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { FaBook, FaClock, FaEllipsisV, FaStar } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 const NewCourseCard = ({
   id,
   title,
@@ -14,13 +14,23 @@ const NewCourseCard = ({
   rating,
   courseId,
   sections,
+  isInstructor,
+
+  handleEdit,
 }) => {
   const totalLectures = sections?.reduce(
     (acc, section) => acc + section.lectures.length,
     0
   );
+  const [showMenu, setShowMenu] = React.useState(false);
+  const navigate = useNavigate();
+  const toggleMenu = (event) => {
+    event.stopPropagation();
+    setShowMenu(!showMenu);
+  };
+
   return (
-    <Link to={`/course/course-details/${courseId}`}>
+    <Link to={isInstructor ? "#" : `/course/course-details/${courseId}`}>
       <div className=" bg-white rounded-[8px] transition duration-100 hover:shadow-sm shadow-xl">
         <div className="h-[248px] rounded-t-[8px]  relative">
           <img
@@ -34,8 +44,10 @@ const NewCourseCard = ({
           </span>
         </div>
         <div className="course-content p-8">
-          <div className="text-secondary font-bold text-2xl mb-3">${price}</div>
-          <h4 className=" text-xl mb-3 font-bold line-clamp-2 min-h-[3em]">
+          <div className="text-secondary text-start font-bold text-2xl mb-3">
+            ${price}
+          </div>
+          <h4 className=" text-xl text-start mb-3 font-bold line-clamp-2 min-h-[3em]">
             {title}
           </h4>
           <div className="flex justify-between  flex-wrap space-y-1 xl:space-y-0">
@@ -55,6 +67,22 @@ const NewCourseCard = ({
             </span>
           </div>
         </div>
+        {isInstructor && (
+          <div className="flex gap-2">
+            <button
+              onClick={handleEdit}
+              className="bg-primary text-white w-full py-2 rounded-b-[8px]"
+            >
+              Edit
+            </button>
+            <button className="bg-primary text-white w-full py-2 rounded-b-[8px]">
+              Delete
+            </button>
+            <button className="bg-primary text-white w-full py-2 rounded-b-[8px]">
+              View
+            </button>
+          </div>
+        )}
       </div>
     </Link>
   );

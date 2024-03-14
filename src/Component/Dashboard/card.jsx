@@ -1,5 +1,4 @@
-import React from 'react'
-
+import React from "react";
 
 export default function Card({ title, count, Icon, color }) {
   return (
@@ -12,11 +11,11 @@ export default function Card({ title, count, Icon, color }) {
           <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
             {title}
           </p>
-          <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+          <p class="text-lg text-start font-semibold text-gray-700 dark:text-gray-200">
             {count}
           </p>
         </div>
       </div>
     </>
-  )
+  );
 }

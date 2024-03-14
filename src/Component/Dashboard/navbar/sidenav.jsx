@@ -17,13 +17,12 @@ export default function Sidenav() {
     <>
       <div class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
         <div class="py-4 text-gray-500 dark:text-gray-400">
-          
           <Link
             to={"/"}
             class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200"
           >
-           <span className="text-xl">Trade</span>
-          <span className="text-xl text-primary">Guru.pk</span>
+            <span className="text-xl">Trade</span>
+            <span className="text-xl text-primary">Guru.pk</span>
           </Link>
           <ul class="mt-6">
             <Link to={"/dashboard"}>
@@ -200,7 +199,7 @@ export default function Sidenav() {
                       manage Students
                     </div>
                   </Link>
-                  <Link to={"/coursepage"}>
+                  <Link to={"/coursePage"}>
                     <div class="px-2 py-1 w-full transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
                       Add Courses
                     </div>

@@ -219,6 +219,8 @@ const CurriculumSection = ({
   sections,
   setSections,
   handleAddCourse,
+  handleEditCourse,
+  type,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -280,7 +282,7 @@ const CurriculumSection = ({
           Prev
         </button>
         <button
-          onClick={handleAddCourse}
+          onClick={type === "Add" ? handleAddCourse : handleEditCourse}
           className=" bg-primary w-24 hover:bg-primary-600 text-white p-3 rounded-md focus:outline-none focus:shadow-outline-blue "
         >
           Submit

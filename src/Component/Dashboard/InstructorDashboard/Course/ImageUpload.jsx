@@ -20,8 +20,13 @@ export default function ImageUpload({
   const [uploaded, setUploaded] = useState(false);
 
   useEffect(() => {
-    if (!image) {
-      setPreviewUrl("");
+    if (!image || formData.imageUrl) {
+      if (formData.imageUrl) {
+        console.log("Image URL: ", formData.imageUrl);
+        setPreviewUrl(formData.imageUrl);
+      } else {
+        setPreviewUrl("");
+      }
       return;
     }
 
@@ -71,7 +76,9 @@ export default function ImageUpload({
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log("File available at", downloadURL);
           formData.imageUrl = downloadURL;
+
           setIsUploading(false);
           setUploaded(true);
         });
@@ -80,14 +87,18 @@ export default function ImageUpload({
   };
 
   const removeImage = async () => {
-    if (!uploaded || !image) {
-      setImage(null);
-      setPreviewUrl("");
-      return;
+    if (!formData.imageUrl) {
+      if (!uploaded || !image) {
+        setImage(null);
+        setPreviewUrl("");
+        return;
+      }
     }
-
     const storage = getStorage();
-    const storageReference = ref(storage, `images/${image.name}`);
+    const urlPath = new URL(formData.imageUrl).pathname;
+    const filePath = decodeURIComponent(urlPath.split("/o/")[1].split("?")[0]);
+    console.log("File Path: ", filePath);
+    const storageReference = ref(storage, filePath);
 
     deleteObject(storageReference)
       .then(() => {
