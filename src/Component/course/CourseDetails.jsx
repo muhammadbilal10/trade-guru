@@ -71,16 +71,15 @@ export default function CourseDetails() {
     <div className="grid grid-cols-12 gap-5 px-5 md:max-w-4xl lg:max-w-7xl mx-auto">
       <div className="bg-white  col-span-12 lg:col-span-8 space-y-6">
         <img
-          src={course.formData?.imageUrl || ML}
+          src={course.formData?.imageUrl}
           alt="UI/UX Design and Graphics Learning Bootcamp 2022"
           className="rounded-xl w-full xl:h-[470px] h-[350px] object-cover"
         />
         <p className="text-white bg-secondary w-32 font-bold text-center py-1 rounded-md text-sm  tracking-wide">
-          {course.formData?.category || "Data Science"}
+          {course.formData?.category}
         </p>
         <h3 className="text-gray-900 text-4xl font-bold max-w-2xl">
-          {course.formData?.title ||
-            "UI/UX Design and Graphics Learning Bootcamp 2022"}
+          {course.formData?.title}
         </h3>
         <CourseTabs
           instructorId={course.instructorId}

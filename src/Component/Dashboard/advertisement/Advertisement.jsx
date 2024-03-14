@@ -7,11 +7,21 @@ import { MdPendingActions } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import AddModal from "./Modals/AddModal";
+import Addfoam from "./add";
 export default function Advertisement() {
+
+  
+  const [isEditClicked, setIsEditClicked] = useState(false);
+  // const [IsOpen, setIsOpen] = useState(false)
+  const [addfoam, setAddfoma] = useState(false)
+
 
   const [IsOpen, setIsOpen] = useState(false)
   const handleAddPlan = () => {
-    setIsOpen(true);
+    // setIsOpen(true);
+    
+    setIsEditClicked(true);
+    setAddfoma(true);
   };
   const handleEditPlan = () => {
     // Logic for handling the "Edit Plan" button click
@@ -23,19 +33,25 @@ export default function Advertisement() {
     console.log("Delete Plan clicked");
   };
 
+
+
+
+
+  
   return (
     <>
       {IsOpen && <AddModal isOpen={IsOpen} setIsOpen={setIsOpen} />}
       <div className="flex h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden">
         <Sidenav />
+
         <div className="flex flex-col flex-1 w-full">
           <Topnav />
           <main className="h-full overflow-y-auto">
             <div className="container px-6 mx-auto grid">
-              <h2 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+              {/* <h2 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                 Advertisement Plan
-              </h2>
-              <a
+              </h2> */}
+              {/* <a
                 className="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-primary rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple"
                 href=""
               >
@@ -51,48 +67,55 @@ export default function Advertisement() {
                   </svg>
                   <span>instructor approvals here</span>
                 </div>
-              </a>
+              </a> */}
 
 
-              {/* CTA */}
-              <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
-                <Card
-                  title={"Total Advertisement plan"}
-                  count={5}
-                  Icon={<FaChalkboardTeacher />}
-                  color={"green-500"}
-                />
-                <Card
-                  title={"Total ads running"}
-                  count={5}
-                  Icon={<MdPendingActions />}
-                />
-                <Card title={"Total requests"} count={6} Icon={<FaEdit />} />
-              </div>
-              <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
-                <button
-                  className="p-4 bg-blue-500 text-white rounded hover:bg-blue-600"
-                  onClick={handleAddPlan}
-                >
-                  Add Plan
-                </button>
-                <button
-                  className="p-4 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-                  onClick={handleEditPlan}
-                >
-                  Edit Plan
-                </button>
-                <button
-                  className="p-4 bg-red-500 text-white rounded hover:bg-red-600"
-                  onClick={handleDeletePlan}
-                >
-                  Delete Plan
-                </button>
-              </div>
+              {!isEditClicked && (
+                <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
+                  <Card
+                    title={"Total Advertisement plan"}
+                    count={5}
+                    Icon={<FaChalkboardTeacher />}
+                    color={"green-500"}
+                  />
+                  <Card
+                    title={"Total ads running"}
+                    count={5}
+                    Icon={<MdPendingActions />}
+                  />
+                  <Card title={"Total requests"} count={6} Icon={<FaEdit />} />
+                </div>
+              )}
+
+              {!isEditClicked && (
+                <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
+                  <button
+                    className="p-4 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    onClick={handleAddPlan}
+                  >
+                    Add Plan
+                  </button>
+                  <button
+                    className="p-4 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                    onClick={handleEditPlan}
+                  >
+                    Edit Plan
+                  </button>
+                  <button
+                    className="p-4 bg-red-500 text-white rounded hover:bg-red-600"
+                    onClick={handleDeletePlan}
+                  >
+                    Delete Plan
+                  </button>
+                </div>
+              )}
+
+              {isEditClicked &&addfoam && <Addfoam />}
+
             </div>
           </main>
-        </div>
-      </div>
+        </div >
+      </div >
     </>
   );
 }

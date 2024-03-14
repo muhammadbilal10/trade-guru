@@ -4,15 +4,54 @@ import { Link } from "react-router-dom";
 import { FiUser, FiBookOpen } from "react-icons/fi";
 import { MdOutlinePayments } from "react-icons/md";
 import { IoHomeOutline } from "react-icons/io5";
-
+import { FaAngleDown } from "react-icons/fa6";
+import { RiAdvertisementLine } from "react-icons/ri";
 export default function Sidenav() {
   const [togglePages, setTogglePages] = useState(false);
 
-  const [toggleInstructor, setToggleInstructor] = useState(false);
-  const [togglestudent, setToggleStudent] = useState(false);
   const [togglecourse, setToggleCourse] = useState(false);
-  const [toggleadvirtisment, setToggleAdvirtisment] = useState(false);
   const [togglepayment, setTogglePayment] = useState(false);
+
+  const [openMenuIndex, setOpenMenuIndex] = useState(null);
+
+  const toggleMenu = (index) => {
+    setOpenMenuIndex((prevIndex) => (prevIndex === index ? null : index));
+  };
+
+  const sidebarMenu = [
+    {
+      title: "Instructor",
+      link: "/instructorpage",
+      icon: <FiBookOpen className="w-5 h-5" />,
+      dropdownOptions: [
+        { title: "Manage Instructor", link: "/instructorpage" },
+        { title: "Approvals", link: "/approveinstructor" },
+        { title: "Instructors", link: "/instructorpage" },
+      ],
+    },
+    {
+      title: "Student",
+      link: "/student_page",
+      icon: <FiUser className="w-5 h-5" />,
+      dropdownOptions: [
+        { title: "Manage Students", link: "/student_page" },
+        { title: "Approvals", link: "/instructorpage" },
+        { title: "Queries", link: "/instructorpage" },
+      ],
+    },
+    {
+      title: "Advirtisment",
+      link: "/advertisement",
+      icon: <RiAdvertisementLine className="w-5 h-5" />,
+      dropdownOptions: [{ title: "Manage add", link: "/advertisement" }],
+    },
+    {
+      title: "Payment",
+      link: "/instructorpage",
+      icon: <RiAdvertisementLine className="w-5 h-5" />,
+      dropdownOptions: [{ title: "Pay", link: "/instructorpage" }],
+    },
+  ];
   return (
     <>
       <div class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
@@ -24,6 +63,7 @@ export default function Sidenav() {
             <span className="text-xl">Trade</span>
             <span className="text-xl text-primary">Guru.pk</span>
           </Link>
+
           <ul class="mt-6">
             <Link to={"/dashboard"}>
               <li class="relative px-6 py-3">
@@ -40,129 +80,38 @@ export default function Sidenav() {
           </ul>
 
           <ul>
-            <li class="relative px-6 py-3">
-              <button
-                class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                onClick={() => setToggleInstructor(!toggleInstructor)}
-                aria-haspopup="true"
-              >
-                <span class="inline-flex items-center">
-                  <FiBookOpen className="w-5 h-5" />
-
-                  <span class="ml-4">Instructor</span>
-                </span>
-                <svg
-                  class="w-4 h-4"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
+            {sidebarMenu.map((menuItem, index) => (
+              <li key={index} className="relative px-6 py-3">
+                <button
+                  className="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                  aria-haspopup="true"
+                  onClick={() => toggleMenu(index)}
                 >
-                  <path
-                    fill-rule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-              </button>
-              <template className={`${toggleInstructor ? "block" : "hidden"}`}>
-                <ul
-                  class="transition-all ease-in-out duration-300 p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
-                  aria-label="submenu"
+                  <div className="inline-flex items-center">
+                    {menuItem.icon}
+                    <div className="ml-4">{menuItem.title}</div>
+                  </div>
+                  <FaAngleDown />
+                </button>
+
+                <template
+                  className={`${openMenuIndex === index ? "block" : "hidden"}`}
                 >
-                  <Link to={"/instructorpage"}>
-                    <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                      <a class="w-full" href="pages/login.html">
-                        manage instructor
-                      </a>
-                    </li>
-                  </Link>
-
-                  <Link to={"/approveinstructor"}>
-                    <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                      <a class="w-full" href="pages/create-account.html">
-                        Aprrovals
-                      </a>
-                    </li>
-                  </Link>
-
-                  <Link to={"/instructorpage"}>
-                    <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                      <a class="w-full" href="pages/forgot-password.html">
-                        Instructors
-                      </a>
-                    </li>
-                  </Link>
-                </ul>
-              </template>
-            </li>
-
-            <li class="relative px-6 py-3">
-              <button
-                class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                //@click="togglePagesMenu"
-                onClick={() => setToggleStudent(!togglestudent)}
-                aria-haspopup="true"
-              >
-                <span class="inline-flex items-center">
-                  <FiUser className="w-5 h-5" />
-
-                  <span class="ml-4">Studet</span>
-                </span>
-                <svg
-                  class="w-4 h-4"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-              </button>
-
-              <template className={`${togglestudent ? "block" : "hidden"}`}>
-                <ul
-                  class="transition-all ease-in-out duration-300 p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
-                  aria-label="submenu"
-                >
-                  <Link to={"/student_page"}>
-                    <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                      <a class="w-full" href="pages/login.html">
-                        manage Students
-                      </a>
-                    </li>
-                  </Link>
-
-                  <Link to={"/instructorpage"}>
-                    <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                      <a class="w-full" href="pages/create-account.html">
-                        Aprrovals
-                      </a>
-                    </li>
-                  </Link>
-
-                  <Link to={"/instructorpage"}>
-                    <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                      <a class="w-full" href="pages/forgot-password.html">
-                        queries
-                      </a>
-                    </li>
-                  </Link>
-                </ul>
-              </template>
-            </li>
-
-            {/* <li class="relative px-6 py-3">
-              <a
-                class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="charts.html"
-              >
-                <FiUser className='w-5 h-5' />
-                <span class="ml-4">Courses</span>
-              </a>
-            </li> */}
+                  <ul
+                    className="transition-all ease-in-out duration-300 p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
+                    aria-label="submenu"
+                  >
+                    {menuItem.dropdownOptions.map((option, idx) => (
+                      <Link to={option.link} key={idx}>
+                        <li className="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                          {option.title}
+                        </li>
+                      </Link>
+                    ))}
+                  </ul>
+                </template>
+              </li>
+            ))}
 
             <li class="relative px-6 py-3">
               <button
@@ -175,18 +124,7 @@ export default function Sidenav() {
 
                   <div class="ml-4">courses</div>
                 </div>
-                <svg
-                  class="w-4 h-4"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
+                <FaAngleDown />
               </button>
 
               <div className={`${togglecourse ? "block" : "hidden"}`}>
@@ -208,95 +146,18 @@ export default function Sidenav() {
               </div>
             </li>
 
-            <li class="relative px-6 py-3">
-              <button
-                class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                onClick={() => setTogglePayment(!togglepayment)}
-                aria-haspopup="true"
-              >
-                <div class="inline-flex items-center">
-                  <FiUser className="w-5 h-5" />
-
-                  <div class="ml-4">payment</div>
-                </div>
-                <svg
-                  class="w-4 h-4"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-              </button>
-
-              <div className={`${togglepayment ? "block" : "hidden"}`}>
-                <ul
-                  class="transition-all ease-in-out duration-300 p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
-                  aria-label="submenu"
-                >
-                  <Link to={"/instructorpage"}>
-                    <div class="px-2 py-1 w-full transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                      pay
-                    </div>
-                  </Link>
-                </ul>
-              </div>
-            </li>
-
-            <li class="relative px-6 py-3">
-              <button
-                class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                onClick={() => setToggleAdvirtisment(!toggleadvirtisment)}
-                aria-haspopup="true"
-              >
-                <div class="inline-flex items-center">
-                  <FiUser className="w-5 h-5" />
-
-                  <div class="ml-4">Advirtisment</div>
-                </div>
-                <svg
-                  class="w-4 h-4"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-              </button>
-
-              <div className={`${toggleadvirtisment ? "block" : "hidden"}`}>
-                <ul
-                  class="transition-all ease-in-out duration-300 p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
-                  aria-label="submenu"
-                >
-                  <Link to={"/advertisement"}>
-                    <div class="px-2 py-1 w-full transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                      manage add
-                    </div>
-                  </Link>
-                </ul>
-              </div>
-            </li>
-
+            {/* 
             <li class="relative px-6 py-3">
               <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
                 <FiBookOpen className="w-5 h-5" />
                 <span class="ml-4">Tables</span>
               </a>
-            </li>
-
+            </li> */}
+            {/* 
             <li class="relative px-6 py-3">
               <button
                 class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                //@click="togglePagesMenu"
+
                 onClick={() => setTogglePages(!togglePages)}
                 aria-haspopup="true"
               >
@@ -305,18 +166,7 @@ export default function Sidenav() {
 
                   <span class="ml-4">More options</span>
                 </span>
-                <svg
-                  class="w-4 h-4"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
+                <FaAngleDown />
               </button>
               <template className={`${togglePages ? "block" : "hidden"}`}>
                 <ul
@@ -350,11 +200,11 @@ export default function Sidenav() {
                   </li>
                 </ul>
               </template>
-            </li>
+            </li> */}
           </ul>
           <div class="px-6 my-6">
             <button class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-primary border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-              Create account
+              Add account
               <span class="ml-2" aria-hidden="true">
                 +
               </span>

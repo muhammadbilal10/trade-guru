@@ -82,7 +82,6 @@ export default function AddCoursePage() {
   };
 
   const handleEditCourse = async () => {
-    alert("Edit Course");
     if (id) {
       const instructorId = cookies.get("userId");
       const courseData = {

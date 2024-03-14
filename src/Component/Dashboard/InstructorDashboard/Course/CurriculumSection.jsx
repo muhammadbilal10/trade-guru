@@ -5,7 +5,13 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import { FaCheck, FaFile } from "react-icons/fa";
+import {
+  FaBacon,
+  FaBasketballBall,
+  FaCheck,
+  FaFile,
+  FaTrash,
+} from "react-icons/fa";
 
 const Modal = ({ isOpen, onClose, onSave }) => {
   const [title, setTitle] = useState("");
@@ -167,7 +173,7 @@ const LectureModal = ({ isOpen, onClose, onSave }) => {
 };
 
 // Lecture Component
-const Lecture = ({ title, material, id }) => {
+const Lecture = ({ title, material, id, onRemove }) => {
   return (
     <div className="mb-2 border-2 p-4">
       <div className="flex items-center">
@@ -175,13 +181,21 @@ const Lecture = ({ title, material, id }) => {
         <span>
           {`Lecture ${id}`} - {title} - {material}
         </span>
+        <button onClick={onRemove}>
+          <FaTrash />
+        </button>
       </div>
     </div>
   );
 };
 
 // CurriculumItem Component
-const CurriculumItem = ({ sectionId, lectures, onAddLecture }) => {
+const CurriculumItem = ({
+  sectionId,
+  lectures,
+  onAddLecture,
+  onRemoveLecture,
+}) => {
   const [isLectureModalOpen, setIsLectureModalOpen] = useState(false);
 
   const addLecture = (lecture) => {
@@ -189,6 +203,9 @@ const CurriculumItem = ({ sectionId, lectures, onAddLecture }) => {
     setIsLectureModalOpen(false);
   };
 
+  const removeLecture = (lectureId) => {
+    onRemoveLecture(sectionId, lectureId);
+  };
   return (
     <div>
       {lectures.map((lecture, index) => (
@@ -197,6 +214,7 @@ const CurriculumItem = ({ sectionId, lectures, onAddLecture }) => {
           title={lecture.title}
           material={lecture.material}
           id={index + 1}
+          onRemove={() => removeLecture(index)}
         />
       ))}
       <button
@@ -241,6 +259,24 @@ const CurriculumSection = ({
     setSections(newSections);
   };
 
+  const removeLectureFromSection = (sectionId, lectureId) => {
+    const newSections = sections.map((section, sectionIndex) => {
+      if (sectionIndex + 1 === sectionId) {
+        return {
+          ...section,
+          lectures: section.lectures.filter((_, index) => index !== lectureId),
+        };
+      }
+      return section;
+    });
+    console.log(newSections);
+    setSections(newSections);
+  };
+
+  const removeSection = (sectionId) => {
+    setSections(sections.filter((section, index) => index !== sectionId));
+  };
+
   return (
     <div className="container mx-auto mt-4 shadow-lg rounded-md p-8 bg-white">
       {sections.map((section, index) => (
@@ -251,15 +287,22 @@ const CurriculumSection = ({
             }: `}</h2>
             <div className="flex items-center">
               <FaFile className="inline-block text-black mr-2" size={14} />
-              <span className="text-gray-600 text-md">{section.title}</span>
+              <span className="text-gray-600 text-md mr-2">
+                {section.title}
+              </span>
+              <button onClick={() => removeSection(index)} className=" ">
+                <FaTrash />
+              </button>
             </div>
           </div>
 
           <p className="mb-4">{`Objective: ${section.objective}`}</p>
+
           <CurriculumItem
             sectionId={section.id}
             lectures={section.lectures}
             onAddLecture={addLectureToSection}
+            onRemoveLecture={removeLectureFromSection}
           />
         </div>
       ))}

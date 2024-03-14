@@ -7,6 +7,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  deleteDoc,
 } from "firebase/firestore";
 import app from "../../../../database/firebase";
 import Cookies from "universal-cookie";
@@ -70,6 +71,18 @@ export default function CoursePage({
     }
   };
 
+  const handleDelete = async (id) => {
+    const db = getFirestore(app);
+    const docRef = doc(db, "Course", id);
+    try {
+      await deleteDoc(docRef);
+      console.log("Document successfully deleted!");
+    } catch (error) {
+      console.error("Error removing document: ", error);
+    }
+    window.location.reload();
+  };
+
   return (
     <>
       <div className="mt-6 text-end space-y-2">
@@ -101,6 +114,7 @@ export default function CoursePage({
                 sections={course.sections}
                 isInstructor={true}
                 handleEdit={() => handleEdit(course.id)}
+                handleDelete={() => handleDelete(course.id)}
               />
             </div>
           ))}

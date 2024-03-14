@@ -15,7 +15,7 @@ const NewCourseCard = ({
   courseId,
   sections,
   isInstructor,
-
+  handleDelete,
   handleEdit,
 }) => {
   const totalLectures = sections?.reduce(
@@ -75,11 +75,11 @@ const NewCourseCard = ({
             >
               Edit
             </button>
-            <button className="bg-primary text-white w-full py-2 rounded-b-[8px]">
-              Delete
-            </button>
-            <button className="bg-primary text-white w-full py-2 rounded-b-[8px]">
-              View
+            <button
+              onClick={handleDelete}
+              className="bg-primary text-white w-full py-2 rounded-b-[8px]"
+            >
+              Remove
             </button>
           </div>
         )}
