@@ -10,6 +10,10 @@ export default {
           600: "#e57076",
         },
         secondary: "#30BEAD",
+        secondary: {
+          DEFAULT: "#30BEAD",
+          600: "#279693",
+        },
       },
     },
   },

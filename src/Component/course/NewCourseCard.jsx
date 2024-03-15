@@ -71,18 +71,18 @@ const NewCourseCard = ({
           <div className="flex gap-2">
             <button
               onClick={handleEdit}
-              className="bg-primary text-white w-full py-2 rounded-b-[8px]"
+              className="bg-primary hover:bg-primary-600 text-white w-full py-2 rounded-b-[8px]"
             >
               Edit
             </button>
             <button
               onClick={handleDelete}
-              className="bg-primary text-white w-full py-2 rounded-b-[8px]"
+              className="bg-primary hover:bg-primary-600 text-white w-full py-2 rounded-b-[8px]"
             >
               Remove
             </button>
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-primary hover:bg-primary-600 text-white w-full py-2 rounded-b-[8px]"
               onClick={() => navigate(`/feedback/${courseId}`)}
             >
               Feedback

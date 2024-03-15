@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FeedbackForm from "./FeedbackForm";
 import Topnav from "../../navbar/topnavbar";
 import Sidenav from "../../navbar/sidenav";
@@ -6,7 +6,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import Cookies from "universal-cookie";
 
 import { v4 as uuid } from "uuid";
-import { setDoc, doc, updateDoc, getFirestore } from "firebase/firestore";
+import {
+  setDoc,
+  doc,
+  updateDoc,
+  getFirestore,
+  getDoc,
+} from "firebase/firestore";
 import app from "../../../../database/firebase";
 
 export default function Feedback() {
@@ -16,14 +22,30 @@ export default function Feedback() {
   const courseId = param.id;
   const [feedbackList, setFeedbackList] = useState([]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const db = getFirestore(app);
+        const docRef = doc(db, "Feedback", courseId);
+        const feedBackSnap = await getDoc(docRef);
+        if (feedBackSnap.exists()) {
+          const data = feedBackSnap.data();
+          console.log(data);
+          setFeedbackList(data.feedBackQuestion);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error.message);
+      }
+    };
+    fetchData();
+  }, []);
+
   const handleSave = async () => {
     try {
       const feedbackId = uuid();
       const instructorId = cookies.get("userId");
-      console.log(feedbackList);
       const db = getFirestore(app);
-
-      const courseDocRef = doc(db, "Feedback", feedbackId);
+      const courseDocRef = doc(db, "Feedback", courseId);
 
       const feedBackData = {
         feedbackId: feedbackId,

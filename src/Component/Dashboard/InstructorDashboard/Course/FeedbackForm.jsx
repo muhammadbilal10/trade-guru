@@ -89,13 +89,13 @@ export default function FeedbackForm({ feedbackList, setFeedbackList }) {
           <h3 className="text-lg font-semibold">{feedback.question}</h3>
           <div>
             <button
-              className="text-primary mr-2"
+              className="text-secondary hover:text-secondary-600 mr-2"
               onClick={() => openEditModal(feedback.question, index)}
             >
               <FaEdit />
             </button>
             <button
-              className="text-primary"
+              className="text-secondary hover:text-secondary-600"
               onClick={() =>
                 setFeedbackList(feedbackList.filter((_, i) => i !== index))
               }
@@ -114,7 +114,7 @@ export default function FeedbackForm({ feedbackList, setFeedbackList }) {
             initialQuestion: "",
           });
         }}
-        className="bg-primary mt-4 hover:bg-primary-600 text-white font-bold py-2 px-4 rounded"
+        className="bg-secondary mt-4 hover:bg-secondary-600 text-white font-bold py-2 px-4 rounded"
       >
         + Add Feedback Question
       </button>
