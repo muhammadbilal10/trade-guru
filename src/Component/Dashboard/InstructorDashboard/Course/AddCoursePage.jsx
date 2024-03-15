@@ -12,6 +12,7 @@ import Cookies from "universal-cookie";
 import ImageUpload from "./ImageUpload";
 import CoursePage from "./CoursePage";
 import { useNavigate, useParams } from "react-router-dom";
+import Feedback from "./Feedback";
 
 export default function AddCoursePage() {
   const db = getFirestore(app);

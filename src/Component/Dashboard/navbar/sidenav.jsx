@@ -51,6 +51,12 @@ export default function Sidenav() {
       icon: <RiAdvertisementLine className="w-5 h-5" />,
       dropdownOptions: [{ title: "Pay", link: "/instructorpage" }],
     },
+    {
+      title: "Feedback",
+      link: "/feedback",
+      icon: <RiAdvertisementLine className="w-5 h-5" />,
+      dropdownOptions: [{ title: "Feedback", link: "/feedback" }],
+    },
   ];
   return (
     <>

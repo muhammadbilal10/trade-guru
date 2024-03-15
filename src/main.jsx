@@ -39,6 +39,7 @@ import MyCourses from "./Component/student/MyCourses";
 import CurriculumSection from "./Component/Dashboard/InstructorDashboard/Course/CurriculumSection";
 import AddCoursePage from "./Component/Dashboard/InstructorDashboard/Course/AddCoursePage";
 import CoursePage from "./Component/Dashboard/InstructorDashboard/Course/CoursePage";
+import Feedback from "./Component/Dashboard/InstructorDashboard/Course/Feedback";
 const CourseRoutes = () => {
   return (
     <Routes>
@@ -184,6 +185,10 @@ const router = createBrowserRouter([
   {
     path: "/coursePage",
     element: <AddCoursePage />,
+  },
+  {
+    path: "/feedback/:id",
+    element: <Feedback />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(
