@@ -27,7 +27,7 @@ const CheckoutForm = ({ courseDetails }) => {
       //`Elements` instance that was used to create the Payment Element
       elements,
       confirmParams: {
-        return_url: "http://localhost:5173/my-courses",
+        return_url: `http://localhost:5173/payment-confirmation/${courseDetails.courseId}`,
       },
     });
 
@@ -36,6 +36,7 @@ const CheckoutForm = ({ courseDetails }) => {
       console.log(result.error.message);
       setLoading(false);
     } else {
+      alert("Payment Successfull");
       // Your customer will be redirected to your `return_url`. For some payment
       // methods like iDEAL, your customer will be redirected to an intermediate
       // site first to authorize the payment, then redirected to the `return_url`.

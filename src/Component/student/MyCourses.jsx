@@ -1,5 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NotificationCard from "./NotificationCard";
+import {
+  collection,
+  doc,
+  documentId,
+  getDoc,
+  getDocs,
+  getFirestore,
+  query,
+  where,
+} from "firebase/firestore";
+import app from "../../database/firebase";
+import NewCourseCard from "../course/NewCourseCard";
 
 const TabButton = ({ active, onClick, children }) => (
   <button
@@ -19,6 +31,47 @@ const MyCourses = () => {
   const [courses, setCourses] = useState([]);
   const [lists, setLists] = useState([]);
   const [archieved, setArchieved] = useState([]);
+  const userId = "21oEyQqYJHeth0OVEl0DTxDBtd92";
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      const db = getFirestore(app);
+      const docRef = doc(db, "User", userId);
+      try {
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data().enrolledCourses);
+          const enrolledCoursesIds = docSnap.data().enrolledCourses || [];
+          console.log(enrolledCoursesIds);
+
+          const batches = [];
+          while (enrolledCoursesIds.length) {
+            const batch = enrolledCoursesIds.splice(0, 10);
+            batches.push(batch);
+          }
+
+          const coursesPromises = batches.map((batch) => {
+            const coursesRef = collection(db, "Course");
+            const q = query(coursesRef, where(documentId(), "in", batch));
+            return getDocs(q);
+          });
+          console.log(coursesPromises);
+          const coursesSnapshots = await Promise.all(coursesPromises);
+          const coursesData = coursesSnapshots.flatMap((snapshot) =>
+            snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+          );
+
+          setCourses(coursesData);
+        } else {
+          console.log("No such document!");
+        }
+      } catch (error) {
+        console.error("Error getting document:", error);
+      }
+    };
+    fetchCourses();
+  }, []);
 
   return (
     <div className="max-w-3xl lg:max-w-6xl  mx-auto px-10 -mt-4">
@@ -55,14 +108,27 @@ const MyCourses = () => {
                   </h2>
                   <p className="text-md">
                     When you purchase a course, it will appear here.
-                    <a href="/browse" className="text-secondary underline pl-1">
+                    <a href="/course" className="text-secondary underline pl-1">
                       Browse now.
                     </a>
                   </p>
                 </div>
               </div>
             )}
-            {courses.length > 0 && <div>My courses</div>}
+            {courses.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[30px]">
+                {courses.map((course) => (
+                  <div key={course.id} className="">
+                    <NewCourseCard
+                      key={course.id}
+                      {...course.formData}
+                      courseId={course.courseId}
+                      sections={course.sections}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 

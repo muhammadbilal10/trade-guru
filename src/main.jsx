@@ -42,6 +42,7 @@ import CoursePage from "./Component/Dashboard/InstructorDashboard/Course/CourseP
 import Feedback from "./Component/Dashboard/InstructorDashboard/Course/Feedback";
 
 import Checkout from "./Component/payment/Checkout";
+import PaymentConfirmationPage from "./Component/payment/PaymentConfirmation";
 const CourseRoutes = () => {
   return (
     <Routes>
@@ -195,6 +196,10 @@ const router = createBrowserRouter([
   {
     path: "/checkout/:id",
     element: <Checkout />,
+  },
+  {
+    path: "/payment-confirmation/:id",
+    element: <PaymentConfirmationPage />,
   },
 ]);
 
