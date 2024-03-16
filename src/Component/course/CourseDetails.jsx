@@ -93,6 +93,7 @@ export default function CourseDetails() {
           {...course.formData}
           instructorId={course.instructorId}
           totalLecture={lectures}
+          courseId={course.courseId}
         />
         <RelatedCourse />
       </div>

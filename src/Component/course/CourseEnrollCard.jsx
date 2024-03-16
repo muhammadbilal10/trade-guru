@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import { getFirestore, collection, getDoc, doc } from "firebase/firestore";
 import app from "../../database/firebase";
+import { useNavigate } from "react-router-dom";
 
 const CourseEnrollCard = ({
   id,
@@ -24,8 +25,10 @@ const CourseEnrollCard = ({
   enroll,
   price,
   totalLecture,
+  courseId,
 }) => {
   const [instructor, setInstructor] = React.useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const db = getFirestore(app);
@@ -116,7 +119,10 @@ const CourseEnrollCard = ({
       </div>
       <div className="px-6 py-4">
         <div className="font-bold text-2xl mb-4">${price}</div>
-        <button className="bg-primary hover:bg-primary-600  hover:outline text-white font-bold py-2 px-4 rounded w-full">
+        <button
+          onClick={() => navigate(`/checkout/${courseId}`)}
+          className="bg-primary hover:bg-primary-600  hover:outline text-white font-bold py-2 px-4 rounded w-full"
+        >
           Enroll Now
         </button>
       </div>

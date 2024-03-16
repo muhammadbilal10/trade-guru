@@ -84,7 +84,10 @@ export default function Feedback() {
             </button>
             <button
               onClick={handleSave}
-              className=" bg-primary w-24 hover:bg-primary-600 text-white p-3 rounded-md focus:outline-none focus:shadow-outline-blue "
+              disabled={feedbackList.length === 0}
+              className={`bg-primary w-24 hover:bg-primary-600 text-white p-3 rounded-md focus:outline-none focus:shadow-outline-blue ${
+                feedbackList.length === 0 ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
               Save
             </button>
