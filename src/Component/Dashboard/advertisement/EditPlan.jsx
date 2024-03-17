@@ -1,18 +1,10 @@
 import { React, useState } from "react";
-import Sidenav from "../navbar/sidenav";
-import Topnav from "../navbar/topnavbar";
-import Card from '../card';
-
-import { MdPendingActions } from "react-icons/md";
-import { FaEdit } from "react-icons/fa";
-import { FaChalkboardTeacher } from "react-icons/fa";
-import AddModal from "./Modals/AddModal";
 
 import { setDoc, doc } from "firebase/firestore";
 import { v4 as uuid } from "uuid";
 import app from "../../../database/firebase";
 import { getFirestore, getDoc } from "firebase/firestore";
-export default function Addfoam() {
+export default function Editfoam({setEditfoam,setIsetIsFoamOpen}) {
     const db = getFirestore(app);
 
     const advertisementType = ["Display ad", "Feature"];
@@ -53,7 +45,8 @@ export default function Addfoam() {
     const handleSave = async () => {
         try {
             const planId = uuid();
-            const docRef = doc(db, 'advertisementPlans', planId);
+            const docRef = doc(db, 'AdvertisementPlans', planId);
+            planData.AdId = planId;
             await setDoc(docRef, planData);
             console.log('Plan added successfully with ID:', planId);
         
@@ -62,7 +55,7 @@ export default function Addfoam() {
             price: "",
             description: "",
             pricetype: "",
-            duration: "",
+            duration: 1,
             title: "",
             feature: [],
             placement: "",
@@ -72,6 +65,8 @@ export default function Addfoam() {
         } catch (error) {
           console.error('Error adding plan:', error.message);
         }
+        setIsEditClicked(false);
+        setAddfoma(false);
       };
 
 
