@@ -12,6 +12,7 @@ import Cookies from 'universal-cookie';
 
 import '../../../node_modules/react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from "react-toastify";
+import ApproveInstructor from "../Dashboard/instructor/approveInstructor";
 //import { ToastContainer, toast } from "react-toastify";
 
 
@@ -56,15 +57,16 @@ export default function TempLogin() {
 
 
     const handleLogin = () => {
-        const IsInstructorExist = async (uId) => {
+        const InstructorDetails = async (uId) => {
             try {
-                const docRef = doc(db, 'Instructor', uId);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const userData = docSnap.data();
-                    return !!userData.approval; // Convert status to boolean and return
+                const docRef = doc(db, 'User', uId);
+                const doc = await getDoc(docRef);
+                if (doc.exists()) {
+                    const data = doc.data();
+                    const res=[data.isInstructor,data.approval];
+                    return res;
                 } else {
-                    return false;
+                    return [false,false];
                 }
             } catch (error) {
                 console.error('Error checking document existence and status:', error);
@@ -113,12 +115,12 @@ export default function TempLogin() {
                 // Signed in 
                 const user = userCredential.user;
                 const uid = user.uid;
-                const isExist = await IsInstructorExist(uid); // Wait for the promise to resolve
+                const isExist = await InstructorDetails(uid); // Wait for the promise to resolve
                 console.log(isExist);
-                // Do something with isExist
                 cookies.set('userId', uid);
                 cookies.set('islogin', true);
-                cookies.set('isInstructor', isExist);
+                cookies.set('isInstructor', isExist[0]);
+                cookies.set('isapprove', isExist[1]);
                 
                 navigate("/");
             })

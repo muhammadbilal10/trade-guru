@@ -9,14 +9,11 @@ export default function DeleteModal({ IsDelOpen, setIsDelOpen ,id, setId}) {
 
     // Function to handle delete confirmation
     const handleDeleteConfirm = async (uid) => {
-        const collectionName = 'Instructor'; // Replace with the actual name of your Firestore collection
+        const collectionName = 'User';
 
         try {
             console.log(id);
-            // Create a reference to the document with the provided UID
             const documentRef = doc(db, collectionName, uid);
-
-            // Delete the document
             await deleteDoc(documentRef);
             window.location.reload();
 
@@ -61,7 +58,7 @@ export default function DeleteModal({ IsDelOpen, setIsDelOpen ,id, setId}) {
                     >
                         <button
 
-                            class="w-full px-5 py-3 text-sm font-medium leading-5 text-white text-gray-700 bg-red-600 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
+                            class="w-full px-5 py-3 text-sm font-medium leading-5 text-white bg-red-600 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
                             onClick={() => handleDeleteConfirm(id)}
                         >
                             confirm delete

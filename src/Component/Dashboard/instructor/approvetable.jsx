@@ -13,11 +13,11 @@ export default function ApprovalTable() {
    
     const db = getFirestore(app);
     useEffect(() => {
-        // Assuming 'Instructor' is the name of your collection
-        const collectionName = 'Instructor';
+       
+        const collectionName = 'User';
         const myCollection = collection(db, collectionName);
     
-        // Create a query to get documents with status false
+
         const statusFalseQuery = query(myCollection, where('approval', '==', false));
     
         const fetchData = async () => {
@@ -119,8 +119,9 @@ export default function ApprovalTable() {
                                             <button
                                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                                 aria-label="Edit"
-                                                key={user.instructorId}
-                                                onClick={() => handleClick(user.instructorId)}
+                                                key={user.uid}
+                                                onClick={() => handleClick(user.uid)}
+                                                // user.instructorId
                                             >
 
                                                 <FcApproval class="w-5 h-5" />

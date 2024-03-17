@@ -14,7 +14,7 @@ export default function Instructorpage() {
     const db = getFirestore(app);
     const [count, setCount] = useState(0)
 
-    const myCollection = collection(db, 'Instructor');
+    const myCollection = collection(db, 'User');
     const getTotalInstructorCount = async () => {
         try {
             const querySnapshot = await getDocs(myCollection);

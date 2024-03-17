@@ -1,8 +1,7 @@
 import {React,useEffect,useState} from 'react'
 import Navbar from '../navbar/navbar'
 import { FaArrowRight } from "react-icons/fa";
-import { doc, setDoc,getDoc  } from "firebase/firestore";
-import { collection, addDoc } from 'firebase/firestore';
+import { doc, setDoc,getDoc,updateDoc,collection, addDoc   } from "firebase/firestore";
 import app from '../../database/firebase';
 import { getFirestore, Timestamp } from "firebase/firestore";
 import Cookies from 'universal-cookie';
@@ -12,10 +11,8 @@ export default function Instructorform() {
     const [gender, setGender] = useState('');
     const [lang, setLang] = useState('');
     const [experience, setExperience] = useState('');
-    const [approval, setApproval] = useState(false);
     const [about, setAbout] = useState('');
     const [address, setAddress] = useState('');
-    const [count, setCount] = useState(0)
 
     const db = getFirestore(app);
     const cookies = new Cookies();
@@ -23,7 +20,7 @@ export default function Instructorform() {
 
     const getUserData = async (uid) => {
         try {
-            const userDocRef = doc(db, 'User', uid); // Replace 'users' with your actual collection name
+            const userDocRef = doc(db, 'User', uid); 
             const userDocSnap = await getDoc(userDocRef);
             
             if (userDocSnap.exists()) {
@@ -41,33 +38,29 @@ export default function Instructorform() {
 
     const handlesubmit = async () => {
         try {
-           
-
-            console.log(uid);
-            const collectionRef = doc(db, 'Instructor', uid);
-            
+            const docRef = doc(db, 'User', uid); 
             const currentDate = new Date();
             const formattedDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`;
-
             const data = {
 
                 fname: fname,
                 lname: lname,
                 language: lang,
-                instructorId:uid,
                 experiance: experience,
-                gender: gender,
-                approval: approval,
+                isInstructor: true,
+                approval: false,
                 address:address,
                 about:about,
-                totalCourse: count,
+                totalCourse: 0,
+                // occupasion: occupasion,
+                // profilePicture: profilePicture,
+                // socialMedia: socialMedia,
                 date: formattedDate,
             };
             
-             await setDoc(collectionRef, data);
-
-            console.log('Document added with ID:', collectionRef);
-            console.log('Document added with ID:', collectionRef.id);
+            
+             await updateDoc(docRef, data);
+        console.log('Document updated successfully');
         } catch (error) {
             console.error('Error adding document:', error.message);
         }
@@ -80,12 +73,10 @@ export default function Instructorform() {
             try {
               
                 const userData = await getUserData(uid); 
-
-                // Update state with user data
                 if (userData) {
-                    setFname(userData.fname || ''); // Set first name, defaulting to empty string if undefined
-                    setLname(userData.lname || ''); // Set last name, defaulting to empty string if undefined
-                    setGender(userData.gender || 'male'); // Set gender, defaulting to empty string if undefined
+                    setFname(userData.fname || '');
+                    setLname(userData.lname || '');
+                    setGender(userData.gender || 'male');
                 } else {
                     console.log('User data not found');
                 }
@@ -124,9 +115,9 @@ export default function Instructorform() {
                                 <FaArrowRight />
                             </a>
                             {/* <!-- General elements --> */}
-                            <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-                                basic info form
-                            </h4>
+                            <h1 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
+                                Hello {fname}
+                            </h1>
 
                             <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
                                 {/* first name */}

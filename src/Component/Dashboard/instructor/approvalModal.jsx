@@ -9,7 +9,7 @@ export default function ApproveModal({ IsOpen, setIsOpen, id, setId }) {
     const db = getFirestore(app);
     const handleApprove = async (uid) => {
         try {
-            const docRef = doc(db, 'Instructor', uid);
+            const docRef = doc(db, 'User', uid);
             await updateDoc(docRef, { approval: true });
             console.log('Status updated successfully');
         } catch (error) {
@@ -48,7 +48,7 @@ export default function ApproveModal({ IsOpen, setIsOpen, id, setId }) {
                     >
                         <button
 
-                            class="w-full px-5 py-3 text-sm font-medium leading-5 text-white text-gray-700 bg-red-600 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
+                            class="w-full px-5 py-3 text-sm font-medium leading-5 text-white bg-red-600 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
                             onClick={() => handleApprove(id)}
                         >
                             Approve
