@@ -5,8 +5,6 @@ export const getprice = async (symbol) => {
     return data;
 };
 
-
-
 export const getcandlestick_data = async (symbol) => {
     const response = await fetch(`http://127.0.0.1:8000/candlestick_data/${symbol}`);
     const data = await response.json();

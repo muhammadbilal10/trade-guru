@@ -97,9 +97,9 @@ const colors = ['	#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#d0ed57
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchStocks(symbol, startDate, endDate);
-      console.log(data);
-      setStocksData(data);
+      //const data = await fetchStocks(symbol, startDate, endDate);
+      //console.log(data);
+      //setStocksData(data);
     };
 
     fetchData();

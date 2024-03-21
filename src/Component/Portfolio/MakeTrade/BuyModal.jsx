@@ -8,18 +8,16 @@ import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice, setPercent, setValue, SymbolsList }) {
   const cookies = new Cookies();
-  let completeButtonRef = useRef(null)
   const [comment, setComment] = useState('');
+  const [targetPrice, setTargetPrice] = useState(0);
+  const [stoploss, setStoploss] = useState(0);
   const [userId, setUserId] = useState(cookies.get('userId'));
   const db = getFirestore(app);
 
   const handleConfirmBuy = async () => {
     try {
-      // Check if the symbol exists and if the quantity is valid
       if (Is_symbol_exist(SymbolsList, symbol.toLocaleUpperCase()) && quantity >= 10) {
-        // Retrieve the user document reference
         const userDocRef = doc(db, "portfolio", userId);
-        // Retrieve the user document snapshot
         const userDocSnap = await getDoc(userDocRef);
         // Fetch the latest stock price and calculate total price
         const change = await getchange(symbol.toUpperCase());
@@ -51,20 +49,32 @@ export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice
 
           const stockHoldings = userDocSnap.data().stockHoldings || {};
           if (stockHoldings[symbol.toUpperCase()]) {
+            
             // Update existing entry
-            const oldTotalQuantity = Number(stockHoldings[symbol.toUpperCase()].totalQuantity);
+            const oldTotalQuantity = Number(stockHoldings[symbol.toUpperCase()].quantity);
             const oldAveragePrice = stockHoldings[symbol.toUpperCase()].averagePrice;
             const newTotalQuantity = oldTotalQuantity + Number(quantity);
             // Calculate new average price
             const newAveragePrice = ((oldTotalQuantity * oldAveragePrice) + (Number(quantity) * price)) / newTotalQuantity;
             // Update stock holdings
-            stockHoldings[symbol.toUpperCase()] = { totalQuantity: Number(newTotalQuantity), averagePrice: newAveragePrice };
+            stockHoldings[symbol.toUpperCase()] = {
+              ...stockHoldings[symbol.toUpperCase()], // Copy existing fields
+              quantity: Number(newTotalQuantity),
+              averagePrice: newAveragePrice,
+              stoploss: stoploss,
+              targetPrice: targetPrice
+          };
           } else {
-            // Add new entry with quantity as number
-            stockHoldings[symbol.toUpperCase()] = { totalQuantity: Number(quantity), averagePrice: price };
-          }
 
-          ////////////
+            stockHoldings[symbol.toUpperCase()] = {
+              symbol: symbol.toUpperCase(),
+              quantity: Number(quantity),
+              averagePrice: price,
+              sector: getSectorBySymbol(SymbolsList, symbol.toUpperCase()),
+              stoploss: stoploss,
+              targetPrice: targetPrice
+            };
+          }
 
           // Add the new transaction to the existing transactions array
           await updateDoc(userDocRef, {
@@ -72,6 +82,7 @@ export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice
             transactions: [...(userDocSnap.data().transactions || []), newTransaction],
             stockHoldings: stockHoldings,
             "wallet.cash_in_hand": userWallet.cash_in_hand - totalPrice,
+            ///////need to be updated
             "wallet.net_worth": userWallet.net_worth - userWallet.cash_in_hand + (userWallet.cash_in_hand - totalPrice)
 
           });
@@ -90,12 +101,17 @@ export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice
               comment: comment,
               type: 'Buy'
             }],
-            stockHoldings: [{
-              symbol: symbol.toUpperCase(),
-              quantity: Number(quantity),
-              averagePrice: price,
-              sector: getSectorBySymbol(SymbolsList, symbol.toUpperCase())
-            }],
+            
+            stockHoldings: {
+              [symbol.toUpperCase()]: { // Use symbol as the key/index
+                symbol: symbol.toUpperCase(),
+                quantity: Number(quantity),
+                averagePrice: price,
+                sector: getSectorBySymbol(SymbolsList, symbol.toUpperCase()),
+                stoploss: stoploss,
+                targetPrice: targetPrice
+              }
+            },
             wallet: {
               currency: "PKR",
               balance: 1000000, // Initial balance of 1000k rupees.it can be changed
@@ -146,6 +162,29 @@ export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice
             />
           </div>
           <div className="mb-4">
+            <label htmlFor="targetPrice" className="block mb-1">Target Price</label>
+            <input
+              id="targetPrice"
+              type="number"
+              className="block w-full px-3 py-2 border rounded focus:outline-none focus:border-purple-400"
+              value={targetPrice}
+              onChange={(e) => setTargetPrice(e.target.value)}
+            //required
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="stoploss" className="block mb-1">Stop Loss</label>
+            <input
+              id="stoploss"
+              type="number"
+              className="block w-full px-3 py-2 border rounded focus:outline-none focus:border-purple-400"
+              value={stoploss}
+              onChange={(e) => setStoploss(e.target.value)}
+            //required
+            //readOnly
+            />
+          </div>
+          <div className="mb-4">
             <label htmlFor="comment" className="block mb-1">Comment</label>
             <textarea
               id="comment"
@@ -169,7 +208,7 @@ export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice
               Cancel
             </button>
           </div>
-          
+
         </div>
       </Dialog.Panel>
     </Dialog>

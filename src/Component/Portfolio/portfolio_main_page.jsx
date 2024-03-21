@@ -6,15 +6,17 @@ import Optionbar from "./optionbar";
 export default function Portfolio_Main_Page() {
     
     return (
-        <div className="flex flex-col min-h-screen bg-white text-black">
+        <div className="flex flex-col min-h-screen bg-gray-50 text-black">
             <Navbar />
             <Optionbar />
-            <div className="flex-1 flex p-4">
+            <div className="flex flex-1 p-4">
                 <div className="flex-1">
                     <OverviewCard />
                 </div>
                 <div className="flex-1 flex justify-center items-center">
                     <object
+                    className="background-color-black"
+                    
                         data="https://sarmaaya.pk/public/widgets/market-snapshot"
                         width="80%" // Adjust the width as desired
                         height="540"

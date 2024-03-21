@@ -5,30 +5,52 @@ import app from '../../database/firebase';
 import { getFirestore } from "firebase/firestore";
 import { collection, addDoc } from 'firebase/firestore';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-
 import { getprice, getchange, getSectorBySymbol, Is_symbol_exist } from './apiFuntion/api_funtion';
 
+import TradeBar from './MakeTrade/MakeTradeBar';
+
 export default function Positions_page() {
-  const [chnage_value, setValue] = useState(0);
-  const [stockData, setStockData] = useState([]);
-  const [processedSymbols, setProcessedSymbols] = useState(new Set());
-  const [symbol, setSymbol] = useState('');
-  const [quantity, setQuantity] = useState('');
   const [stockHoldings, setStockHoldings] = useState([]);
 
-  const [userId, setUserId] = useState('RvITOTp9JrsehfH8iGcq');
+  const [userId, setUserId] = useState('r6SQliH0isTz7qhgS1lggXERJ9E3');
   //const [userId, setUserId] = useState('QnX0VHVG9AQXldtoyV2PgTmvW422');
   const db = getFirestore(app);
+  const [symbolData, setSymbolData] = useState({});
+  const fetchSymbolData = async (symbol) => {
+    try {
+      const [price, value, percent] = await getchange(symbol.toUpperCase());
+      return { price, value, percent };
+    } catch (error) {
+      console.error(`Error fetching data for ${symbol}:`, error.message);
+      return null;
+    }
+  };
 
   useEffect(() => {
+
     const fetchData = async () => {
       try {
         const userDocRef = doc(db, "portfolio", userId);
         const userDocSnap = await getDoc(userDocRef);
-
+    
         if (userDocSnap.exists()) {
-          setStockHoldings(userDocSnap.data().stockHoldings || []);
-
+          const stockHoldingsData = userDocSnap.data().stockHoldings || {};
+          const stockHoldingsEntries = Object.entries(stockHoldingsData);
+    
+          setStockHoldings(stockHoldingsEntries);
+    
+          for (const [symbol, holding] of stockHoldingsEntries) {
+            const data = await fetchSymbolData(symbol);
+            if (data) {
+              setSymbolData(prevState => ({
+                ...prevState,
+                [symbol]: data
+              }));
+            } else {
+              console.error(`Error fetching data for ${symbol}`);
+            }
+          }
+    
         } else {
           console.error('User document not found');
         }
@@ -36,16 +58,175 @@ export default function Positions_page() {
         console.error('Error fetching user portfolio data:', error.message);
       }
     };
+    
+   
+    
 
     fetchData();
-  }, [userId]);
+
+  }, []);
 
   return (
     <>
-      <div className="h-screen flex flex-col">
+
+      <div className="flex h-screen bg-gray-5  flex-col flex-1 w-full">
         <Navbar />
         <Optionbar />
-        <div className="flex-1 overflow-hidden rounded-lg shadow-xs mt-4">
+        <div className='flex flex-1 flex-row'>
+          <div className='w-10/12' >
+            <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
+              Table with actions
+            </h4>
+            <div class="w-full overflow-hidden rounded-lg shadow-xs">
+              <div class="w-full overflow-x-auto">
+                <table class="w-full whitespace-no-wrap">
+                  <thead>
+                    <tr
+                      class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
+                    >
+                      <th class="px-4 py-3">Symbol</th>
+                      <th class="px-4 py-3">Share</th>
+                      <th class="px-4 py-3">Avg Price</th>
+                      <th class="px-4 py-3">current Price</th>
+                      <th class="px-4 py-3">Daily change </th>
+                      <th class="px-4 py-3">Targert Price</th>
+                      <th class="px-4 py-3">Stop Loss</th>
+                      <th class="px-4 py-3">Current Value</th>
+                      {/* current value of asset  */}
+                      <th class="px-4 py-3">Equity</th>
+                      <th class="px-4 py-3">Current Value</th>
+                      {/* Net profit loss  */}
+                      <th class="px-4 py-3">PKR,%</th>
+                      <th class="px-4 py-3">Equity,%</th>
+                    </tr>
+                  </thead>
+                  <tbody
+                    class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
+                  >
+                    {stockHoldings.map(([symbol, holding]) => (
+                      <tr key={symbol} class="text-gray-700 dark:text-gray-400">
+                        <td class="px-4 py-3">
+                          <div class="flex items-center text-sm">
+
+                            <div>
+                              <p class="font-semibold">{symbol}</p>
+                              <p class="text-xs text-gray-600 dark:text-gray-400">
+                                {symbol}
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                          {holding.quantity}
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                          {/* avg price */}
+                          {holding.averagePrice}
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                          {/* current price */}
+
+                          {symbolData[symbol]?.price|| 'no'}
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                          {/* Daily change*/}
+                          {symbolData[symbol]?.value|| 'no'}
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                          {/* TARGET price*/}
+                          {holding.targetPrice}
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                          {/* stoploss*/}
+                          {holding.stoploss}
+                        </td>
+
+
+
+                        <td class="px-4 py-3 text-sm">
+                          {/* stoploss*/}
+                          {holding.stoploss}
+                        </td>
+
+
+                        <td class="px-4 py-3 text-sm">
+                          {/* stoploss*/}
+                          0
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                          {/* stoploss*/}
+                          0
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                          {/* stoploss*/}
+                          0
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                          {/* stoploss*/}
+                          0
+                        </td>
+
+
+                        {/* <td class="px-4 py-3 text-xs">
+                              <span
+                                className={`px-2 py-1 font-semibold leading-tight rounded-full ${user.status
+                                  ? 'text-green-700 bg-green-100 dark:bg-green-700 dark:text-green-100'
+                                  : 'text-red-700 bg-red-100 dark:bg-red-700 dark:text-red-100'
+                                  }`}
+                              >
+                                {user.status ? 'approved' : 'not approved'}
+                              </span>
+                            </td> */}
+
+
+
+                        <td class="px-4 py-3">
+
+                          <div class="flex items-center space-x-4 text-sm">
+
+                            {/* <button
+                                  class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                  aria-label="Edit"
+                                  onClick={() => handleEditClick(user)}
+                                  key={data.AdId}
+                                >
+
+                                  <FaEdit class="w-5 h-5" />
+
+                                </button>
+
+                                <button
+                                  class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                  aria-label="Delete"
+                                  onClick={() => handleDeleteClick(user.id)}
+                                  key={user.id}
+
+                                >
+                                  <MdDeleteOutline class="w-5 h-5" />
+
+                                </button> */}
+                          </div>
+                        </td>
+                      </tr>
+
+
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+
+
+            </div>
+
+          </div>
+          <TradeBar />
+
+        </div>
+
+
+
+        {/* <div className="flex-1 bg-gray-50 overflow-hidden rounded-lg shadow-xs mt-4">
           <div className="w-full overflow-x-auto">
             <table className="w-full bg-white divide-y ">
               <thead className="bg-gray-200">
@@ -54,7 +235,7 @@ export default function Positions_page() {
                   <th className="px-6 py-3">Symbol</th>
                   <th className="px-6 py-3">Shares</th>
                   <th className="px-6 py-3">Price</th>
-                  <th className="px-6 py-3">Daily Change</th>
+                 
                 </tr>
               </thead>
               <tbody>
@@ -68,13 +249,13 @@ export default function Positions_page() {
                       </span>
                     </td>
                     <td className="px-6 py-4">{holding.averagePrice}</td>
-                    {/* Add more columns for other data if needed */}
+                   
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );
