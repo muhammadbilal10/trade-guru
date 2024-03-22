@@ -45,6 +45,7 @@ import Feedback from "./Component/Dashboard/InstructorDashboard/Course/Feedback"
 import Checkout from "./Component/payment/Checkout";
 import PaymentConfirmationPage from "./Component/payment/PaymentConfirmation";
 import MyLearning from "./Component/course/MyLearning";
+import AdvertismentPage from "./Component/Dashboard/InstructorDashboard/AdvertismentPage";
 
 const CourseRoutes = () => {
   return (
@@ -121,7 +122,6 @@ const router = createBrowserRouter([
     element: <TempLogin />,
     // element: <Login/>,
   },
-
   //dashboard
   //Student related paths
   {
@@ -148,6 +148,11 @@ const router = createBrowserRouter([
   {
     path: "/instructorform",
     element: <Instructorform />,
+  },
+
+  {
+    path: "/inst-advertisment",
+    element: <AdvertismentPage />,
   },
 
   //terminal folder

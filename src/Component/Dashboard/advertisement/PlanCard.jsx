@@ -2,69 +2,77 @@ import { React, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { FaDeleteLeft } from "react-icons/fa6";
 
-export default function PlanCard({ data }) {
-  console.log(data);
+export default function PlanCard({ data, isInstructor = false }) {
   return (
-    <div className="bg-white rounded-lg border p-6 border-gray-100 shadow dark:bg-gray-800 dark:border-gray-700">
-      <div class=" flex flex-col h-full  w-full text-center text-gray-900  ">
-        <h3 class="mb-4 text-2xl font-semibold">{data.title}</h3>
-        <p class="font-light line-clamp-2 text-gray-500 sm:text-lg dark:text-gray-400">
-          {data.description}
-        </p>
-        <div class="flex justify-center items-baseline my-8">
-          <span class="mr-2 text-5xl font-extrabold">{data.price}</span>
-          <span class="text-gray-500 dark:text-gray-400">/month</span>
+    <div className="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="p-10">
+        <h2 className="font-semibold text-lg">{data.title}</h2>
+        <p className=" text-gray-600 mt-1 line-clamp-3 ">{data.description}</p>
+        <div className="flex items-baseline my-8">
+          <span className="text-3xl font-extrabold">${data.price}</span>
+          <span className="text-gray-500">/month</span>
         </div>
-
-        <ul role="list" class="mb-8 space-y-4 text-left">
-          <li class="flex items-center space-x-3">
+        <button className="block w-full bg-primary hover:bg-primary-600 text-white font-semibold rounded-lg px-4 py-2 focus:outline-none">
+          Buy plan
+        </button>
+        <ul className="mt-8 space-y-4">
+          <li className="flex items-center">
             <svg
-              class="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
+              className="text-green-500 w-6 h-6 mr-2"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              <path
-                fill-rule="evenodd"
-                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                clip-rule="evenodd"
-              ></path>
+              <path d="M5 13l4 4L19 7" />
             </svg>
-            <span>Individual configuration</span>
+            5 products
           </li>
-          {/* <li class="flex items-center space-x-3">
-
-                        <svg class="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                        <span>No setup, or hidden fees</span>
-                    </li>
-                    <li class="flex items-center space-x-3">
-
-                        <svg class="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                        <span>Team size: <span class="font-semibold">1 developer</span></span>
-                    </li>
-                    <li class="flex items-center space-x-3">
-
-                        <svg class="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                        <span>Premium support: <span class="font-semibold">6 months</span></span>
-                    </li>
-                    <li class="flex items-center space-x-3">
-
-                        <svg class="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                        <span>Free updates: <span class="font-semibold">6 months</span></span>
-                    </li> */}
-        </ul>
-        <div className="flex-1 h-full">
-          {true ? (
-            <a
-              href="#"
-              class=" text-white h-full bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white  dark:focus:ring-primary-900"
+          <li className="flex items-center">
+            <svg
+              className="text-green-500 w-6 h-6 mr-2"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              Get started
-            </a>
-          ) : (
-            ""
-          )}
-        </div>
+              <path d="M5 13l4 4L19 7" />
+            </svg>
+            Up to 1,000 subscribers
+          </li>
+          <li className="flex items-center">
+            <svg
+              className="text-green-500 w-6 h-6 mr-2"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path d="M5 13l4 4L19 7" />
+            </svg>
+            Basic analytics
+          </li>
+          <li className="flex items-center">
+            <svg
+              className="text-green-500 w-6 h-6 mr-2"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path d="M5 13l4 4L19 7" />
+            </svg>
+            48-hour support response time
+          </li>
+        </ul>
       </div>
     </div>
   );

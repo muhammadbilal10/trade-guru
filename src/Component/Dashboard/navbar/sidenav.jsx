@@ -40,15 +40,16 @@ export default function Sidenav() {
       ],
     },
     {
-      title: 'Advirtisment',
+      title: "Advirtisment",
       link: "/advertisement",
       icon: <RiAdvertisementLine className="w-5 h-5" />,
       dropdownOptions: [
-        { title: 'My Plans', link: "/myplan" },
-        { title: 'Manage Plans', link: "/advertisement" },
-        { title: 'My Plans', link: "/advertisement" },,
+        { title: "My Plans", link: "/myplan" },
+        { title: "Manage Plans", link: "/advertisement" },
+        { title: "My Plans", link: "/advertisement" },
 
-      ]
+        ,
+      ],
     },
     {
       title: "Payment",
@@ -61,6 +62,14 @@ export default function Sidenav() {
       link: "/feedback",
       icon: <RiAdvertisementLine className="w-5 h-5" />,
       dropdownOptions: [{ title: "Feedback", link: "/feedback" }],
+    },
+    {
+      title: "Advertisment-Ins",
+      link: "instructorAdvertisment",
+      icon: <RiAdvertisementLine className="w-5 h-5" />,
+      dropdownOptions: [
+        { title: "Advertisment Plans", link: "/inst-advertisment" },
+      ],
     },
   ];
   return (
