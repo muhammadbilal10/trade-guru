@@ -46,7 +46,7 @@ export default function Sidenav() {
       dropdownOptions: [
         { title: "My Plans", link: "/myplan" },
         { title: "Manage Plans", link: "/advertisement" },
-        { title: "My Plans", link: "/advertisement" },
+        // { title: "My Plans", link: "/advertisement" },
 
         ,
       ],

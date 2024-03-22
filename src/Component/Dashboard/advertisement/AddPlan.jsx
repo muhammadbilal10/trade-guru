@@ -22,9 +22,9 @@ export default function Addfoam({
   const db = getFirestore(app);
   const navigate = useNavigate();
 
-  const advertisementType = ["Display ad", "Feature"];
+  const advertisementType = ["Display ad", "Featured Ad"];
   const placement = ["Home Page", "Course page", "both"];
-  const pricetype = ["Per day", "defined no. of days"];
+  const pricetype = ["Per day", "Per month","Defined no. of days"];
   const [priceSection, setPricesection] = useState(false);
 
   const [planData, setPlanData] = useState({
@@ -62,13 +62,30 @@ export default function Addfoam({
     }
   }, []);
 
-  const handleChange = (e) => {
-    setPlanData({
-      ...planData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // const handleChange = (e) => {
+  //   setPlanData({
+  //     ...planData,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
 
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === 'pricetype' && (value === 'Per month' ||value === 'Per day')) {
+      if (value === 'Per month') {
+        setPlanData({ ...planData, pricetype: value, duration: 30 });
+      } else if (value === 'Per day') {
+        setPlanData({ ...planData, pricetype: value, duration: 1 });
+      } 
+      // else {
+      //   setPlanData({ ...planData, pricetype: value, duration: '' });
+      // }
+    } else {
+      setPlanData({ ...planData, [name]: value });
+    }
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     handleSave();
@@ -211,7 +228,7 @@ export default function Addfoam({
                       htmlFor="description"
                       className="block text-sm font-medium text-gray-600"
                     >
-                      Course Description
+                      Brife Description
                     </label>
                     <textarea
                       id="description"
@@ -228,7 +245,7 @@ export default function Addfoam({
                       htmlFor="futurePoints"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      feature
+                      Whats included(write in 4-10 words)
                     </label>
                     {planData.feature.map((feature, index) => (
                       <div key={index} className="flex items-center mb-2">
@@ -314,7 +331,7 @@ export default function Addfoam({
                       required
                       className="mt-1 p-2 w-full border rounded-md"
                     >
-                      <option value="">Select price type</option>
+                      <option value="">Select price/billing type</option>
                       {pricetype.map((pricetype, index) => (
                         <option key={index} value={pricetype}>
                           {pricetype}
@@ -322,13 +339,13 @@ export default function Addfoam({
                       ))}
                     </select>
                   </div>
-                  {planData.pricetype === "defined no. of days" && (
+                  {planData.pricetype === "Defined no. of days" && (
                     <div className="mb-4">
                       <label
                         htmlFor="duration"
                         className="block text-sm font-medium text-gray-600"
                       >
-                        Display Duration (Days)
+                        Define Duration (Days)
                       </label>
                       <input
                         type="number"
@@ -341,6 +358,7 @@ export default function Addfoam({
                       />
                     </div>
                   )}
+                    
 
                   <div className="mt-6 text-end flex justify-between">
                     <button
