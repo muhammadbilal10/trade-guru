@@ -5,6 +5,13 @@ import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { getprice, getchange, getSectorBySymbol, Is_symbol_exist } from '../apiFuntion/api_funtion';
 import BuyModal from './BuyModal';
 import SellModal from './SellModal';
+import { PiChartLineUpBold, PiChartLineDownBold } from "react-icons/pi";
+import { MdAccessTimeFilled } from "react-icons/md";
+
+
+
+import { Combobox } from '@headlessui/react'
+
 
 export default function TradeBar() {
     const [symbol, setSymbol] = useState('HBL');
@@ -15,14 +22,14 @@ export default function TradeBar() {
     const [change_value, setValue] = useState(0);
     const [symbolsList, setSymbolsList] = useState([]);
 
-     const [userId, setUserId] = useState('RvITOTp9JrsehfH8iGcq');
+    const [userId, setUserId] = useState('RvITOTp9JrsehfH8iGcq');
     const db = getFirestore(app);
     ////////Modal////////////
     const [IsBuyOpen, setIsBuyOpen] = useState(false)
     const [IsSellOpen, setIsSellOpen] = useState(false)
     // Function to handle delete button click
     const handleBuy = () => {
-        setIsBuyOpen(true); 
+        setIsBuyOpen(true);
     };
     const handleSell = () => {
 
@@ -34,9 +41,12 @@ export default function TradeBar() {
                 const response = await fetch('http://127.0.0.1:8000/get_symbol');
                 if (!response.ok) {
                     throw new Error('Failed to fetch symbols');
+
                 }
                 const data = await response.json();
+                console.log(data);
                 setSymbolsList(data);
+
             } catch (error) {
                 console.error('Error fetching symbols:', error.message);
             }
@@ -52,6 +62,21 @@ export default function TradeBar() {
         temp();
     }, []);
 
+
+
+    const [selectedSymbol, setSelectedSymbol] = useState('');
+    const [query, setQuery] = useState('');
+
+    // Function to filter symbols based on the query
+    const filterSymbols = (query) => {
+        return symbolsList.filter((symbolObj) =>
+            symbolObj.symbol.toLowerCase().includes(query.toLowerCase())
+        );
+    };
+
+    // Update the symbols list based on the query
+    const filteredSymbols = filterSymbols(query);
+
     return (
         <>
             {/* Trade Section */}
@@ -60,13 +85,30 @@ export default function TradeBar() {
                     type="text"
                     placeholder="Symbol"
                     value={symbol}
-                    onChange={(e) => setSymbol(e.target.value)} />
+                    onChange={(e) => setSymbol(e.target.value)}
+                />
+
+                <Combobox value={selectedSymbol} onChange={setSelectedSymbol}>
+                    <Combobox.Input
+                        onChange={(event) => setQuery(event.target.value)}
+                        value={query}
+                        placeholder="Search symbols..."
+                    />
+                    <Combobox.Options>
+                        {filteredSymbols.map((symbolObj, index) => (
+                            <Combobox.Option key={index} value={symbolObj.symbol}>
+                                {symbolObj.symbol}
+                            </Combobox.Option>
+                        ))}
+                    </Combobox.Options>
+                </Combobox>
 
                 <input className="p-2 bg-gray-200 mb-4 border border-gray-300 rounded"
                     type="number"
                     placeholder="Quantity"
                     value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)} />
+                    onChange={(e) => setQuantity(e.target.value)}
+                />
 
                 <div className="bg-gray-200 p-4 rounded">
                     <p className="text-gray-700 font-semibold">Price: (Rs.) {price}</p>
@@ -80,12 +122,20 @@ export default function TradeBar() {
 
                 {/* Trade Buttons */}
                 <div className="flex flex-col justify-end space-y-2">
-                    <button className="p-2 bg-green-500 text-white rounded hover:bg-green-600" onClick={handleBuy}>
-                        BUY
+                    <button
+                        className="flex flex-col items-center justify-center p-2 bg-green-500 text-white rounded hover:bg-green-600" onClick={handleBuy}>
+                        <PiChartLineUpBold size={24} className="mr-2" />
+                        <span className="text-lg font-bold">BUY</span>
                     </button>
-                    <button className="p-2 bg-red-500 text-white rounded hover:bg-red-600" onClick={handleSell}>SELL</button>
+                    <button className="flex flex-col items-center justify-center p-2 bg-red-500 text-white rounded hover:bg-red-600" onClick={handleSell}>
+                        <PiChartLineDownBold size={24} className="mr-2" />
+                        <span className="text-lg font-bold">SELL</span>
+                    </button>
 
-                    <button className="p-2 bg-orange-500 text-white rounded hover:bg-orange-600">SHORT</button>
+                    <button className=" flex flex-col items-center justify-center p-2 bg-orange-500 text-white rounded hover:bg-orange-600">
+                        <MdAccessTimeFilled size={24} className="mr-2" />
+                        <span className="text-lg font-bold"> SHORT</span>
+                    </button>
                 </div>
                 {/* buy modal */}
                 {
@@ -94,7 +144,7 @@ export default function TradeBar() {
                 }
                 {/* sell modal */}
                 {
-                  
+
                     <SellModal isOpen={IsSellOpen} setIsOpen={setIsSellOpen} symbol={symbol} quantity={quantity} SymbolsList={symbolsList} />
                 }
             </div>

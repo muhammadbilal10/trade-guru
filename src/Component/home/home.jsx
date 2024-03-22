@@ -22,7 +22,7 @@ export default function Home() {
 
   const [uid, setUid] = useState("r6SQliH0isTz7qhgS1lggXERJ9E3");
   cookies.set("userId", uid);
-  cookies.set("islogin", true);
+  cookies.set("islogin", false);
   console.log(cookies.get("userId"));
   console.log(cookies.get("islogin"));
 
@@ -48,7 +48,7 @@ export default function Home() {
   }, []);
 
   const backgroundImages = [
-    "https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/11/spacejoy-4xRP0Ajk9ys-unsplash.jpg",
+    "https://www.stockpathshala.com/wp-content/uploads/2021/02/Fundamental.jpg",
     "https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/06/spacejoy-scaled.jpg",
     "https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/06/office-working-space-scaled.jpg",
   ];

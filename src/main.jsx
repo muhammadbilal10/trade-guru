@@ -19,7 +19,9 @@ import Sidebar from "./Component/sidebar/Sidebar";
 import AddCourseForm from "./Component/course/AddCourseForm";
 import CourseOffer from "./Component/course/CourseOffer";
 
+
 import Advertisement from "./Component/Dashboard/advertisement/Advertisement";
+import MyPlans from "./Component/Dashboard/advertisement/MyPlans";
 import FileUpload from "./Component/Resources/ResourceUpload";
 import ApproveInstructor from "./Component/Dashboard/instructor/approveInstructor";
 import Terminal from "./Component/terminal/terminal";
@@ -110,6 +112,10 @@ const router = createBrowserRouter([
   {
     path: "/advertisement",
     element: <Advertisement />,
+  },
+  {
+    path: "/myplan",
+    element: <MyPlans />,
   },
   {
     path: "/login",

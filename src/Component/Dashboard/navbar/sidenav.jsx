@@ -40,10 +40,15 @@ export default function Sidenav() {
       ],
     },
     {
-      title: "Advirtisment",
+      title: 'Advirtisment',
       link: "/advertisement",
       icon: <RiAdvertisementLine className="w-5 h-5" />,
-      dropdownOptions: [{ title: "Manage add", link: "/advertisement" }],
+      dropdownOptions: [
+        { title: 'My Plans', link: "/myplan" },
+        { title: 'Manage Plans', link: "/advertisement" },
+        { title: 'My Plans', link: "/advertisement" },,
+
+      ]
     },
     {
       title: "Payment",
