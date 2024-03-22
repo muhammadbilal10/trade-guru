@@ -5,6 +5,8 @@ import { getAuth } from "firebase/auth";
 import { getFirestore, collection, doc, getDoc } from "firebase/firestore";
 import app from "../../database/firebase";
 import { useState } from "react";
+import HomeHero from "./HomeHero";
+import Footer from "../footer/Footer";
 
 export default function Home() {
   const cookies = new Cookies();
@@ -45,11 +47,19 @@ export default function Home() {
     getUser();
   }, []);
 
-  return (
-    <div className="bg-gradient-to-r from-purple-600 to-blue-900 min-h-screen flex flex-col text-white">
-      <Navbar />
+  const backgroundImages = [
+    "https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/11/spacejoy-4xRP0Ajk9ys-unsplash.jpg",
+    "https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/06/spacejoy-scaled.jpg",
 
-      <div className="container mx-auto py-10 px-4 animate-fade-in-up">
+    "https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/06/office-working-space-scaled.jpg",
+  ];
+
+  return (
+    <div className="">
+      <Navbar />
+      <HomeHero images={backgroundImages} />
+      <Footer />
+      {/* <div className="container mx-auto py-10 px-4 animate-fade-in-up">
         <h1 className="text-5xl font-bold text-center mb-12 animate-pulse">
           Explore the World of tading
         </h1>
@@ -83,7 +93,7 @@ export default function Home() {
             </p>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

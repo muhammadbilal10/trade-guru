@@ -15,7 +15,13 @@ const PaymentConfirmationPage = () => {
       try {
         await setDoc(
           docRef,
-          { enrolledCourses: arrayUnion(params.id) },
+          {
+            enrolledCourses: arrayUnion({
+              courseId: params.id,
+              myList: false,
+              archieved: false,
+            }),
+          },
           { merge: true }
         );
       } catch (error) {

@@ -42,7 +42,9 @@ const MyCourses = () => {
 
         if (docSnap.exists()) {
           console.log("Document data:", docSnap.data().enrolledCourses);
-          const enrolledCoursesIds = docSnap.data().enrolledCourses || [];
+          const enrolledCoursesIds =
+            docSnap.data().enrolledCourses.map((course) => course.courseId) ||
+            [];
           console.log(enrolledCoursesIds);
 
           const batches = [];
