@@ -1,43 +1,37 @@
 import { React, useState, useEffect } from "react";
 import Sidenav from "../navbar/sidenav";
 import Topnav from "../navbar/topnavbar";
-import Card from '../card';
+import Card from "../card";
 
 import { MdPendingActions } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { FaChalkboardTeacher } from "react-icons/fa";
 
 import app from "../../../database/firebase";
-import { getFirestore, getDoc, getDocs, collection } from 'firebase/firestore';
+import { getFirestore, getDoc, getDocs, collection } from "firebase/firestore";
 
 import AddModal from "./Modals/AddModal";
 import Addfoam from "./AddPlan";
 import Editfoam from "./EditPlan";
 import PlanCard from "./PlanCard";
 export default function MyPlans() {
-
-
-
   const [data, setData] = useState([]);
   const db = getFirestore(app);
   useEffect(() => {
-
     const fetchData = async () => {
       try {
-        const mycollection = collection(db, 'AdvertisementPlans');
+        const mycollection = collection(db, "AdvertisementPlans");
         const doc = await getDocs(mycollection);
 
-        const Data = doc.docs.map(doc => doc.data());
+        const Data = doc.docs.map((doc) => doc.data());
         setData(Data);
       } catch (error) {
-        console.error('Error getting documents:', error);
+        console.error("Error getting documents:", error);
       }
     };
 
     fetchData();
   }, []);
-
-
 
   return (
     <>
@@ -70,8 +64,6 @@ export default function MyPlans() {
                 </div>
               </a> */}
 
-
-
               <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
                 <Card
                   title={"Total Advertisement plan"}
@@ -87,52 +79,40 @@ export default function MyPlans() {
                 <Card title={"Total requests"} count={6} Icon={<FaEdit />} />
               </div>
 
-
               <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
                 <button
                   className="p-4 bg-blue-500 text-white rounded hover:bg-blue-600"
-                // onClick={handleAddPlan}
+                  // onClick={handleAddPlan}
                 >
                   Add Plan
                 </button>
                 <button
                   className="p-4 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-                // onClick={handleEditPlan}
+                  // onClick={handleEditPlan}
                 >
                   Edit Plan
                 </button>
                 <button
                   className="p-4 bg-red-500 text-white rounded hover:bg-red-600"
-                // onClick={handleDeletePlan}
+                  // onClick={handleDeletePlan}
                 >
                   Delete Plan
                 </button>
               </div>
 
-
               {/* {isFoamOpen && addfoam && <Addfoam setIsetIsFoamOpen={setIsFoamOpen} setAddfoam={setAddfoam} />}
               {isFoamOpen && editfoam && <Editfoam setIsetIsFoamOpen={setIsFoamOpen} setEditfoam={setEditfoam} />} */}
               {/* {isFoamOpen &&deletefoam && <Addfoam setIsetIsFoamOpen={setIsFoamOpen} setAddfoam={setAddfoam} />} */}
 
-              <div className="flex flex-row ">
-                {data?.map((data) => (
-
-
-                  <PlanCard data={data} />
-
-                )
-                )
-                }
+              <div className="grid grid-cols-1 gap-4  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {data?.map((data, index) => (
+                  <PlanCard data={data} key={index} />
+                ))}
               </div>
-
             </div>
-
-
-
           </main>
-        </div >
-      </div >
+        </div>
+      </div>
     </>
   );
 }
-
