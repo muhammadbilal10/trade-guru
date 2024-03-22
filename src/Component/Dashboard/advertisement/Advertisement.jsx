@@ -136,18 +136,6 @@ export default function Advertisement() {
                   >
                     Add Plan
                   </button>
-                  <button
-                    className="p-4 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-                    onClick={() => handleEditPlan}
-                  >
-                    Edit Plan
-                  </button>
-                  <button
-                    className="p-4 bg-red-500 text-white rounded hover:bg-red-600"
-                    onClick={handleDeletePlan}
-                  >
-                    Delete Plan
-                  </button>
                 </div>
               )}
 
