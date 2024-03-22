@@ -17,6 +17,7 @@ const NewCourseCard = ({
   isInstructor,
   handleDelete,
   handleEdit,
+  isStudent,
 }) => {
   const totalLectures = sections?.reduce(
     (acc, section) => acc + section.lectures.length,
@@ -30,7 +31,15 @@ const NewCourseCard = ({
   };
 
   return (
-    <Link to={isInstructor ? "#" : `/course/course-details/${courseId}`}>
+    <Link
+      to={
+        isInstructor
+          ? "#"
+          : isStudent
+          ? `/my-courses/learning/${courseId}`
+          : `/course/course-details/${courseId}`
+      }
+    >
       <div className=" bg-white rounded-[8px] transition duration-100 hover:shadow-sm shadow-xl">
         <div className="h-[248px] rounded-t-[8px]  relative">
           <img

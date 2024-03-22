@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import app from "../../database/firebase";
 import NewCourseCard from "../course/NewCourseCard";
+import MyLearning from "../course/MyLearning";
 
 const TabButton = ({ active, onClick, children }) => (
   <button
@@ -117,6 +118,7 @@ const MyCourses = () => {
                 </div>
               </div>
             )}
+
             {courses.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[30px]">
                 {courses.map((course) => (
@@ -126,6 +128,7 @@ const MyCourses = () => {
                       {...course.formData}
                       courseId={course.courseId}
                       sections={course.sections}
+                      isStudent={true}
                     />
                   </div>
                 ))}

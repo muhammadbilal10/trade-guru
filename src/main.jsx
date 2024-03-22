@@ -43,6 +43,8 @@ import Feedback from "./Component/Dashboard/InstructorDashboard/Course/Feedback"
 
 import Checkout from "./Component/payment/Checkout";
 import PaymentConfirmationPage from "./Component/payment/PaymentConfirmation";
+import MyLearning from "./Component/course/MyLearning";
+
 const CourseRoutes = () => {
   return (
     <Routes>
@@ -50,6 +52,24 @@ const CourseRoutes = () => {
       <Route path="/course-details/:id" element={<CourseDetails />} />
       {/* <Route path="/offer" element={<CourseOffer />} />
       <Route path="/uploadResources" element={<FileUpload />} /> */}
+    </Routes>
+  );
+};
+
+const LearningRoutes = () => {
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <>
+            <Navbar />
+            <Hero />
+            <MyCourses />
+          </>
+        }
+      />
+      <Route path="/learning/:id" element={<MyLearning />} />
     </Routes>
   );
 };
@@ -174,12 +194,12 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/my-courses",
+    path: "/my-courses/*",
     element: (
       <>
-        <Navbar />
-        <Hero />
-        <MyCourses />
+        {/* <Navbar />
+        <Hero /> */}
+        <LearningRoutes />
         <Footer />
       </>
     ),
