@@ -7,7 +7,7 @@ import TradeBar from './MakeTrade/MakeTradeBar';
 import { getcandlestick_data, fetchStocks } from './apiFuntion/api_funtion';
 // import CandlestickChartComponent from './chart';
 import CandlestickChartComponent from './temp-chart';
-export default function MarketSummaryPage() {
+export default function TradePage() {
 
 
     // // Sort the data by timestamp in

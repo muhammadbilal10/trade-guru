@@ -1,6 +1,6 @@
 import { React, useState } from 'react';
 import { Dialog } from '@headlessui/react'
-import { getprice, getchange, getSectorBySymbol, Is_symbol_exist } from '../apiFuntion/api_funtion';
+import { getprice, getchange, getSectorBySymbol, Is_symbol_exist, getSymbolName } from '../apiFuntion/api_funtion';
 import Cookies from 'universal-cookie';
 import app from '../../../database/firebase';
 import { getFirestore } from "firebase/firestore";
@@ -16,7 +16,10 @@ export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice
 
   const handleConfirmBuy = async () => {
     try {
+      console.log(cookies.get('userId'));
+      console.log('hello1');
       if (Is_symbol_exist(SymbolsList, symbol.toLocaleUpperCase()) && quantity >= 10) {
+        console.log('hello1.1');
         const userDocRef = doc(db, "portfolio", userId);
         const userDocSnap = await getDoc(userDocRef);
         // Fetch the latest stock price and calculate total price
@@ -27,52 +30,54 @@ export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice
         setValue(change[1]);
         setPrice(change[0]);
         // Check if user document snapshot exists
+        console.log('hello2');
         if (userDocSnap.exists()) {
-          // Retrieve user's wallet data
           const userWallet = userDocSnap.data().wallet;
-          // Check if user has sufficient cash in hand to make the purchase
           if (totalPrice > userWallet.cash_in_hand) {
             throw new Error("Insufficient funds in cash_in_hand");
           }
-
-          // Create the new transaction object
           const newTransaction = {
             symbol: symbol.toUpperCase(),
+            name: getSymbolName(SymbolsList, symbol.toUpperCase()),
             quantity: Number(quantity),
-            price: price,
-            totalPrice: totalPrice,
+            price: parseFloat(price.toFixed(3)),
+            totalPrice: parseFloat(totalPrice.toFixed(3)),
             sector: getSectorBySymbol(SymbolsList, symbol.toUpperCase()),
             date: new Date().toISOString().split('T')[0],
             comment: comment,
             type: 'Buy'
           };
-
           const stockHoldings = userDocSnap.data().stockHoldings || {};
           if (stockHoldings[symbol.toUpperCase()]) {
-            
+            //cost: parseFloat(totalPrice.toFixed(3)),
             // Update existing entry
             const oldTotalQuantity = Number(stockHoldings[symbol.toUpperCase()].quantity);
             const oldAveragePrice = stockHoldings[symbol.toUpperCase()].averagePrice;
+            const oldCost = stockHoldings[symbol.toUpperCase()].cost;
             const newTotalQuantity = oldTotalQuantity + Number(quantity);
+            const newCost = oldCost  + totalPrice;
             // Calculate new average price
             const newAveragePrice = ((oldTotalQuantity * oldAveragePrice) + (Number(quantity) * price)) / newTotalQuantity;
             // Update stock holdings
             stockHoldings[symbol.toUpperCase()] = {
-              ...stockHoldings[symbol.toUpperCase()], // Copy existing fields
+              ...stockHoldings[symbol.toUpperCase()],
               quantity: Number(newTotalQuantity),
-              averagePrice: newAveragePrice,
-              stoploss: stoploss,
-              targetPrice: targetPrice
-          };
+              averagePrice: parseFloat(newAveragePrice.toFixed(3)),
+              cost: parseFloat(totalPrice.toFixed(3)),
+              stoploss: Number(stoploss),
+              targetPrice: Number(targetPrice)
+            };
           } else {
 
             stockHoldings[symbol.toUpperCase()] = {
               symbol: symbol.toUpperCase(),
+              name: getSymbolName(SymbolsList, symbol.toUpperCase()),
               quantity: Number(quantity),
-              averagePrice: price,
+              averagePrice: parseFloat(price.toFixed(3)),
+              cost: parseFloat(totalPrice.toFixed(3)),
               sector: getSectorBySymbol(SymbolsList, symbol.toUpperCase()),
-              stoploss: stoploss,
-              targetPrice: targetPrice
+              stoploss: Number(stoploss),
+              targetPrice: Number(targetPrice)
             };
           }
 
@@ -81,9 +86,10 @@ export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice
 
             transactions: [...(userDocSnap.data().transactions || []), newTransaction],
             stockHoldings: stockHoldings,
-            "wallet.cash_in_hand": userWallet.cash_in_hand - totalPrice,
+
+            "wallet.cash_in_hand": parseFloat(userWallet.cash_in_hand - totalPrice).toFixed(3),
             ///////need to be updated
-            "wallet.net_worth": userWallet.net_worth - userWallet.cash_in_hand + (userWallet.cash_in_hand - totalPrice)
+            "wallet.net_worth": parseFloat(userWallet.net_worth - userWallet.cash_in_hand + (userWallet.cash_in_hand - totalPrice)).toFixed(3)
 
           });
 
@@ -93,23 +99,26 @@ export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice
           await setDoc(userDocRef, {
             transactions: [{
               symbol: symbol.toUpperCase(),
+              name: getSymbolName(SymbolsList, symbol.toUpperCase()),
               quantity: quantity,
-              price: price,
-              totalPrice: totalPrice,
+              price: parseFloat(price.toFixed(3)),
+              totalPrice: parseFloat(totalPrice.toFixed(3)),
               sector: getSectorBySymbol(SymbolsList, symbol.toUpperCase()),
               date: new Date().toISOString().split('T')[0],//just date
               comment: comment,
               type: 'Buy'
             }],
-            
+
             stockHoldings: {
               [symbol.toUpperCase()]: { // Use symbol as the key/index
                 symbol: symbol.toUpperCase(),
+                name: getSymbolName(SymbolsList, symbol.toUpperCase()),
                 quantity: Number(quantity),
-                averagePrice: price,
+                averagePrice: parseFloat(price.toFixed(3)),
+                cost: parseFloat(totalPrice.toFixed(3)),
                 sector: getSectorBySymbol(SymbolsList, symbol.toUpperCase()),
-                stoploss: stoploss,
-                targetPrice: targetPrice
+                stoploss: Number(stoploss),
+                targetPrice: Number(targetPrice)
               }
             },
             wallet: {

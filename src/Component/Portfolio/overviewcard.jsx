@@ -9,10 +9,8 @@ export default function OverviewCard() {
     const cookies = new Cookies();
     const [userId, setUserId] = useState(cookies.get('userId'));
     const db = getFirestore(app);
-    const [NetWorth,  setNetWorth] = useState(0);
-    const [Balance, setBalance] = useState();
-    const [cashInHand, setCashInHand] = useState();
-    const [TotalGainLoss,  setTotalGainLoss] = useState();
+    const [data,  setData] = useState([]);
+   
    useEffect(() => {
     const fetchdata = async () => {
         try {
@@ -20,10 +18,9 @@ export default function OverviewCard() {
             const userDocSnap = await getDoc(userDocRef);
             const data = userDocSnap.data().wallet;
             console.log(data);
-            setBalance(data.balance);
-            setCashInHand(data.cash_in_hand);
-            setNetWorth(data.net_worth);
-            setTotalGainLoss(data.total_gain_loss);
+            setData(data);
+            console.log(data);
+            
           
 
         } catch (error) {
@@ -42,15 +39,15 @@ export default function OverviewCard() {
 
                     <div className="mb-2 ">
                         <p className="text-lg text-gray-600">Account Value:</p>
-                        <span className="text-black">{Balance}</span>
+                        <span className="text-black">{data.net_worth}</span>
                     </div>
                     <div className="mb-2">
                         <p className="text-lg text-gray-600">cash in hand:</p>
-                        <span className="text-green-600">{cashInHand}</span>
+                        <span className="text-green-600">{data.cash_in_hand}</span>
                     </div>
                     <div>
                         <p className="text-gray-600">Today's Loss:</p>
-                        <span className="text-red-600">{TotalGainLoss}</span>
+                        <span className="text-red-600">{data.net_worth}</span>
                     </div>
                 </div>
 

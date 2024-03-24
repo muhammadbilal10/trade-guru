@@ -15,19 +15,19 @@ export default function SellModal({ isOpen, setIsOpen, symbol, quantity, Symbols
 
   const handleConfirmSell = async () => {
     try {
-      // Retrieve the user document reference
       const userDocRef = doc(db, "portfolio", userId);
-      // Retrieve the user document snapshot
       const userDocSnap = await getDoc(userDocRef);
-
-      // Check if user document snapshot exists
       if (userDocSnap.exists()) {
         const stockHoldings = userDocSnap.data().stockHoldings || {};
-
-        // Check if the symbol exists in the stock holdings
+        ///////////////////////////////////////////
+        //////////add toste
         if (!stockHoldings[symbol.toUpperCase()]) {
           console.log("Nothing to sell for symbol:", symbol);
-          return; // Exit the function if the symbol is not in holdings
+          return;
+        }
+        else if (quantity <= 0) {
+          console.log("negative qty:", symbol);
+          return;
         }
 
         const userWallet = userDocSnap.data().wallet;
@@ -37,16 +37,16 @@ export default function SellModal({ isOpen, setIsOpen, symbol, quantity, Symbols
 
         // Update wallet
         await updateDoc(userDocRef, {
-          "wallet.cash_in_hand": userWallet.cash_in_hand + totalPrice,
-          "wallet.net_worth": userWallet.net_worth + totalPrice
+          "wallet.cash_in_hand": parseFloat(userWallet.cash_in_hand + totalPrice).toFixed(3),
+          "wallet.net_worth": parseFloat(userWallet.net_worth + totalPrice).toFixed(3)
         });
 
         // Create the sell transaction object
         const newTransaction = {
           symbol: symbol.toUpperCase(),
           quantity: quantity, // Negative quantity for sell transaction
-          price: price,
-          totalPrice: totalPrice,
+          price: Number(price),
+          totalPrice: parseFloat(totalPrice).toFixed(3),
           sector: getSectorBySymbol(SymbolsList, symbol.toUpperCase()),
           date: new Date().toISOString().split('T')[0],
           type: 'Sell'
@@ -58,7 +58,7 @@ export default function SellModal({ isOpen, setIsOpen, symbol, quantity, Symbols
         });
 
         // Update stock holdings
-        const oldTotalQuantity = stockHoldings[symbol.toUpperCase()].totalQuantity;
+        const oldTotalQuantity = stockHoldings[symbol.toUpperCase()].quantity;
         const oldAveragePrice = stockHoldings[symbol.toUpperCase()].averagePrice;
         const newTotalQuantity = oldTotalQuantity - quantity;
 
@@ -68,7 +68,11 @@ export default function SellModal({ isOpen, setIsOpen, symbol, quantity, Symbols
         } else {
           // Calculate new average price
           const newAveragePrice = ((oldTotalQuantity * oldAveragePrice) - (quantity * price)) / newTotalQuantity;
-          stockHoldings[symbol.toUpperCase()] = { totalQuantity: newTotalQuantity, averagePrice: newAveragePrice };
+          stockHoldings[symbol.toUpperCase()] = {
+            ...stockHoldings[symbol.toUpperCase()],
+            totalQuantity: Number(newTotalQuantity),
+            averagePrice: (newAveragePrice).toFixed(3)
+          };
         }
 
         // Update stock holdings

@@ -4,7 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import "alpinejs";
-import Positions_page from "./Component/Portfolio/temp";
+import Positions_page from "./Component/Portfolio/position";
 import Payment from "./Component/payment/payment";
 import Home from "./Component/home/home";
 import CourseForm from "./Component/course/CourseForm";
@@ -25,7 +25,8 @@ import FileUpload from "./Component/Resources/ResourceUpload";
 import ApproveInstructor from "./Component/Dashboard/instructor/approveInstructor";
 import Terminal from "./Component/terminal/terminal";
 import Portfolio_Main_Page from "./Component/Portfolio/portfolio_main_page";
-import MarketSummaryPage from "./Component/Portfolio/MarketSummary";
+import TransactionPage from "./Component/Portfolio/transactionPage";
+import TradePage from "./Component/Portfolio/tradePage";
 import Student from "./Component/Dashboard/student/managestudent";
 import OverviewPage from "./Component/Portfolio/OverviewPage";
 
@@ -175,14 +176,14 @@ const router = createBrowserRouter([
     element: <Positions_page />,
   },
   {
-    path: "/MarketSummaryPage",
-    element: <MarketSummaryPage />,
+    path: '/tradePage',
+    element: <TradePage />,
+  },
+  {
+    path: '/transactionPage',
+    element: <TransactionPage />,
   },
 
-  {
-    path: "/payment_main_page",
-    element: <Payment />,
-  },
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////

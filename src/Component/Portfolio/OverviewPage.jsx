@@ -14,10 +14,9 @@ export default function OverviewPage() {
   const [totalCash, setTotalcash] = useState(0);
   const [totalGainLoss, setTotalgain] = useState(0);
   const [walletData, setWalletData] = useState(null);
-  const [userId, setUserId] = useState('RvITOTp9JrsehfH8iGcq');
-  //const [userId, setUserId] = useState('QnX0VHVG9AQXldtoyV2PgTmvW422');
+  const [userId, setUserId] = useState('r6SQliH0isTz7qhgS1lggXERJ9E3');
   // Define an array of colors
-const colors = ['	#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#d0ed57'];
+const colors = ['	#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#d0ed57','#0000FF', '#FFFF00', '#FF00FF', '#d0ed57'];
 
   const db = getFirestore(app);
 
@@ -33,7 +32,7 @@ const colors = ['	#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#d0ed57
         const data = userDocSnap.data().wallet;
         return data;
       } else {
-        console.warn('User document does not exist.');
+        console.log('User document does not exist.');
         return null;
       }
     } catch (error) {
@@ -72,10 +71,8 @@ const colors = ['	#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#d0ed57
         console.log(stockHoldingsData);
         const transformedData = Object.keys(stockHoldingsData).map(symbol => ({
           name: symbol, // Use the symbol as the name
-          value: stockHoldingsData[symbol].totalQuantity, // Use the totalQuantity as the value
+          value: stockHoldingsData[symbol].quantity, // Use the totalQuantity as the value
         }));
-
-        // Update state with transformed data
         setStockHoldings(transformedData);
       } catch (error) {
         console.error('Error fetching stock holdings:', error);
@@ -84,23 +81,6 @@ const colors = ['	#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#d0ed57
 
 
     fetchStockHoldings();
-
-    fetchData();
-  }, []);
-
-
-
-  const [stocksData, setStocksData] = useState(null);
-  const symbol = 'HBL'; // Replace 'yourSymbol' with the actual symbol
-  const startDate = '2020, 1, 1'; // Replace 'yourStartDate' with the actual start date
-  const endDate = 'yourEndDate'; // Replace 'yourEndDate' with the actual end date
-
-  useEffect(() => {
-    const fetchData = async () => {
-      //const data = await fetchStocks(symbol, startDate, endDate);
-      //console.log(data);
-      //setStocksData(data);
-    };
 
     fetchData();
   }, []);

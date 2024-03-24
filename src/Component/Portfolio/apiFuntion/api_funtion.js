@@ -24,6 +24,14 @@ export function getSectorBySymbol(SymbolsList,symbol) {
         return null;
     }
 };
+export function getSymbolName(SymbolsList,symbol) {
+    const obj = SymbolsList.find(item => item.symbol === symbol);
+    if (obj) {
+        return obj.name;
+    } else {
+        return null;
+    }
+};
 export function Is_symbol_exist(SymbolsList,symbol) {
     return SymbolsList.some(item => item.symbol === symbol);
 }

@@ -8,10 +8,7 @@ import SellModal from './SellModal';
 import { PiChartLineUpBold, PiChartLineDownBold } from "react-icons/pi";
 import { MdAccessTimeFilled } from "react-icons/md";
 
-
-
 import { Combobox } from '@headlessui/react'
-
 
 export default function TradeBar() {
     const [symbol, setSymbol] = useState('HBL');
@@ -21,7 +18,6 @@ export default function TradeBar() {
     const [change_percent, setPercent] = useState(0);
     const [change_value, setValue] = useState(0);
     const [symbolsList, setSymbolsList] = useState([]);
-
     const [userId, setUserId] = useState('RvITOTp9JrsehfH8iGcq');
     const db = getFirestore(app);
     ////////Modal////////////
@@ -35,47 +31,36 @@ export default function TradeBar() {
 
         setIsSellOpen(true);
     };
+
     useEffect(() => {
         const fetch_symbol = async () => {
             try {
                 const response = await fetch('http://127.0.0.1:8000/get_symbol');
                 if (!response.ok) {
                     throw new Error('Failed to fetch symbols');
-
                 }
                 const data = await response.json();
                 console.log(data);
-                setSymbolsList(data);
+                // Filter data based on conditions
+                const filteredData = data.filter(item => item.sectorName !== 'BILLS AND BONDS' || !item.isDebt);
 
+                console.log(filteredData);
+
+                // Set filteredData in the SymbolsList
+                setSymbolsList(filteredData);
             } catch (error) {
                 console.error('Error fetching symbols:', error.message);
             }
         };
-
-        const temp = async () => {
+        const SetValues = async () => {
             const change = await getchange('HBL');
             setPercent(change[2]);
             setValue(change[1]);
             setPrice(change[0]);
         }
         fetch_symbol();
-        temp();
+        SetValues();
     }, []);
-
-
-
-    const [selectedSymbol, setSelectedSymbol] = useState('');
-    const [query, setQuery] = useState('');
-
-    // Function to filter symbols based on the query
-    const filterSymbols = (query) => {
-        return symbolsList.filter((symbolObj) =>
-            symbolObj.symbol.toLowerCase().includes(query.toLowerCase())
-        );
-    };
-
-    // Update the symbols list based on the query
-    const filteredSymbols = filterSymbols(query);
 
     return (
         <>
@@ -88,20 +73,6 @@ export default function TradeBar() {
                     onChange={(e) => setSymbol(e.target.value)}
                 />
 
-                <Combobox value={selectedSymbol} onChange={setSelectedSymbol}>
-                    <Combobox.Input
-                        onChange={(event) => setQuery(event.target.value)}
-                        value={query}
-                        placeholder="Search symbols..."
-                    />
-                    <Combobox.Options>
-                        {filteredSymbols.map((symbolObj, index) => (
-                            <Combobox.Option key={index} value={symbolObj.symbol}>
-                                {symbolObj.symbol}
-                            </Combobox.Option>
-                        ))}
-                    </Combobox.Options>
-                </Combobox>
 
                 <input className="p-2 bg-gray-200 mb-4 border border-gray-300 rounded"
                     type="number"
@@ -144,7 +115,6 @@ export default function TradeBar() {
                 }
                 {/* sell modal */}
                 {
-
                     <SellModal isOpen={IsSellOpen} setIsOpen={setIsSellOpen} symbol={symbol} quantity={quantity} SymbolsList={symbolsList} />
                 }
             </div>
