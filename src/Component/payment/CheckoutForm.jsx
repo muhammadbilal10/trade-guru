@@ -5,10 +5,14 @@ import {
 } from "@stripe/react-stripe-js";
 import { useState } from "react";
 
-const CheckoutForm = ({ courseDetails }) => {
+const CheckoutForm = ({ courseDetails, ads }) => {
+  console.log(ads);
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
+  const newParams = new URLSearchParams();
+  newParams.set("type", "Ad");
+  newParams.set("adType", ads.type);
 
   const handleSubmit = async (event) => {
     // We don't want to let default form submission happen here,
@@ -27,7 +31,9 @@ const CheckoutForm = ({ courseDetails }) => {
       //`Elements` instance that was used to create the Payment Element
       elements,
       confirmParams: {
-        return_url: `http://localhost:5173/payment-confirmation/${courseDetails.courseId}`,
+        return_url: `http://localhost:5173/payment-confirmation/${
+          courseDetails.courseId || ads.AdId
+        }?${ads ? newParams.toString() : ""}`,
       },
     });
 
@@ -57,18 +63,20 @@ const CheckoutForm = ({ courseDetails }) => {
             <p class="text-gray-400">Check your item.</p>
             <div class="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
               <div class="flex flex-col rounded-lg bg-white sm:flex-row">
-                <img
-                  class="m-2 h-24 w-28 rounded-md border object-cover object-center"
-                  src={courseDetails.formData?.imageUrl}
-                  alt=""
-                />
+                {!ads && (
+                  <img
+                    class="m-2 h-24 w-28 rounded-md border object-cover object-center"
+                    src={courseDetails.formData?.imageUrl}
+                    alt=""
+                  />
+                )}
                 <div class="flex w-full flex-col px-4 py-4">
                   <span class="font-semibold">
-                    {courseDetails.formData?.title}
+                    {courseDetails.formData?.title || ads.title}
                   </span>
 
                   <p class="text-lg font-bold">
-                    ${courseDetails.formData?.price}
+                    ${courseDetails.formData?.price || ads.price}
                   </p>
                 </div>
               </div>
@@ -87,7 +95,7 @@ const CheckoutForm = ({ courseDetails }) => {
                 <p class="text-sm font-medium text-gray-900">Original Price</p>
                 <p class="font-semibold text-gray-900">
                   {" "}
-                  ${courseDetails.formData?.price}
+                  ${courseDetails.formData?.price || ads.price}
                 </p>
               </div>
             </div>
@@ -96,7 +104,7 @@ const CheckoutForm = ({ courseDetails }) => {
               <p class="text-sm font-medium text-gray-900">Total</p>
               <p class="text-2xl font-semibold text-gray-900">
                 {" "}
-                ${courseDetails.formData?.price}
+                ${courseDetails.formData?.price || ads.price}
               </p>
             </div>
 

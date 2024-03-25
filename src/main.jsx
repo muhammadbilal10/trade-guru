@@ -115,6 +115,7 @@ const router = createBrowserRouter([
     path: "/advertisement",
     element: <Advertisement />,
   },
+
   {
     path: "/myplan",
     element: <MyPlans />,
@@ -177,20 +178,17 @@ const router = createBrowserRouter([
     element: <Positions_page />,
   },
   {
-    path: '/tradePage',
+    path: "/tradePage",
     element: <TradePage />,
   },
   {
-    path: '/transactionPage',
+    path: "/transactionPage",
     element: <TransactionPage />,
   },
   {
-    path:'/marketpage',
-    element:<MarketPage/>
+    path: "/marketpage",
+    element: <MarketPage />,
   },
-
-
-
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////

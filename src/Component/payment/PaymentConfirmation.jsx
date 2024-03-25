@@ -1,16 +1,24 @@
 import { arrayUnion, doc, getFirestore, setDoc } from "firebase/firestore";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import app from "../../database/firebase";
+import AdsImageUpload from "../Dashboard/advertisement/AdsImageUpload";
 
 const PaymentConfirmationPage = () => {
   const navigate = useNavigate();
   const params = useParams();
+  const [adImageUrl, setAdImageUrl] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const queryParams = new URLSearchParams(location.search);
+  const type = queryParams.get("type");
+  const adType = queryParams.get("adType");
 
   useEffect(() => {
     const SetEnrolled = async () => {
       const db = getFirestore(app);
+      console.log("setting enrolled");
       const docRef = doc(db, "User", "21oEyQqYJHeth0OVEl0DTxDBtd92");
       try {
         await setDoc(
@@ -24,16 +32,79 @@ const PaymentConfirmationPage = () => {
           },
           { merge: true }
         );
+        console.log("Document successfully written!");
       } catch (error) {
         console.error("Error setting document:", error);
       }
     };
-    SetEnrolled();
+
+    const setAds = async () => {
+      console.log("setting ads");
+      const db = getFirestore(app);
+      const docRef = doc(db, "User", "21oEyQqYJHeth0OVEl0DTxDBtd92");
+      try {
+        await setDoc(
+          docRef,
+          {
+            ads: arrayUnion({
+              AdId: params.id,
+              adImage: "",
+            }),
+          },
+          { merge: true }
+        );
+        console.log("Document successfully written!");
+      } catch (error) {
+        console.error("Error setting document:", error);
+      }
+    };
+    if (type === "Ad" && adType !== "Display ad") {
+      setAds();
+    } else {
+      SetEnrolled();
+    }
   }, []);
 
-  const navigateToCourses = () => {
-    navigate("/my-courses");
+  const setAds = async (imageUrl) => {
+    console.log("setting ads");
+    const db = getFirestore(app);
+    const docRef = doc(db, "User", "21oEyQqYJHeth0OVEl0DTxDBtd92");
+    try {
+      await setDoc(
+        docRef,
+        {
+          ads: arrayUnion({
+            AdId: params.id,
+            adImage: imageUrl ?? "",
+          }),
+        },
+        { merge: true }
+      );
+      console.log("Document successfully written!");
+    } catch (error) {
+      console.error("Error setting document:", error);
+    }
   };
+
+  const navigateToCourses = () => {
+    if (type === "Ad") {
+      navigate("/");
+    } else {
+      navigate("/my-courses");
+    }
+  };
+
+  const navigateToHome = (imageUrl) => {
+    console.log(imageUrl);
+    setAds(imageUrl);
+    navigate("/");
+  };
+
+  if (type === "Ad" && adType === "Display ad" && !loading) {
+    return (
+      <AdsImageUpload nextStep={navigateToHome} setImageUrl={setAdImageUrl} />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
@@ -51,7 +122,7 @@ const PaymentConfirmationPage = () => {
             onClick={navigateToCourses}
             className="mt-6 px-6 py-3 bg-primary text-white rounded-md shadow hover:bg-primary-600 transition duration-200 ease-in-out"
           >
-            Go to My Courses
+            Go to My {type === "Ad" ? "Ads" : "Courses"}
           </button>
           <button
             onClick={() => navigate("/")}

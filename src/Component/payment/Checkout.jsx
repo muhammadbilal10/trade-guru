@@ -4,7 +4,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import CheckoutForm from "./CheckoutForm";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import app from "../../database/firebase";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 const stripePromise = loadStripe(
   "pk_test_51Nxd2nSGfSglhWZnLhWDpprmyfCoyjXAtmQChoSa1QpCjtsUU17k468gNCyQ3OpeJG57cltQ9ZAIoietHhuODX1f00OJyeUiGm"
@@ -15,8 +15,16 @@ const backendUrl = `https://uctqy6nhdk.us.aircode.run/payment`;
 export default function Checkout() {
   const [clientSecret, setClientSecret] = useState("");
   const [course, setCourse] = useState({});
+  const [ads, setAds] = useState({});
   const params = useParams();
   const id = params.id;
+  console.log(id);
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const type = queryParams.get("type");
+  console.log(type);
+
   useEffect(() => {
     const fetchPaymentIntent = async (course) => {
       // const price = 800;
@@ -56,10 +64,39 @@ export default function Checkout() {
         console.error("Error getting document:", error);
       }
     };
-    getCourse();
+
+    const getAdvertisement = async () => {
+      const db = getFirestore(app);
+      const docRef = doc(db, "AdvertisementPlans", id);
+      try {
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+
+          setAds(docSnap.data());
+
+          fetchPaymentIntent({
+            price: docSnap.data().price,
+            title: docSnap.data().description,
+          });
+        } else {
+          console.log("No such document!");
+        }
+      } catch (error) {
+        console.error("Error getting document:", error);
+      }
+    };
+
+    if (id && type === "Ad") {
+      console.log("Ad");
+      getAdvertisement();
+    } else {
+      getCourse();
+    }
   }, []);
 
-  if (!clientSecret)
+  if (!clientSecret) {
     return (
       <form className="">
         <div>
@@ -91,6 +128,7 @@ export default function Checkout() {
         </div>
       </form>
     );
+  }
 
   const options = {
     clientSecret: clientSecret,
@@ -98,7 +136,7 @@ export default function Checkout() {
 
   return (
     <Elements stripe={stripePromise} options={options}>
-      <CheckoutForm courseDetails={course} />
+      <CheckoutForm courseDetails={course} ads={ads} />
     </Elements>
   );
 }
