@@ -26,8 +26,10 @@ const CourseTabs = ({ instructorId, sections, courseDetails }) => {
   useEffect(() => {
     const db = getFirestore(app);
     const getInstructor = async () => {
-      const docRef = await doc(db, "Instructor", instructorId);
 
+
+      
+      const docRef = await doc(db, "User", instructorId);
       try {
         const docSnap = await getDoc(docRef);
 
