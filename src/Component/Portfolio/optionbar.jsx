@@ -5,7 +5,7 @@ export default function Optionbar() {
     // Define an array of navigation links
     const navLinks = [
         { path: '/portfolio_main_page', text: 'Home' },
-        { path: '/portfolio_main_page', text: 'Market Summary' },
+        { path: '/marketpage', text: 'Market Summary' },
         { path: '/tradePage', text: 'Trade' },
         { path: '/overview_page', text: 'Overview' },
         { path: '/positions_page', text: 'Positions' },

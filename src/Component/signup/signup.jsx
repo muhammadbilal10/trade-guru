@@ -9,7 +9,8 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import Cookies from 'universal-cookie';
-
+import '../../../node_modules/react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Signup() {
 
@@ -24,11 +25,42 @@ export default function Signup() {
     const [password, setPassword] = useState(null);
     const [confirm_pass, setConfirm_pass] = useState(null);
 
+
+    const [error_email, setError_email] = useState({
+        status: false,
+        message: ''
+    })
+    const [error_pass_len, setError_pass_len] = useState({
+        status: false,
+        message: ''
+    })
+
+    const [error_pass_match, setError_pass_match] = useState({
+        status: false,
+        message: ''
+    })
+
+
+
+    const ToastemailError = () => {
+        toast.error("Invalid email format!", {
+            position: "top-right",
+            className: "toast-message",
+        });
+    };
+    const ToastPasswordError = () => {
+        toast.error("invalid password", {
+            position: "top-right",
+            className: "toast-message",
+        });
+    };
+
     const cookies = new Cookies();
     const navigate = useNavigate();
-
     const auth = getAuth(app);
     const db = getFirestore(app);
+
+
 
     const addNewDocument = async (uid) => {
         try {
@@ -40,28 +72,42 @@ export default function Signup() {
                 gender: gender,
                 uid: uid,
                 isInstructor: false
-                
-            });
 
+            });
             console.log('Document added with UID: ', uid);
         } catch (error) {
             console.error('Error adding document: ', error);
         }
     }
 
-
     const validateSignUp = () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            console.error('Invalid email address');
+            // console.error('Invalid email address');
+            ToastemailError();
+            ToastPasswordError();
+            setEmail('');
+            setError_email({
+                status: true,
+                message: 'Invalid email format!'
+            });
             return false;
         }
         if (password.length < 6) {
-            console.error('Password must be at least 6 characters long');
+            // console.error('Password must be at least 6 characters long');
+            ToastPasswordError();
+            setError_pass_len({
+                status: true,
+                message: 'Password must be at least 6 characters long'
+            });
             return false;
         }
         if (password !== confirm_pass) {
-            console.error('Password and confirm password do not match');
+            // console.error('Password and confirm password do not match');
+            setError_pass_match({
+                status: true,
+                message: 'Password must be at least 6 characters long'
+            });
             return false;
         }
 
@@ -72,6 +118,20 @@ export default function Signup() {
         if (!validateSignUp()) {
             return;
         }
+
+        // Clear any previous errors
+        setError_pass_len({
+            status: false,
+            message: ''
+        });
+        setError_pass_match({
+            status: false,
+            message: ''
+        });
+        setError_email({
+            status: false,
+            message: ''
+        });
 
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
@@ -95,6 +155,7 @@ export default function Signup() {
 
     return (
         <>
+            <ToastContainer />
             <Navbar />
             <div className="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900" onSubmit={(e) => e.preventDefault()}>
                 <div className="flex-1 max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800">
@@ -103,13 +164,13 @@ export default function Signup() {
                             <img
                                 aria-hidden="true"
                                 className="object-cover w-full h-full dark:hidden"
-                                src="/assets/img/create-account-office.jpeg"
+                                src="https://www.investopedia.com/thmb/6yT9a8ymacj5LQMsBC5ty5OZseY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/TradingPlatforms_Chervov-dfe01706a3c5463aaa96883cc36e8722.jpg"
                                 alt="Office"
                             />
                             <img
                                 aria-hidden="true"
                                 className="hidden object-cover w-full h-full dark:block"
-                                src="/assets/img/create-account-office-dark.jpeg"
+                                src="https://www.investopedia.com/thmb/6yT9a8ymacj5LQMsBC5ty5OZseY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/TradingPlatforms_Chervov-dfe01706a3c5463aaa96883cc36e8722.jpg"
                                 alt="Office"
                             />
                         </div>
@@ -143,11 +204,11 @@ export default function Signup() {
                                     <select
                                         className="block w-full mt-1 text-sm   focus:border-purple-400 focus:outline-none focus:shadow-outline-purple form-input"
                                         required
-                                        
+
                                         value={gender}
                                         onChange={(e) => setGender(e.target.value)}
                                     >
-                                         <option value="">Select gender</option>
+                                        <option value="">Select gender</option>
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
                                         <option value={null}>Not to Answer</option>
@@ -164,6 +225,13 @@ export default function Signup() {
                                         onChange={(e) => setEmail(e.target.value)}
                                     />
                                 </label>
+                                {
+
+                                    error_email?.status &&
+                                    <p className="text-red-500 text-xs">{error_email?.message}</p>
+
+                                }
+
                                 <label className="block mt-4 text-sm">
                                     <span className="text-gray-700 dark:text-gray-400">Password</span>
                                     <input
@@ -175,6 +243,11 @@ export default function Signup() {
                                         onChange={(e) => setPassword(e.target.value)}
                                     />
                                 </label>
+                                {
+                                    setError_pass_len?.status &&
+                                    <p className="text-red-500 text-xs">{error_pass_len?.message}</p>
+                                }
+
                                 <label className="block mt-4 text-sm">
                                     <span className="text-gray-700 dark:text-gray-400">Confirm Password</span>
                                     <input
@@ -186,6 +259,11 @@ export default function Signup() {
                                         onChange={(e) => setConfirm_pass(e.target.value)}
                                     />
                                 </label>
+                                {
+                                    setError_pass_match?.status &&
+                                    <p className="text-red-500 text-xs">{error_pass_match?.message}</p>
+                                }
+
                                 <div className="flex mt-6 text-sm">
                                     <label className="flex items-center dark:text-gray-400">
                                         <input
@@ -206,7 +284,7 @@ export default function Signup() {
                                 </button>
                                 <hr className="my-8" />
                                 <button
-                                    className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
+                                    className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5  text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
                                 >
                                     <svg
                                         className="w-4 h-4 mr-2"
@@ -219,7 +297,7 @@ export default function Signup() {
                                     Github
                                 </button>
                                 <button
-                                    className="flex items-center justify-center w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
+                                    className="flex items-center justify-center w-full px-4 py-2 mt-4 text-sm font-medium leading-5  text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
                                 >
                                     <svg
                                         className="w-4 h-4 mr-2"

@@ -13,15 +13,12 @@ import Cookies from 'universal-cookie';
 import '../../../node_modules/react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from "react-toastify";
 import ApproveInstructor from "../Dashboard/instructor/approveInstructor";
-//import { ToastContainer, toast } from "react-toastify";
-
-
-
 export default function TempLogin() {
     const [error_email, setError_email] = useState({
         status: false,
         message: ''
     })
+    
     const [error_password, setError_password] = useState({
         status: false,
         message: ''

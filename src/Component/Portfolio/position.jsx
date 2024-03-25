@@ -37,7 +37,7 @@ export default function Positions_page() {
           for (const [symbol, holding] of stockHoldingsEntries) {
             const data = await fetchSymbolData(symbol);
             const currentCost = data.price * holding.quantity;
-            const change = Number(holding.cost - currentCost);
+            const change = Number(currentCost - holding.cost);
             const newdata = { ...data, currentCost, change };
             console.log(newdata);
             if (newdata) {
@@ -123,10 +123,16 @@ export default function Positions_page() {
                           {symbolData[symbol]?.price ||
                             <div className="w-3 h-3 border-4 border-dashed rounded-full animate-spin border-default-600"></div>}
                         </td>
+
                         <td className="px-4 py-3 text-sm">
-                          {/* Daily change*/}
-                          {symbolData[symbol]?.value ||
-                            <div className="w-3 h-3 border-4 border-dashed rounded-full animate-spin border-default-600"></div>}
+                          {/* Daily change */}
+                          {symbolData[symbol]?.value !== undefined ? (
+                            <span className={symbolData[symbol]?.value >= 0 ? "text-green-500" : "text-red-500"}>
+                              {symbolData[symbol]?.value}
+                            </span>
+                          ) : (
+                            <div className="w-3 h-3 border-4 border-dashed rounded-full animate-spin border-default-600"></div>
+                          )}
                         </td>
                         <td className="px-4 py-3 text-sm">
                           {/* TARGET price*/}
@@ -147,23 +153,28 @@ export default function Positions_page() {
 
                         <td className="px-4 py-3 text-sm">
                           {/* Current cost*/}
-                          {symbolData[symbol]?.currentCost ||
-                            <div className="w-3 h-3 border-4 border-dashed rounded-full animate-spin border-default-600"></div>}
-                        </td>
-                        <td className="px-4 py-3 text-sm">
-                          {/* cost in percent*/}
-                          {symbolData[symbol]?.currentCost ||
+                          {parseFloat(symbolData[symbol]?.currentCost.toFixed(3)) ||
                             <div className="w-3 h-3 border-4 border-dashed rounded-full animate-spin border-default-600"></div>}
                         </td>
 
+                        <td className="px-4 py-3 text-sm">
+                          {/* cost in percent*/}
+                          {parseFloat(symbolData[symbol]?.currentCost.toFixed(3)) ||
+                            <div className="w-3 h-3 border-4 border-dashed rounded-full animate-spin border-default-600"></div>}
+                        </td>
 
                         <td className="px-4 py-3 text-sm">
                           {/* Profit/Loss */}
-                          {symbolData[symbol]?.change != null && symbolData[symbol].change !== '' ? symbolData[symbol].change :
-                            <div className="w-3 h-3 border-4 border-dashed rounded-full animate-spin border-default-600"></div>}
-
-
+                          {symbolData[symbol]?.change != null && symbolData[symbol].change !== '' ? (
+                            <span className={symbolData[symbol].change < 0 ? "text-red-500" : symbolData[symbol].change > 0 ? "text-green-500" : "text-black"}>
+                              {parseFloat(symbolData[symbol]?.change.toFixed(3))}
+                            </span>
+                          ) : (
+                            <div className="w-3 h-3 border-4 border-dashed rounded-full animate-spin border-default-600"></div>
+                          )}
                         </td>
+
+
                         <td className="px-4 py-3 text-sm">
                           {/* stoploss*/}
                           null

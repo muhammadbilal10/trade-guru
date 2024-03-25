@@ -1,11 +1,9 @@
-
 import React, { useEffect, useRef } from 'react';
 import { createChart } from 'lightweight-charts';
 
 const CandlestickChart = ({ data }) => {
   const containerRef = useRef(null);
   const chartRef = useRef(null);
-
   useEffect(() => {
     if (!containerRef.current || !data || data.length === 0) return;
 
@@ -14,10 +12,8 @@ const CandlestickChart = ({ data }) => {
       width: containerRef.current.clientWidth,
       height: containerRef.current.clientHeight,
     });
-
     // Add a candlestick series
     const candlestickSeries = chart.addCandlestickSeries();
-
     // Convert date strings to timestamps and handle null open and close values
     const formattedData = data.map(({ time, open, high, low, close, volume }) => {
       const formattedOpen = open !== null ? open : low;
@@ -31,15 +27,21 @@ const CandlestickChart = ({ data }) => {
         volume,
       };
     });
-
     // Sort formattedData by time in ascending order
     formattedData.sort((a, b) => a.time - b.time);
-
     // Add data to the candlestick series
     candlestickSeries.setData(formattedData);
+    console.log(formattedData);
+
+    // // Configure the time scale with X-axis labels
+    // const timeScale = chart.timeScale();
+    // timeScale.applyOptions({
+    //   timeVisible: true, // Show time on X-axis
+    // });
+
+
 
     chartRef.current = chart;
-
     return () => {
       if (chartRef.current !== null) {
         chartRef.current.remove();
@@ -52,34 +54,3 @@ const CandlestickChart = ({ data }) => {
 };
 
 export default CandlestickChart;
-
-// const formattedData = data.map(({ time, open, high, low, close, volume }) => ({
-//   time: new Date(time).getTime() / 1000, // Convert to Unix timestamp (seconds)
-//   open,
-//   high,
-//   low,
-//   close,
-//   volume,
-// }));
-// Convert date strings to timestamps and handle null open and close values
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

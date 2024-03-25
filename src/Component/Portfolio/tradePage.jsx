@@ -9,79 +9,71 @@ import { getcandlestick_data, fetchStocks } from './apiFuntion/api_funtion';
 import CandlestickChartComponent from './temp-chart';
 export default function TradePage() {
 
+    const [data, setData] = useState([]);
+    const [activeTab, setActiveTab] = useState('day');
 
-    // // Sort the data by timestamp in
-    // const sortedData = inputList.sort((a, b) => a[0] - b[0]);
+    const handleTabClick = (tab) => {
+        setActiveTab(tab);
+    };
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const temp = await getcandlestick_data("HBL");
+                if (temp) {
+                    setData(temp);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
 
-    const [candle, setCandle] = useState([]);
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const data = await getcandlestick_data('HBL');
-    //         // console.log(data);
-    //         setCandle(data); // Update state with fetched data
-    //     };
-
-    //     fetchData();
-
-    // }, []);
-
-
-    // const [stocksData, setStocksData] = useState(null);
-    // const symbol = 'HBL'; // Replace 'yourSymbol' with the actual symbol
-    // const startDate = '2020, 1, 1'; // Replace 'yourStartDate' with the actual start date
-    // const endDate = 'yourEndDate'; // Replace 'yourEndDate' with the actual end date
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const data = await fetchStocks(symbol, startDate, endDate);
-    //             // Verify that the fetched data is an array and not empty
-    //             if (Array.isArray(data) && data.length > 0) {
-    //                 // Map over the fetched data to format it according to the required format
-    //                 const formattedData = data.map(item => ({
-    //                     time: item.Date,
-    //                     open: item.Open,
-    //                     high: item.High,
-    //                     low: item.Low,
-    //                     close: item.Close,
-    //                 }));
-    //                 // Set the formatted data in the state
-    //                 setStocksData(formattedData);
-    //             } else {
-    //                 // Handle case where fetched data is empty or not in the expected format
-    //                 console.error('Fetched data is empty or not in the expected format');
-    //             }
-    //         } catch (error) {
-    //             // Handle fetch error
-    //             console.error('Error fetching data:', error);
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, []);
-
-
-
-    // const temp = async () => {
-    //     console.log(candle);
-    // };
+        fetchData();
+    }, []);
 
     return (
         <div className="min-h-screen flex flex-col">
             <Navbar />
             <Optionbar />
-            <div className="flex flex-1">
-                <div className="flex-grow bg-gray-100 overflow-y-auto">
-                    <CandlestickChartComponent
-                        symbol='HBL'
-                        startDate='DSF'
-                        endDate='SDF'
-                        style={{ width: '600%', height: '500px' }} // Adjust the height as needed
-                    />
+            <div className='flex flex-row items-center space-x-6'>
+                <button
+                    className={`bg-red-400 ${activeTab === 'day' && 'active'}`}
+                    onClick={() => handleTabClick('day')}
+                >
+                    1 day
+                </button>
+                <div className='button-space-5'></div>
+                <button
+                    className={`bg-red-400 ${activeTab === 'historical' && 'active'}`}
+                    onClick={() => handleTabClick('historical')}
+                >
+                    historical
+                </button>
+            </div>
+
+            <div className="flex flex-row flex-1">
+                <div className="w-full bg-gray-100 overflow-y-auto">
+
+                    <div className="container mt-3">
+                        {activeTab === 'day' && (
+                            <CandlestickChart data={data} />
+                        )}
+
+                        {activeTab === 'historical' && (
+                            <CandlestickChartComponent
+                                symbol='OGDC'
+                                startDate='DSF'
+                                endDate='SDF'
+                                style={{ width: '100%', height: '400px' }}
+                            />
+                        )}
+                    </div>
                 </div>
                 <TradeBar />
             </div>
+
+
+
+
         </div>
     );
 

@@ -25,7 +25,10 @@ export default function Portfolio_Main_Page() {
                         Market Snapshot
                     </object>
                 </div>
+
+                
             </div>
+            
         </div>
 
 

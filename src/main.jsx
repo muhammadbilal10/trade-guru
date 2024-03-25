@@ -25,6 +25,7 @@ import FileUpload from "./Component/Resources/ResourceUpload";
 import ApproveInstructor from "./Component/Dashboard/instructor/approveInstructor";
 import Terminal from "./Component/terminal/terminal";
 import Portfolio_Main_Page from "./Component/Portfolio/portfolio_main_page";
+import MarketPage from "./Component/Portfolio/marketPage";
 import TransactionPage from "./Component/Portfolio/transactionPage";
 import TradePage from "./Component/Portfolio/tradePage";
 import Student from "./Component/Dashboard/student/managestudent";
@@ -183,6 +184,12 @@ const router = createBrowserRouter([
     path: '/transactionPage',
     element: <TransactionPage />,
   },
+  {
+    path:'/marketpage',
+    element:<MarketPage/>
+  },
+
+
 
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
