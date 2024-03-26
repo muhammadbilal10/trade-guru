@@ -3,6 +3,7 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 function HomeHero({ images }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+
   const slideInterval = useRef(null);
 
   const goToPrevious = () => {

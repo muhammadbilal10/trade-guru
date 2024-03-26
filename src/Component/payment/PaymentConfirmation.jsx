@@ -4,6 +4,7 @@ import { FaCheckCircle } from "react-icons/fa";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import app from "../../database/firebase";
 import AdsImageUpload from "../Dashboard/advertisement/AdsImageUpload";
+import { v4 as uuid } from "uuid";
 
 const PaymentConfirmationPage = () => {
   const navigate = useNavigate();
@@ -40,20 +41,17 @@ const PaymentConfirmationPage = () => {
 
     const setAds = async () => {
       console.log("setting ads");
+      const AdId = uuid();
       const db = getFirestore(app);
-      const docRef = doc(db, "User", "21oEyQqYJHeth0OVEl0DTxDBtd92");
+      const docRef = doc(db, "Ads", AdId);
       try {
-        await setDoc(
-          docRef,
-          {
-            ads: arrayUnion({
-              AdId: params.id,
-              adImage: "",
-            }),
-          },
-          { merge: true }
-        );
-        console.log("Document successfully written!");
+        const adData = {
+          userId: "21oEyQqYJHeth0OVEl0DTxDBtd92",
+          adId: AdId,
+          adPlanId: params.id,
+          adImage: "",
+        };
+        await setDoc(docRef, adData);
       } catch (error) {
         console.error("Error setting document:", error);
       }
@@ -68,19 +66,17 @@ const PaymentConfirmationPage = () => {
 
   const setAds = async (imageUrl) => {
     console.log("setting ads");
+    const AdId = uuid();
     const db = getFirestore(app);
-    const docRef = doc(db, "User", "21oEyQqYJHeth0OVEl0DTxDBtd92");
+    const docRef = doc(db, "Ads", AdId);
     try {
-      await setDoc(
-        docRef,
-        {
-          ads: arrayUnion({
-            AdId: params.id,
-            adImage: imageUrl ?? "",
-          }),
-        },
-        { merge: true }
-      );
+      const adData = {
+        userId: "21oEyQqYJHeth0OVEl0DTxDBtd92",
+        adId: AdId,
+        adPlanId: params.id,
+        adImage: imageUrl,
+      };
+      await setDoc(docRef, adData);
       console.log("Document successfully written!");
     } catch (error) {
       console.error("Error setting document:", error);

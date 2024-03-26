@@ -2,7 +2,15 @@ import React, { useEffect } from "react";
 import Navbar from "../navbar/navbar";
 import Cookies from "universal-cookie";
 import { getAuth } from "firebase/auth";
-import { getFirestore, collection, doc, getDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import app from "../../database/firebase";
 import { useState } from "react";
 import HomeHero from "./HomeHero";
@@ -25,6 +33,7 @@ export default function Home() {
   cookies.set("islogin", false);
   console.log(cookies.get("userId"));
   console.log(cookies.get("islogin"));
+  const [displayAds, setDisplayAds] = useState([]);
 
   useEffect(() => {
     const db = getFirestore(app);
@@ -44,6 +53,39 @@ export default function Home() {
           console.log("Error getting document:", error);
         });
     };
+
+    const fetchDisplayAdPlans = async () => {
+      const db = getFirestore(app);
+      const plansCollectionRef = collection(db, "AdvertisementPlans");
+      // Assuming you want to check for a specific 'placement' value as well
+      const specificPlacement = "homepage"; // Example placement value
+      // Adjust the query to include both conditions
+      const q = query(
+        plansCollectionRef,
+        where("type", "==", "Display ad"),
+        where("placement", "==", specificPlacement)
+      );
+      const querySnapshot = await getDocs(q);
+
+      const displayAdPlans = [];
+      querySnapshot.forEach((doc) => {
+        displayAdPlans.push(doc.id);
+      });
+
+      console.log(displayAdPlans);
+      return displayAdPlans;
+    };
+
+    const fetchUsersAndAds = async () => {
+      fetchDisplayAdPlans();
+      const db = getFirestore(app);
+      const docRef = collection(db, "User");
+      const querySnapshot = await getDocs(docRef);
+
+      const adDetails = [];
+    };
+
+    fetchUsersAndAds();
     getUser();
   }, []);
 
