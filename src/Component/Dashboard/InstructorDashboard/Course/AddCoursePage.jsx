@@ -60,6 +60,8 @@ export default function AddCoursePage() {
       // Generate a unique course ID
       const courseId = uuid();
 
+      console.log(instructorId);
+
       // Define the document reference with the course ID
       const courseDocRef = doc(db, "Course", courseId);
 
@@ -69,7 +71,7 @@ export default function AddCoursePage() {
         formData: formData,
         sections: sections,
         // Add other fields as needed
-        instructorId: instructorId, // Use the instructor ID associated with the course
+        instructorId: instructorId, // Add the instructor ID
       };
 
       // Set the course data in the course document

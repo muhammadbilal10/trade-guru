@@ -98,7 +98,12 @@ const LectureModal = ({ isOpen, onClose, onSave }) => {
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            resolve(downloadURL);
+            const fileType = material.type.startsWith("video")
+              ? "video"
+              : "file";
+            const fileExtension = material.name.split(".").pop();
+            const modifiedURL = `${downloadURL}?type=${fileType}&ext=${fileExtension}`;
+            resolve({ url: modifiedURL, type: fileType });
           });
         }
       );
@@ -112,8 +117,9 @@ const LectureModal = ({ isOpen, onClose, onSave }) => {
 
   const handleSubmit = async () => {
     setDisabled(true);
-    const fileURL = await uploadImage();
-    await onSave({ title, material: fileURL });
+    const { url, type } = await uploadImage();
+    console.log(type);
+    await onSave({ title, material: url });
     setTitle("");
     setMaterial("");
     setDisabled(false);

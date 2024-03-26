@@ -70,10 +70,21 @@ const LearningRoutes = () => {
             <Navbar />
             <Hero />
             <MyCourses />
+            <Footer />
           </>
         }
       />
-      <Route path="/learning/:id" element={<MyLearning />} />
+      <Route
+        path="/learning/:id"
+        element={
+          <div className="flex min-h-screen flex-col justify-between">
+            <div className="flex-1 flex">
+              <MyLearning />
+            </div>
+            <Footer />
+          </div>
+        }
+      />
     </Routes>
   );
 };
@@ -216,7 +227,6 @@ const router = createBrowserRouter([
         {/* <Navbar />
         <Hero /> */}
         <LearningRoutes />
-        <Footer />
       </>
     ),
   },
