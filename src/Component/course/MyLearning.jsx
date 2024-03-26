@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
+
 import app from "../../database/firebase";
 import {
   FaChevronDown,
@@ -9,6 +10,7 @@ import {
   FaShare,
   FaStar,
 } from "react-icons/fa";
+import RatingModal from "../student/RatingModal";
 
 const MyLearning = () => {
   const params = useParams();
@@ -17,6 +19,7 @@ const MyLearning = () => {
   const [activeLesson, setActiveLesson] = useState(null);
   const [courseContent, setCourseContent] = useState({});
   const [showMaterial, setShowMaterial] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const getCourseContent = async () => {
@@ -99,7 +102,13 @@ const MyLearning = () => {
     );
   }
 
-  return (
+  return modalOpen ? (
+    <RatingModal
+      modalOpen={modalOpen}
+      setModalOpen={setModalOpen}
+      courseId={courseId}
+    />
+  ) : (
     <div className="flex-1">
       <nav className="bg-black text-white flex items-center justify-between px-4 py-2">
         <div className="flex items-center gap-2">
@@ -112,7 +121,10 @@ const MyLearning = () => {
           </span>
         </div>
         <div className="flex items-center">
-          <button className="flex items-center text-gray-300 hover:text-white mr-6">
+          <button
+            onClick={() => setModalOpen(true)}
+            className="flex items-center text-gray-300 hover:text-white mr-6"
+          >
             <FaStar className="mr-1" /> Leave a rating
           </button>
           <button className="flex items-center text-gray-300 hover:text-white mr-6">
@@ -126,6 +138,7 @@ const MyLearning = () => {
           </button>
         </div>
       </nav>
+
       <div className="flex flex-col md:flex-row">
         <div className="w-full md:w-2/3">
           {showMaterial ? (
