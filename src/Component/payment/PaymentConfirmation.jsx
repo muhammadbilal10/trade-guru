@@ -60,7 +60,8 @@ const PaymentConfirmationPage = () => {
     };
     if (type === "Ad" && adType !== "Display ad") {
       setAds();
-    } else {
+    }
+    if (type === "course") {
       SetEnrolled();
     }
   }, []);
@@ -115,8 +116,8 @@ const PaymentConfirmationPage = () => {
             Payment Successful!
           </h1>
           <p className="text-md text-gray-600 text-center mt-2">
-            Your enrollment has been confirmed. You can now access your course
-            materials.
+            Your enrollment has been confirmed. You can now access your{" "}
+            {type === "Ad" ? "Ads" : "Courses"}. materials.
           </p>
           <button
             onClick={navigateToCourses}

@@ -11,7 +11,8 @@ const CheckoutForm = ({ courseDetails, ads }) => {
   const elements = useElements();
   const [loading, setLoading] = useState(false);
   const newParams = new URLSearchParams();
-  newParams.set("type", "Ad");
+
+  newParams.set("type", Object.keys(ads).length !== 0 ? "Ad" : "course");
   newParams.set("adType", ads.type);
 
   const handleSubmit = async (event) => {
@@ -33,7 +34,7 @@ const CheckoutForm = ({ courseDetails, ads }) => {
       confirmParams: {
         return_url: `http://localhost:5173/payment-confirmation/${
           courseDetails.courseId || ads.AdId
-        }?${ads ? newParams.toString() : ""}`,
+        }?${newParams.toString()}`,
       },
     });
 
