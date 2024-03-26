@@ -33,12 +33,12 @@ export default function SellModal({ isOpen, setIsOpen, symbol, quantity, Symbols
         const userWallet = userDocSnap.data().wallet;
         const change = await getchange(symbol.toUpperCase());
         const price = change[0];
-        const totalPrice = price * quantity;
+        const totalPrice = Number(price * quantity);
 
         // Update wallet
         await updateDoc(userDocRef, {
-          "wallet.cash_in_hand": parseFloat(userWallet.cash_in_hand + totalPrice).toFixed(3),
-          "wallet.net_worth": parseFloat(userWallet.net_worth + totalPrice).toFixed(3)
+          "wallet.cash_in_hand": parseFloat(Number(userWallet.cash_in_hand) + totalPrice).toFixed(3),
+          "wallet.net_worth": parseFloat(Number(userWallet.net_worth) + totalPrice).toFixed(3)
         });
 
         // Create the sell transaction object
@@ -60,18 +60,18 @@ export default function SellModal({ isOpen, setIsOpen, symbol, quantity, Symbols
         // Update stock holdings
         const oldTotalQuantity = stockHoldings[symbol.toUpperCase()].quantity;
         const oldAveragePrice = stockHoldings[symbol.toUpperCase()].averagePrice;
-        const newTotalQuantity = oldTotalQuantity - quantity;
+        const newTotalQuantity = Number(oldTotalQuantity - quantity);
 
         if (newTotalQuantity === 0) {
           // If all stocks are sold, remove the symbol from holdings
           delete stockHoldings[symbol.toUpperCase()];
         } else {
           // Calculate new average price
-          const newAveragePrice = ((oldTotalQuantity * oldAveragePrice) - (quantity * price)) / newTotalQuantity;
+          const newAveragePrice = parseFloat(Number((oldTotalQuantity * oldAveragePrice) - (quantity * price)) / newTotalQuantity).toFixed(3);
           stockHoldings[symbol.toUpperCase()] = {
             ...stockHoldings[symbol.toUpperCase()],
-            totalQuantity: Number(newTotalQuantity),
-            averagePrice: (newAveragePrice).toFixed(3)
+            quantity: Number(newTotalQuantity),
+            averagePrice: Number(parseFloat(newAveragePrice).toFixed(3))
           };
         }
 

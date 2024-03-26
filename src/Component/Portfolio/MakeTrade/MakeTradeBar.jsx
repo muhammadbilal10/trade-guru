@@ -18,7 +18,6 @@ export default function TradeBar() {
     const [change_percent, setPercent] = useState(0);
     const [change_value, setValue] = useState(0);
     const [symbolsList, setSymbolsList] = useState([]);
-    const [userId, setUserId] = useState('RvITOTp9JrsehfH8iGcq');
     const db = getFirestore(app);
     ////////Modal////////////
     const [IsBuyOpen, setIsBuyOpen] = useState(false)
@@ -32,19 +31,18 @@ export default function TradeBar() {
         setIsSellOpen(true);
     };
 
+
+
     useEffect(() => {
-        const fetch_symbol = async () => {
+        const fetchData = async () => {
             try {
                 const response = await fetch('http://127.0.0.1:8000/get_symbol');
                 if (!response.ok) {
                     throw new Error('Failed to fetch symbols');
                 }
                 const data = await response.json();
-                console.log(data);
                 // Filter data based on conditions
                 const filteredData = data.filter(item => item.sectorName !== 'BILLS AND BONDS' || !item.isDebt);
-
-                console.log(filteredData);
 
                 // Set filteredData in the SymbolsList
                 setSymbolsList(filteredData);
@@ -52,15 +50,25 @@ export default function TradeBar() {
                 console.error('Error fetching symbols:', error.message);
             }
         };
-        const SetValues = async () => {
-            const change = await getchange('HBL');
-            setPercent(change[2]);
-            setValue(change[1]);
-            setPrice(change[0]);
-        }
-        fetch_symbol();
-        SetValues();
+
+        fetchData();
     }, []);
+
+    useEffect(() => {
+        const SetValues = async () => {
+            if (Is_symbol_exist(symbolsList, symbol.toLocaleUpperCase())) {
+                // setSymbol("HBL")
+                const change = await getchange(symbol);
+                setPercent(change[2]);
+                setValue(change[1]);
+                setPrice(change[0]);
+            }
+        };
+
+        SetValues();
+    }, [ symbol]);
+
+
 
     return (
         <>

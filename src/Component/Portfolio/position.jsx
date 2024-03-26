@@ -6,12 +6,14 @@ import { getFirestore } from "firebase/firestore";
 import { collection, addDoc } from 'firebase/firestore';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { getprice, getchange, getSectorBySymbol, Is_symbol_exist } from './apiFuntion/api_funtion';
-
+import Cookies from 'universal-cookie';
 import TradeBar from './MakeTrade/MakeTradeBar';
 
 export default function Positions_page() {
+
+  const cookies = new Cookies();
   const [stockHoldings, setStockHoldings] = useState([]);
-  const [userId, setUserId] = useState('r6SQliH0isTz7qhgS1lggXERJ9E3');
+  const [userId, setUserId] = useState(cookies.get('userId'));
   const db = getFirestore(app);
   const [symbolData, setSymbolData] = useState({});
 
@@ -67,10 +69,33 @@ export default function Positions_page() {
         <Navbar />
         <Optionbar />
         <div className='flex flex-1 flex-row'>
+
           <div className='w-10/12' >
-            <h4 className="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
+
+            <div className=" bg-white text-primary flex justify-between items-center px-8 border-t border-b border-gray-300">
+              <div className="flex items-center space-x-6">
+                <button className="hover:bg-primary hover:text-white text-black px-4 py-2 rounded-lg transition duration-300"
+                  onClick={() => handleTabClick('stock')}
+                >
+                  STOCK & ETF
+                </button>
+                <div className='button-space-5'></div>
+
+                <button className="hover:bg-primary hover:text-white text-black px-4 py-2 rounded-lg transition duration-300"
+                  onClick={() => handleTabClick('short')}
+                >
+                  SHORTS
+                </button>
+                <button className="hover:bg-primary hover:text-white text-black px-4 py-2 rounded-lg transition duration-300"
+                  onClick={() => handleTabClick('crypto')}
+                >
+                  Crypto
+                </button>
+              </div>
+            </div>
+            {/* <h4 className="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
               Open Position
-            </h4>
+            </h4> */}
             <div className="w-full overflow-hidden rounded-lg shadow-xs">
               <div className="w-full overflow-x-auto">
                 <table className="w-full whitespace-no-wrap">
