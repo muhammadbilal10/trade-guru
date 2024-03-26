@@ -3,7 +3,6 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 function HomeHero({ images }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-
   const slideInterval = useRef(null);
 
   const goToPrevious = () => {
@@ -19,22 +18,24 @@ function HomeHero({ images }) {
   };
 
   const startSlideShow = () => {
-    stopSlideShow();
-    slideInterval.current = setInterval(() => {
-      goToNext();
-    }, 3000);
+    if (slideInterval.current) clearInterval(slideInterval.current); // Clear existing interval if any
+    slideInterval.current = setInterval(goToNext, 3000); // Start a new interval
   };
 
   const stopSlideShow = () => {
-    if (slideInterval.current) {
-      clearInterval(slideInterval.current);
-    }
+    if (slideInterval.current) clearInterval(slideInterval.current);
   };
 
   useEffect(() => {
-    startSlideShow();
-    return () => stopSlideShow();
-  }, [currentIndex]);
+    // This effect manages the slideshow based on the number of images
+    if (images.length > 1) {
+      startSlideShow(); // Start slideshow if more than one image
+    } else {
+      stopSlideShow(); // Stop slideshow if one or no images
+    }
+
+    return () => stopSlideShow(); // Cleanup on component unmount
+  }, [images.length]); // Effect depends on the images.length
 
   return (
     <div className="relative">

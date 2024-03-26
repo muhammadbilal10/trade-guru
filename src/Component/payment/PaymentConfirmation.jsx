@@ -40,15 +40,20 @@ const PaymentConfirmationPage = () => {
     };
 
     const setAds = async () => {
-      console.log("setting ads");
       const AdId = uuid();
       const db = getFirestore(app);
-      const docRef = doc(db, "Ads", AdId);
+      const userId = "21oEyQqYJHeth0OVEl0DTxDBtd92";
+      const docRef = doc(
+        db,
+        "AdvertisementPlans",
+        params.id,
+        "AdsBuyers",
+        userId
+      );
       try {
         const adData = {
-          userId: "21oEyQqYJHeth0OVEl0DTxDBtd92",
           adId: AdId,
-          adPlanId: params.id,
+          userId: "21oEyQqYJHeth0OVEl0DTxDBtd92",
           adImage: "",
         };
         await setDoc(docRef, adData);
@@ -65,19 +70,23 @@ const PaymentConfirmationPage = () => {
   }, []);
 
   const setAds = async (imageUrl) => {
-    console.log("setting ads");
     const AdId = uuid();
     const db = getFirestore(app);
-    const docRef = doc(db, "Ads", AdId);
+    const userId = "21oEyQqYJHeth0OVEl0DTxDBtd92";
+    const docRef = doc(
+      db,
+      "AdvertisementPlans",
+      params.id,
+      "AdsBuyers",
+      userId
+    );
     try {
       const adData = {
-        userId: "21oEyQqYJHeth0OVEl0DTxDBtd92",
         adId: AdId,
-        adPlanId: params.id,
+        userId: userId,
         adImage: imageUrl,
       };
       await setDoc(docRef, adData);
-      console.log("Document successfully written!");
     } catch (error) {
       console.error("Error setting document:", error);
     }

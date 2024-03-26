@@ -54,39 +54,38 @@ export default function Home() {
         });
     };
 
-    const fetchDisplayAdPlans = async () => {
+    const displayAdsWithBuyers = async () => {
       const db = getFirestore(app);
-      const plansCollectionRef = collection(db, "AdvertisementPlans");
-      // Assuming you want to check for a specific 'placement' value as well
-      const specificPlacement = "homepage"; // Example placement value
-      // Adjust the query to include both conditions
+      const plansRef = collection(db, "AdvertisementPlans");
       const q = query(
-        plansCollectionRef,
+        plansRef,
         where("type", "==", "Display ad"),
-        where("placement", "==", specificPlacement)
+        where("placement", "==", "Home Page")
       );
-      const querySnapshot = await getDocs(q);
+      console.log("Display ads with buyers:");
+      try {
+        const querySnapshot = await getDocs(q);
+        for (const doc of querySnapshot.docs) {
+          // Use a for...of loop for async operations inside
+          console.log(doc.id, " => ", doc.data());
+          const buyersRef = collection(doc.ref, "AdsBuyers");
+          const buyersSnapshot = await getDocs(buyersRef);
+          const buyersData = [];
+          buyersSnapshot.forEach((buyerDoc) => {
+            // Store buyer information in an array
+            buyersData.push(buyerDoc.data());
+            console.log(buyerDoc.data());
+            setDisplayAds((prev) => [...prev, buyerDoc.data()?.adImage]);
+          });
 
-      const displayAdPlans = [];
-      querySnapshot.forEach((doc) => {
-        displayAdPlans.push(doc.id);
-      });
-
-      console.log(displayAdPlans);
-      return displayAdPlans;
+          console.log("Buyers for ad:", doc.id, " => ", buyersData);
+        }
+      } catch (error) {
+        console.error("Error retrieving or updating documents:", error);
+      }
     };
 
-    const fetchUsersAndAds = async () => {
-      fetchDisplayAdPlans();
-      const db = getFirestore(app);
-      const docRef = collection(db, "User");
-      const querySnapshot = await getDocs(docRef);
-
-      const adDetails = [];
-    };
-
-    fetchUsersAndAds();
-    getUser();
+    displayAdsWithBuyers();
   }, []);
 
   const backgroundImages = [
@@ -98,7 +97,7 @@ export default function Home() {
   return (
     <div className="">
       <Navbar />
-      <HomeHero images={backgroundImages} />
+      <HomeHero images={displayAds} />
       <Footer />
       {/* <div className="container mx-auto py-10 px-4 animate-fade-in-up">
         <h1 className="text-5xl font-bold text-center mb-12 animate-pulse">
