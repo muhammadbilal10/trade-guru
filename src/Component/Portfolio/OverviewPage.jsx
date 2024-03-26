@@ -4,17 +4,20 @@ import Navbar from "../navbar/navbar";
 import app from '../../database/firebase';
 import { getFirestore } from "firebase/firestore";
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import Cookies from 'universal-cookie';
 import { LineChart, Line, XAxis, YAxis, PieChart, Pie, Tooltip, Legend , Cell} from 'recharts';
 import { getprice, getchange, getSectorBySymbol, Is_symbol_exist,fetchStocks } from './apiFuntion/api_funtion';
 import TradeBar from './MakeTrade/MakeTradeBar';
 
 export default function OverviewPage() {
+  
+  const cookies = new Cookies();
   const [todayGainLoss, setTodaygain] = useState(0);
   const [netWorth, setNetworth] = useState(0);
   const [totalCash, setTotalcash] = useState(0);
   const [totalGainLoss, setTotalgain] = useState(0);
   const [walletData, setWalletData] = useState(null);
-  const [userId, setUserId] = useState('r6SQliH0isTz7qhgS1lggXERJ9E3');
+  const [userId, setUserId] = useState(cookies.get('userId'));
   // Define an array of colors
 const colors = ['	#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#d0ed57','#0000FF', '#FFFF00', '#FF00FF', '#d0ed57'];
 

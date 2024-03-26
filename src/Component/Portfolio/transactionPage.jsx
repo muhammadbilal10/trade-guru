@@ -6,13 +6,16 @@ import { getFirestore } from "firebase/firestore";
 import { collection, addDoc } from 'firebase/firestore';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { getprice, getchange, getSectorBySymbol, Is_symbol_exist } from './apiFuntion/api_funtion';
-
+import Cookies from 'universal-cookie';
 import TradeBar from './MakeTrade/MakeTradeBar';
 
 export default function TransactionPage() {
+  
+  
   const [buyTransaction, setBuyTransaction] = useState([]);
   const [sellTransaction, setSellTransaction] = useState([]);
-  const [userId, setUserId] = useState('r6SQliH0isTz7qhgS1lggXERJ9E3');
+  const cookies = new Cookies();
+  const [userId, setUserId] = useState(cookies.get('userId'));
   const db = getFirestore(app);
   const [symbolData, setSymbolData] = useState({});
   const fetchSymbolData = async (symbol) => {

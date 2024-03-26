@@ -13,13 +13,23 @@ export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice
   const [stoploss, setStoploss] = useState(0);
   const [userId, setUserId] = useState(cookies.get('userId'));
   const db = getFirestore(app);
+  const [error_stoploss, setError_Stoploss] = useState({
+    status: false,
+    message: ''
+  })
+  const [error_targetprice, setError_Trgetprice] = useState({
+    status: false,
+    message: ''
+  })
 
   const handleConfirmBuy = async () => {
+
+
+
     try {
-      console.log(cookies.get('userId'));
-      console.log('hello1');
+      console.log('userid',cookies.get('userId'));
+      
       if (Is_symbol_exist(SymbolsList, symbol.toLocaleUpperCase()) && quantity >= 10) {
-        console.log('hello1.1');
         const userDocRef = doc(db, "portfolio", userId);
         const userDocSnap = await getDoc(userDocRef);
         // Fetch the latest stock price and calculate total price
@@ -30,7 +40,31 @@ export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice
         setValue(change[1]);
         setPrice(change[0]);
         // Check if user document snapshot exists
-        console.log('hello2');
+
+        if (stoploss >= price) {
+          setError_Stoploss({
+            status: true,
+            message: 'stop loss connot be grwater then price'
+          });
+          return;
+        }
+        else if (targetPrice <= price) {
+          setError_Trgetprice({
+            status: true,
+            message: 'Indvalid Target Price'
+          });
+          return;
+        }
+
+        /////clear error msg
+        setError_Stoploss({
+          status: false,
+          message: ''
+        });
+        setError_Trgetprice({
+          status: false,
+          message: ''
+        });
         if (userDocSnap.exists()) {
           const userWallet = userDocSnap.data().wallet;
           if (totalPrice > userWallet.cash_in_hand) {
@@ -55,7 +89,7 @@ export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice
             const oldAveragePrice = stockHoldings[symbol.toUpperCase()].averagePrice;
             const oldCost = stockHoldings[symbol.toUpperCase()].cost;
             const newTotalQuantity = oldTotalQuantity + Number(quantity);
-            const newCost = oldCost  + totalPrice;
+            const newCost = Number(oldCost + totalPrice);
             // Calculate new average price
             const newAveragePrice = ((oldTotalQuantity * oldAveragePrice) + (Number(quantity) * price)) / newTotalQuantity;
             // Update stock holdings
@@ -63,7 +97,7 @@ export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice
               ...stockHoldings[symbol.toUpperCase()],
               quantity: Number(newTotalQuantity),
               averagePrice: parseFloat(newAveragePrice.toFixed(3)),
-              cost: parseFloat(totalPrice.toFixed(3)),
+              cost: parseFloat(newCost.toFixed(3)),
               stoploss: Number(stoploss),
               targetPrice: Number(targetPrice)
             };
@@ -167,7 +201,7 @@ export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice
               type="number"
               className="block w-full px-3 py-2 border rounded focus:outline-none focus:border-purple-400"
               value={quantity}
-              readOnly
+            // readOnly
             />
           </div>
           <div className="mb-4">
@@ -180,7 +214,12 @@ export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice
               onChange={(e) => setTargetPrice(e.target.value)}
             //required
             />
+            {
+              error_targetprice?.status &&
+              <p className="text-red-500 text-xs">{error_targetprice?.message}</p>
+            }
           </div>
+
           <div className="mb-4">
             <label htmlFor="stoploss" className="block mb-1">Stop Loss</label>
             <input
@@ -190,9 +229,13 @@ export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice
               value={stoploss}
               onChange={(e) => setStoploss(e.target.value)}
             //required
-            //readOnly
             />
+            {
+              error_stoploss?.status &&
+              <p className="text-red-500 text-xs">{error_stoploss?.message}</p>
+            }
           </div>
+
           <div className="mb-4">
             <label htmlFor="comment" className="block mb-1">Comment</label>
             <textarea
