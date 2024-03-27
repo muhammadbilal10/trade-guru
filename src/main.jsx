@@ -19,6 +19,10 @@ import Sidebar from "./Component/sidebar/Sidebar";
 import AddCourseForm from "./Component/course/AddCourseForm";
 import CourseOffer from "./Component/course/CourseOffer";
 
+import Paymentpage from "./Component/Dashboard/payments/paymentHome";
+import AllTransaction from "./Component/Dashboard/payments/paymentRecord";
+
+
 import Advertisement from "./Component/Dashboard/advertisement/Advertisement";
 import MyPlans from "./Component/Dashboard/advertisement/MyPlans";
 import FileUpload from "./Component/Resources/ResourceUpload";
@@ -30,6 +34,7 @@ import TransactionPage from "./Component/Portfolio/transactionPage";
 import TradePage from "./Component/Portfolio/tradePage";
 import Student from "./Component/Dashboard/student/managestudent";
 import OverviewPage from "./Component/Portfolio/OverviewPage";
+
 
 ///////////zains///////////////////
 import NewCourseCard from "./Component/course/NewCourseCard";
@@ -48,7 +53,6 @@ import Checkout from "./Component/payment/Checkout";
 import PaymentConfirmationPage from "./Component/payment/PaymentConfirmation";
 import MyLearning from "./Component/course/MyLearning";
 import AdvertismentPage from "./Component/Dashboard/InstructorDashboard/AdvertismentPage";
-
 const CourseRoutes = () => {
   return (
     <Routes>
@@ -70,24 +74,14 @@ const LearningRoutes = () => {
             <Navbar />
             <Hero />
             <MyCourses />
-            <Footer />
           </>
         }
       />
-      <Route
-        path="/learning/:id"
-        element={
-          <div className="flex min-h-screen flex-col justify-between">
-            <div className="flex-1 flex">
-              <MyLearning />
-            </div>
-            <Footer />
-          </div>
-        }
-      />
+      <Route path="/learning/:id" element={<MyLearning />} />
     </Routes>
   );
 };
+
 
 const router = createBrowserRouter([
   {
@@ -105,13 +99,14 @@ const router = createBrowserRouter([
     // element: <Login/>,
   },
 
+
   ///dashboard paths
   {
     path: "/dashboard",
     element: <DashboardHome />,
   },
 
-  //dashboard
+  //dashboard 
   //instructor related paths
   {
     path: "/approveinstructor",
@@ -121,12 +116,26 @@ const router = createBrowserRouter([
     path: "/instructorpage",
     element: <Instructorpage />,
   },
+
+
+  ///paymetn page
+
+  
+  {
+    path: "/paymentpage",
+    element: <Paymentpage />,
+  },
+
+  {
+    path: "/paymentAllTransactions",
+    element: <AllTransaction />,
+  },
+
   //advertisment related path
   {
     path: "/advertisement",
     element: <Advertisement />,
   },
-
   {
     path: "/myplan",
     element: <MyPlans />,
@@ -136,23 +145,16 @@ const router = createBrowserRouter([
     element: <TempLogin />,
     // element: <Login/>,
   },
-  //dashboard
+
+  //dashboard 
   //Student related paths
   {
     path: "/student_page",
     element: <Student />,
   },
 
-  // {
-  //   path: "/course/*",
-  //   // element: <CourseForm/>,
-  //   element: (
-  //     <>
-  //       <Sidebar />
-  //       <CourseRoutes />
-  //     </>
-  //   ),
-  // },
+
+
 
   {
     path: "/Regesteration",
@@ -163,11 +165,11 @@ const router = createBrowserRouter([
     path: "/instructorform",
     element: <Instructorform />,
   },
-
   {
     path: "/inst-advertisment",
     element: <AdvertismentPage />,
   },
+
 
   //terminal folder
   {
@@ -175,31 +177,42 @@ const router = createBrowserRouter([
     element: <Terminal />,
   },
 
+
+
   //portfolio paths
   {
-    path: "/portfolio_main_page",
+    path: '/portfolio_main_page',
     element: <Portfolio_Main_Page />,
   },
   {
-    path: "/overview_page",
+    path: '/overview_page',
     element: <OverviewPage />,
   },
   {
-    path: "/positions_page",
+    path: '/positions_page',
     element: <Positions_page />,
   },
   {
-    path: "/tradePage",
+    path: '/tradePage',
     element: <TradePage />,
   },
   {
-    path: "/transactionPage",
+    path: '/transactionPage',
     element: <TransactionPage />,
   },
   {
-    path: "/marketpage",
-    element: <MarketPage />,
+    path:'/marketpage',
+    element:<MarketPage/>
   },
+
+
+
+  {
+    path: '/payment_main_page',
+    element: <Payment />,
+  },
+
+
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -227,9 +240,11 @@ const router = createBrowserRouter([
         {/* <Navbar />
         <Hero /> */}
         <LearningRoutes />
+        <Footer />
       </>
     ),
   },
+
 
   {
     path: "/coursePage",
@@ -247,11 +262,10 @@ const router = createBrowserRouter([
     path: "/payment-confirmation/:id",
     element: <PaymentConfirmationPage />,
   },
-]);
 
+]);
 ReactDOM.createRoot(document.getElementById("root")).render(
   <>
-    {/* <Elements stripe={stripePromise} options={options}></Elements> */}
     <RouterProvider router={router} />
   </>
 );

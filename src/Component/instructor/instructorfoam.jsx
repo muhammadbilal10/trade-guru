@@ -5,7 +5,12 @@ import { doc, setDoc,getDoc,updateDoc,collection, addDoc   } from "firebase/fire
 import app from '../../database/firebase';
 import { getFirestore, Timestamp } from "firebase/firestore";
 import Cookies from 'universal-cookie';
+import { useNavigate } from "react-router-dom";
 export default function Instructorform() {
+
+    
+const navigate = useNavigate();
+    
     const [fname, setFname] = useState('');
     const [lname, setLname] = useState('');
     const [gender, setGender] = useState('');
@@ -60,6 +65,7 @@ export default function Instructorform() {
             
             
              await updateDoc(docRef, data);
+             navigate("/");
         console.log('Document updated successfully');
         } catch (error) {
             console.error('Error adding document:', error.message);

@@ -1,58 +1,42 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
-import { getFirestore, collection,query,where, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 import app from "../../../database/firebase";
 import { fetchUserData } from '../js file/instructor';
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
-import EditModal from './EditModal';
-import DeleteModal from './deletemodal';
 
-export default function EditTable() {
+export default function TransactionTable() {
 
-    const [IsEditOpen, setIsEditOpen] = useState(false)
-    const [IsDelOpen, setIsDelOpen] = useState(false)
-    const [user, setUser] = useState(null);
-    const [currentuser, setCurrentUser] = useState(null);
-    const [uid, setUid] = useState(null);
+    const [transactions, setTransactions] = useState([]);
     const db = getFirestore(app);
 
-    // useEffect(() => {
-    //     fetchUserData(db, 'User').then((res) => {
-    //         setUser(res)
-    //     })
-    // }, []);
+    const fetchTransactions = async () => {
+        const transactionsCollectionRef = collection(db, 'transactions');
+
+        try {
+            const snapshot = await getDocs(transactionsCollectionRef);
+            const transactionsData = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            return transactionsData;
+        } catch (error) {
+            console.error('Error fetching transactions:', error.message);
+            return [];
+        }
+    };
 
 
     useEffect(() => {
-       
-        const collectionName = 'User';
-        const myCollection = collection(db, collectionName);
-        const statusFalseQuery = query(myCollection, where('isInstructor', '==', true));
-        const fetchData = async () => {
-            try {
-                const querySnapshot = await getDocs(statusFalseQuery);
-                const userData = querySnapshot.docs.map(doc => doc.data());
-                setUser(userData);
-            } catch (error) {
-                console.error('Error getting documents:', error);
-            }
+        const fetchAndSetTransactions = async () => {
+            const fetchedTransactions = await fetchTransactions();
+            setTransactions(fetchedTransactions);
         };
-    
-        fetchData();
+        fetchAndSetTransactions();
     }, []);
 
-    // Function to handle delete button click
-    const handleDeleteClick = (userId) => {
-        console.log(userId);
-        setUid(userId); // Set the UID of the user to be deleted
-        setIsDelOpen(true); // Open the delete modal
-    };
-    const handleEditClick = (cuser) => {
-        console.log(cuser);
-        setCurrentUser(cuser);
-        setIsEditOpen(true);
-    };
+
 
 
     return (
@@ -60,7 +44,7 @@ export default function EditTable() {
             <h4
                 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300"
             >
-                Table with actions
+                All Transactions
             </h4>
             <div class="w-full overflow-hidden rounded-lg shadow-xs">
                 <div class="w-full overflow-x-auto">
@@ -69,88 +53,53 @@ export default function EditTable() {
                             <tr
                                 class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
                             >
-                                <th class="px-4 py-3">Name</th>
-                                <th class="px-4 py-3">total course</th>
-                                <th class="px-4 py-3">Status</th>
+                                <th class="px-4 py-3">#</th>
+                                <th class="px-4 py-3">Title</th>
+                                <th class="px-4 py-3">catagory</th>
+                                <th class="px-4 py-3">Amount Paid</th>
                                 <th class="px-4 py-3">Date</th>
-                                <th class="px-4 py-3">Actions</th>
+                                <th class="px-4 py-3">Gateway</th>
                             </tr>
                         </thead>
                         <tbody
                             class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
                         >
-                            {user?.map((user) => (
-                                <tr class="text-gray-700 dark:text-gray-400">
-                                    <td class="px-4 py-3">
-                                        <div class="flex items-center text-sm">
-                                            {/* <!-- Avatar with inset shadow --> */}
-                                            <div
-                                                class="relative hidden w-8 h-8 mr-3 rounded-full md:block"
-                                            >
-                                                <img
-                                                    class="object-cover w-full h-full rounded-full"
-                                                    src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                                                    alt=""
-                                                    loading="lazy"
-                                                />
-                                                <div
-                                                    class="absolute inset-0 rounded-full shadow-inner"
-                                                    aria-hidden="true"
-                                                ></div>
-                                            </div>
-                                            <div>
-                                                <p class="font-semibold">{user.fname}</p>
-                                                <p class="text-xs text-gray-600 dark:text-gray-400">
-                                                    {user.experiance}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </td>
+                            {transactions.map((transaction, index) => (
+
+                                <tr class="text-gray-700 dark:text-gray-400"
+                                    key={transaction.id}>
+                                   
                                     <td class="px-4 py-3 text-sm">
-                                        {user.totalCourse}
+                                        {(index+1)}
                                     </td>
-                                    <td class="px-4 py-3 text-xs">
-                                    <span
-                                            className={`px-2 py-1 font-semibold leading-tight rounded-full ${user.approval
+                                    {/* <td class="px-4 py-3 text-xs">
+                                        <span
+                                            className={`px-2 py-1 font-semibold leading-tight rounded-full ${user.status
                                                 ? 'text-green-700 bg-green-100 dark:bg-green-700 dark:text-green-100'
                                                 : 'text-red-700 bg-red-100 dark:bg-red-700 dark:text-red-100'
                                                 }`}
                                         >
-                                            {user.approval? 'approved' : 'not approved'}
+                                            {user.status ? 'approved' : 'not approved'}
                                         </span>
+                                    </td> */}
+                                      <td class="px-4 py-3 text-sm">
+                                    {transaction.title}
                                     </td>
                                     <td class="px-4 py-3 text-sm">
-                                        6/10/2020
+                                    {transaction.type}
                                     </td>
-
-
-                                    <td class="px-4 py-3">
-
-                                        <div class="flex items-center space-x-4 text-sm">
-
-                                            <button
-                                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                                                aria-label="Edit"
-                                                onClick={() => handleEditClick(user)}
-                                                key={user.id}
-                                            >
-
-                                                <FaEdit class="w-5 h-5" />
-
-                                            </button>
-
-                                            <button
-                                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                                                aria-label="Delete"
-                                                onClick={() => handleDeleteClick(user.id)}
-                                                key={user.id}
-
-                                            >
-                                                <MdDeleteOutline class="w-5 h-5" />
-
-                                            </button>
-                                        </div>
+                                    <td class="px-4 py-3 text-sm">
+                                    {transaction.price}
                                     </td>
+                                    <td class="px-4 py-3 text-sm">
+                                    {transaction.date}
+                                    </td>
+                                    <td class="px-4 py-3 text-sm">
+                                    {transaction.gateway}
+                                    </td>
+                                    
+
+                                   
                                 </tr>
 
 
@@ -230,12 +179,6 @@ export default function EditTable() {
                         </nav>
                     </span>
                 </div>
-                {
-                    IsEditOpen &&
-                    <EditModal IsEditOpen={IsEditOpen} setIsEditOpen={setIsEditOpen} user={currentuser} />
-                }
-                <DeleteModal IsDelOpen={IsDelOpen} setIsDelOpen={setIsDelOpen} id={uid} setId={setUid} data={user} setData={user} />
-
 
             </div>
 

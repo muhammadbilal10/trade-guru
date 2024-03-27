@@ -113,10 +113,10 @@ export default function Positions_page() {
                       <th className="px-4 py-3">Total Cost</th>
                       {/* current value of asset  */}
                       <th className="px-4 py-3">Current price/cost</th>
-                      <th className="px-4 py-3">Equity,%</th>
+
                       {/* Net profit loss  */}
                       <th className="px-4 py-3">Profit/Loss</th>
-                      <th className="px-4 py-3">Equity,%</th>
+
                     </tr>
                   </thead>
                   <tbody
@@ -182,11 +182,7 @@ export default function Positions_page() {
                             <div className="w-3 h-3 border-4 border-dashed rounded-full animate-spin border-default-600"></div>}
                         </td>
 
-                        <td className="px-4 py-3 text-sm">
-                          {/* cost in percent*/}
-                          {parseFloat(symbolData[symbol]?.currentCost.toFixed(3)) ||
-                            <div className="w-3 h-3 border-4 border-dashed rounded-full animate-spin border-default-600"></div>}
-                        </td>
+
 
                         <td className="px-4 py-3 text-sm">
                           {/* Profit/Loss */}
@@ -200,21 +196,7 @@ export default function Positions_page() {
                         </td>
 
 
-                        <td className="px-4 py-3 text-sm">
-                          {/* stoploss*/}
-                          null
-                        </td>
 
-                        {/* <td className="px-4 py-3 text-xs">
-                              <span
-                                classNameName={`px-2 py-1 font-semibold leading-tight rounded-full ${user.status
-                                  ? 'text-green-700 bg-green-100 dark:bg-green-700 dark:text-green-100'
-                                  : 'text-red-700 bg-red-100 dark:bg-red-700 dark:text-red-100'
-                                  }`}
-                              >
-                                {user.status ? 'approved' : 'not approved'}
-                              </span>
-                            </td> */}
                       </tr>
                     ))}
                   </tbody>

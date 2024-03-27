@@ -17,12 +17,12 @@ export default function TempLogin() {
     const [error_email, setError_email] = useState({
         status: false,
         message: ''
-    })
-    
+    });
+
     const [error_password, setError_password] = useState({
         status: false,
         message: ''
-    })
+    });
 
     const navigate = useNavigate();
     const auth = getAuth(app);
@@ -57,19 +57,49 @@ export default function TempLogin() {
         const InstructorDetails = async (uId) => {
             try {
                 const docRef = doc(db, 'User', uId);
-                const doc = await getDoc(docRef);
-                if (doc.exists()) {
-                    const data = doc.data();
-                    const res=[data.isInstructor,data.approval];
-                    return res;
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+
+                    // Check if 'isInstructor' and 'approval' fields exist in the document
+                    const isInstructor = data.isInstructor !== undefined ? data.isInstructor : false;
+                    const approval = data.approval !== undefined ? data.approval : false;
+
+                    // Return an array with the values of 'isInstructor' and 'approval'
+                    return [isInstructor, approval];
                 } else {
-                    return [false,false];
+                    console.error('Document does not exist for uId:', uId);
+                    return [false, false]; // Return default values if document doesn't exist
                 }
             } catch (error) {
                 console.error('Error checking document existence and status:', error);
-                return false; // Return false in case of any error
+                return [false, false]; // Return false for both fields in case of any error
             }
         };
+
+        // const UserRole = async (uId) => {
+        //     try {
+        //         const docRef = doc(db, 'User', uId);
+        //         const doc = await getDoc(docRef);
+        //         if (doc.exists()) {
+        //             const data = doc.data();
+        //             const role = data.role
+        //             // Check if the 'role' field exists and return its value
+        //             if (role) {
+        //                 return role;
+        //             } else {
+        //                 return 'user'; 
+        //             }
+        //             ////change it latter
+        //         } else {
+        //             return null; 
+        //         }
+        //     } catch (error) {
+        //         console.error('Error checking document existence and status:', error);
+        //         return false; // Return false in case of any error
+        //     }
+        // };
 
         // Check if email is in valid format
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -112,14 +142,27 @@ export default function TempLogin() {
                 // Signed in 
                 const user = userCredential.user;
                 const uid = user.uid;
-                const isExist = await InstructorDetails(uid); // Wait for the promise to resolve
-                console.log(isExist);
-                cookies.set('userId', uid);
-                cookies.set('islogin', true);
-                cookies.set('isInstructor', isExist[0]);
-                cookies.set('isapprove', isExist[1]);
-                
-                navigate("/");
+                if (email == 'admin1234@gmail.com') {
+
+                    navigate("/dashboard");
+                    cookies.set('isAdmin', true);
+                    cookies.set('isInstructor', false);
+                    cookies.set('isapprove', false);
+                }
+                else {
+                    const isExist = await InstructorDetails(uid);
+                    // const getrole = await UserRole(uid);
+                    // console.log('isExist:', isExist);
+                    cookies.set('userId', uid);
+                    cookies.set('isAdmin', false);
+                    cookies.set('islogin', true);
+                    cookies.set('isInstructor', isExist[0]);
+                    cookies.set('isapprove', isExist[1]);
+                    // cookies.set('role', getrole);
+
+                    navigate("/");
+                }
+
             })
             .catch((error) => {
 
@@ -204,14 +247,14 @@ export default function TempLogin() {
                                 </button>
 
                                 <hr class="my-8" />
-                                <Link to={'/'}>
+                                {/* <Link to={'/'}>
                                     <p class="mt-4">
                                         <button class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline focus:outline-none">
                                             Forgot your password?
                                         </button>
                                     </p>
-                                </Link>
-                                <Link to={'/'}>
+                                </Link> */}
+                                <Link to={"/signup"}>
                                     <p class="mt-1">
                                         <button class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline focus:outline-none">
                                             Create account

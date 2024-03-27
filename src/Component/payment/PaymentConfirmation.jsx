@@ -1,12 +1,15 @@
-import { arrayUnion, doc, getFirestore, setDoc } from "firebase/firestore";
+import { collection,arrayUnion, doc, getFirestore, setDoc,addDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import app from "../../database/firebase";
 import AdsImageUpload from "../Dashboard/advertisement/AdsImageUpload";
 import { v4 as uuid } from "uuid";
+import Cookies from 'universal-cookie';
 
 const PaymentConfirmationPage = () => {
+  const cookies = new Cookies();
+  const [userId, setUserId] = useState(cookies.get('userId'));
   const navigate = useNavigate();
   const params = useParams();
   const [adImageUrl, setAdImageUrl] = useState("");
@@ -15,14 +18,39 @@ const PaymentConfirmationPage = () => {
   const queryParams = new URLSearchParams(location.search);
   const type = queryParams.get("type");
   const adType = queryParams.get("adType");
+  ///transaction table
+  const title = queryParams.get("title");
+  const price = queryParams.get("price");
 
   useEffect(() => {
+
+    const addTransaction = async (type, title, price, id,method) => {
+      const db = getFirestore(app);
+      const currentDate = new Date();
+
+      try {
+        const docRef = await addDoc(collection(db, 'transactions'), {
+          type: type,
+          price: Number(price),
+          title: title,
+          userId: id,
+          date: currentDate.toISOString().split('T')[0], // Only date without time
+          gateway:method,
+        });
+        console.log('Transaction document added with ID:', docRef.id);
+      } catch (error) {
+        console.error('Error adding transaction:', error.message);
+      }
+    };
+
+
     const SetEnrolled = async () => {
       const db = getFirestore(app);
       console.log("setting enrolled");
-      const docRef = doc(db, "User", "21oEyQqYJHeth0OVEl0DTxDBtd92");
+      const docRef = doc(db, "User", userId);
       try {
-        await setDoc(
+        console.log(userId)
+        const temp = await setDoc(
           docRef,
           {
             enrolledCourses: arrayUnion({
@@ -33,7 +61,10 @@ const PaymentConfirmationPage = () => {
           },
           { merge: true }
         );
+        console.log(temp);
+        addTransaction(type, title, price, userId,"Stripe");
         console.log("Document successfully written!");
+
       } catch (error) {
         console.error("Error setting document:", error);
       }
@@ -42,7 +73,7 @@ const PaymentConfirmationPage = () => {
     const setAds = async () => {
       const AdId = uuid();
       const db = getFirestore(app);
-      const userId = "21oEyQqYJHeth0OVEl0DTxDBtd92";
+      const userId = cookies.get('userId');
       const docRef = doc(
         db,
         "AdvertisementPlans",
@@ -53,10 +84,11 @@ const PaymentConfirmationPage = () => {
       try {
         const adData = {
           adId: AdId,
-          userId: "21oEyQqYJHeth0OVEl0DTxDBtd92",
+          userId: cookies.get('userId'),
           adImage: "",
         };
         await setDoc(docRef, adData);
+        addTransaction(type, title, price, userId,"Stripe");
       } catch (error) {
         console.error("Error setting document:", error);
       }
@@ -72,7 +104,7 @@ const PaymentConfirmationPage = () => {
   const setAds = async (imageUrl) => {
     const AdId = uuid();
     const db = getFirestore(app);
-    const userId = "21oEyQqYJHeth0OVEl0DTxDBtd92";
+    const userId = cookies.get('userId');
     const docRef = doc(
       db,
       "AdvertisementPlans",
@@ -87,6 +119,7 @@ const PaymentConfirmationPage = () => {
         adImage: imageUrl,
       };
       await setDoc(docRef, adData);
+      addTransaction(type, title, price, userId,"Stripe");
     } catch (error) {
       console.error("Error setting document:", error);
     }

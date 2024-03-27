@@ -13,7 +13,7 @@ import {
 import app from "../../database/firebase";
 import NewCourseCard from "../course/NewCourseCard";
 import MyLearning from "../course/MyLearning";
-
+import Cookies from 'universal-cookie';
 const TabButton = ({ active, onClick, children }) => (
   <button
     className={`px-4 py-2 text-md font-medium rounded-t-lg border-b-2 ${
@@ -32,7 +32,8 @@ const MyCourses = () => {
   const [courses, setCourses] = useState([]);
   const [lists, setLists] = useState([]);
   const [archieved, setArchieved] = useState([]);
-  const userId = "21oEyQqYJHeth0OVEl0DTxDBtd92";
+  const cookies = new Cookies();
+  const [userId, setUserId] = useState(cookies.get('userId'));
 
   useEffect(() => {
     const fetchCourses = async () => {

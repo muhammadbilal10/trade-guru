@@ -14,7 +14,9 @@ const CheckoutForm = ({ courseDetails, ads }) => {
 
   newParams.set("type", Object.keys(ads).length !== 0 ? "Ad" : "course");
   newParams.set("adType", ads.type);
-
+  ///transaction table
+  newParams.set("title", courseDetails.formData?.title || ads.title);
+  newParams.set("price", courseDetails.formData?.price || ads.price);
   const handleSubmit = async (event) => {
     // We don't want to let default form submission happen here,
     // which would refresh the page.

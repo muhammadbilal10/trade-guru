@@ -6,19 +6,24 @@ import { MdOutlinePayments } from "react-icons/md";
 import { IoHomeOutline } from "react-icons/io5";
 import { FaAngleDown } from "react-icons/fa6";
 import { RiAdvertisementLine } from "react-icons/ri";
-export default function Sidenav() {
-  const [togglePages, setTogglePages] = useState(false);
+import { MdOutlinePayment } from "react-icons/md";
+import Cookies from "universal-cookie";
 
+export default function Sidenav() {
+
+  const [togglePages, setTogglePages] = useState(false);
   const [togglecourse, setToggleCourse] = useState(false);
   const [togglepayment, setTogglePayment] = useState(false);
-
   const [openMenuIndex, setOpenMenuIndex] = useState(null);
 
   const toggleMenu = (index) => {
     setOpenMenuIndex((prevIndex) => (prevIndex === index ? null : index));
   };
 
-  const sidebarMenu = [
+  const cookies = new Cookies();
+  const isAdmin = cookies.get('isAdmin');
+
+  const AdminMenu = [
     {
       title: "Instructor",
       link: "/instructorpage",
@@ -53,15 +58,36 @@ export default function Sidenav() {
     },
     {
       title: "Payment",
-      link: "/instructorpage",
-      icon: <RiAdvertisementLine className="w-5 h-5" />,
-      dropdownOptions: [{ title: "Pay", link: "/instructorpage" }],
+      link: "/paymentpage",
+      icon: <MdOutlinePayment className="w-5 h-5" />,
+      dropdownOptions: [
+        { title: "Home", link: "/paymentpage" },
+        { title: "Transactions", link: "/paymentAllTransactions" }],
     },
+   
+
+  ];
+
+  const InstructorMenu = [
+    // {
+    //   title: "Instructor",
+    //   link: "/instructorpage",
+    //   icon: <FiBookOpen className="w-5 h-5" />,
+    //   dropdownOptions: [
+    //     { title: "Manage Instructor", link: "/instructorpage" },
+    //     { title: "Approvals", link: "/approveinstructor" },
+    //     { title: "Instructors", link: "/instructorpage" },
+    //   ],
+    // },
     {
-      title: "Feedback",
-      link: "/feedback",
-      icon: <RiAdvertisementLine className="w-5 h-5" />,
-      dropdownOptions: [{ title: "Feedback", link: "/feedback" }],
+      title: "courses",
+      link: "/student_page",
+      icon: <FiUser className="w-5 h-5" />,
+      dropdownOptions: [
+        { title: "Manage Students", link: "/coursePage" },
+        { title: "Add Courses", link: "/coursePage" },
+        // { title: "Queries", link: "/instructorpage" },
+      ],
     },
     {
       title: "Advertisment-Ins",
@@ -69,9 +95,18 @@ export default function Sidenav() {
       icon: <RiAdvertisementLine className="w-5 h-5" />,
       dropdownOptions: [
         { title: "Advertisment Plans", link: "/inst-advertisment" },
+        { title: "Ad Spend", link: "/inst-advertisment" },
       ],
     },
+    {
+      title: "Feedback",
+      link: "/feedback",
+      icon: <RiAdvertisementLine className="w-5 h-5" />,
+      dropdownOptions: [{ title: "Feedback", link: "/feedback" }],
+    },
+
   ];
+
   return (
     <>
       <div class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
@@ -99,129 +134,81 @@ export default function Sidenav() {
             </Link>
           </ul>
 
-          <ul>
-            {sidebarMenu.map((menuItem, index) => (
-              <li key={index} className="relative px-6 py-3">
-                <button
-                  className="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                  aria-haspopup="true"
-                  onClick={() => toggleMenu(index)}
-                >
-                  <div className="inline-flex items-center">
-                    {menuItem.icon}
-                    <div className="ml-4">{menuItem.title}</div>
-                  </div>
-                  <FaAngleDown />
-                </button>
+          {isAdmin && (
+            <ul>
 
-                <template
-                  className={`${openMenuIndex === index ? "block" : "hidden"}`}
-                >
-                  <ul
-                    className="transition-all ease-in-out duration-300 p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
-                    aria-label="submenu"
+              {AdminMenu.map((menuItem, index) => (
+                <li key={index} className="relative px-6 py-3">
+                  <button
+                    className="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    aria-haspopup="true"
+                    onClick={() => toggleMenu(index)}
                   >
-                    {menuItem.dropdownOptions.map((option, idx) => (
-                      <Link to={option.link} key={idx}>
-                        <li className="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                          {option.title}
-                        </li>
-                      </Link>
-                    ))}
-                  </ul>
-                </template>
-              </li>
-            ))}
-
-            <li class="relative px-6 py-3">
-              <button
-                class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                onClick={() => setToggleCourse(!togglecourse)}
-                aria-haspopup="true"
-              >
-                <div class="inline-flex items-center">
-                  <FiUser className="w-5 h-5" />
-
-                  <div class="ml-4">courses</div>
-                </div>
-                <FaAngleDown />
-              </button>
-
-              <div className={`${togglecourse ? "block" : "hidden"}`}>
-                <ul
-                  class="transition-all ease-in-out duration-300 p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
-                  aria-label="submenu"
-                >
-                  <Link to={"/instructorpage"}>
-                    <div class="px-2 py-1 w-full transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                      manage Students
+                    <div className="inline-flex items-center">
+                      {menuItem.icon}
+                      <div className="ml-4">{menuItem.title}</div>
                     </div>
-                  </Link>
-                  <Link to={"/coursePage"}>
-                    <div class="px-2 py-1 w-full transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                      Add Courses
-                    </div>
-                  </Link>
-                </ul>
-              </div>
-            </li>
+                    <FaAngleDown />
+                  </button>
 
-            {/* 
-            <li class="relative px-6 py-3">
-              <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                <FiBookOpen className="w-5 h-5" />
-                <span class="ml-4">Tables</span>
-              </a>
-            </li> */}
-            {/* 
-            <li class="relative px-6 py-3">
-              <button
-                class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                  <template
+                    className={`${openMenuIndex === index ? "block" : "hidden"}`}
+                  >
+                    <ul
+                      className="transition-all ease-in-out duration-300 p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
+                      aria-label="submenu"
+                    >
+                      {menuItem.dropdownOptions.map((option, idx) => (
+                        <Link to={option.link} key={idx}>
+                          <li className="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                            {option.title}
+                          </li>
+                        </Link>
+                      ))}
+                    </ul>
+                  </template>
+                </li>
+              ))}
+            </ul>
+          )}
 
-                onClick={() => setTogglePages(!togglePages)}
-                aria-haspopup="true"
-              >
-                <span class="inline-flex items-center">
-                  <FiBookOpen className="w-5 h-5" />
+          {!isAdmin && (
+             <ul>
+             {InstructorMenu.map((menuItem, index) => (
+               <li key={index} className="relative px-6 py-3">
+                 <button
+                   className="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                   aria-haspopup="true"
+                   onClick={() => toggleMenu(index)}
+                 >
+                   <div className="inline-flex items-center">
+                     {menuItem.icon}
+                     <div className="ml-4">{menuItem.title}</div>
+                   </div>
+                   <FaAngleDown />
+                 </button>
 
-                  <span class="ml-4">More options</span>
-                </span>
-                <FaAngleDown />
-              </button>
-              <template className={`${togglePages ? "block" : "hidden"}`}>
-                <ul
-                  class="transition-all ease-in-out duration-300 p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
-                  aria-label="submenu"
-                >
-                  <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                    <a class="w-full" href="pages/login.html">
-                      Login
-                    </a>
-                  </li>
-                  <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                    <a class="w-full" href="pages/create-account.html">
-                      Create account
-                    </a>
-                  </li>
-                  <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                    <a class="w-full" href="pages/forgot-password.html">
-                      Forgot password
-                    </a>
-                  </li>
-                  <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                    <a class="w-full" href="pages/404.html">
-                      404
-                    </a>
-                  </li>
-                  <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                    <a class="w-full" href="pages/blank.html">
-                      Blank
-                    </a>
-                  </li>
-                </ul>
-              </template>
-            </li> */}
-          </ul>
+                 <template
+                   className={`${openMenuIndex === index ? "block" : "hidden"}`}
+                 >
+                   <ul
+                     className="transition-all ease-in-out duration-300 p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
+                     aria-label="submenu"
+                   >
+                     {menuItem.dropdownOptions.map((option, idx) => (
+                       <Link to={option.link} key={idx}>
+                         <li className="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                           {option.title}
+                         </li>
+                       </Link>
+                     ))}
+                   </ul>
+                 </template>
+               </li>
+             ))}
+           </ul>
+          )}
+
           <div class="px-6 my-6">
             <button class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-primary border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
               Add account

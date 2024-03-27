@@ -8,10 +8,10 @@ import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice, setPercent, setValue, SymbolsList }) {
   const cookies = new Cookies();
+  const [userId, setUserId] = useState(cookies.get('userId'));
   const [comment, setComment] = useState('');
   const [targetPrice, setTargetPrice] = useState(0);
   const [stoploss, setStoploss] = useState(0);
-  const [userId, setUserId] = useState(cookies.get('userId'));
   const db = getFirestore(app);
   const [error_stoploss, setError_Stoploss] = useState({
     status: false,
@@ -108,7 +108,7 @@ export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice
               name: getSymbolName(SymbolsList, symbol.toUpperCase()),
               quantity: Number(quantity),
               averagePrice: parseFloat(price.toFixed(3)),
-              cost: parseFloat(totalPrice.toFixed(3)),
+              cost: Number(parseFloat(totalPrice.toFixed(3))),
               sector: getSectorBySymbol(SymbolsList, symbol.toUpperCase()),
               stoploss: Number(stoploss),
               targetPrice: Number(targetPrice)
@@ -121,9 +121,9 @@ export default function BuyModal({ isOpen, setIsOpen, symbol, quantity, setPrice
             transactions: [...(userDocSnap.data().transactions || []), newTransaction],
             stockHoldings: stockHoldings,
 
-            "wallet.cash_in_hand": parseFloat(userWallet.cash_in_hand - totalPrice).toFixed(3),
+            "wallet.cash_in_hand": Number(parseFloat(userWallet.cash_in_hand - totalPrice).toFixed(3)),
             ///////need to be updated
-            "wallet.net_worth": parseFloat(userWallet.net_worth - userWallet.cash_in_hand + (userWallet.cash_in_hand - totalPrice)).toFixed(3)
+            "wallet.net_worth": Number(parseFloat(userWallet.net_worth - userWallet.cash_in_hand + (userWallet.cash_in_hand - totalPrice)).toFixed(3))
 
           });
 

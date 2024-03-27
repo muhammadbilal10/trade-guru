@@ -43,35 +43,36 @@ export default function Hero() {
   //     occupasion: null
   //     profilePicture: null
 
-  const [uid, setUid] = useState("r6SQliH0isTz7qhgS1lggXERJ9E3");
-  cookies.set("userId", uid);
-  cookies.set("islogin", false);
-  console.log(cookies.get("userId"));
-  console.log(cookies.get("islogin"));
+  // const [uid, setUid] = useState("r6SQliH0isTz7qhgS1lggXERJ9E3");
+  // cookies.set("userId", uid);
+  // cookies.set("islogin", false);
+  // console.log(cookies.get("userId"));
+  // console.log(cookies.get("islogin"));
   const [displayAds, setDisplayAds] = useState([]);
 
   useEffect(() => {
-    const db = getFirestore(app);
-    const getUser = async () => {
-      const documentId = cookies.get("userId");
-      const collectionName = "Instructor";
-      const docRef = doc(db, collectionName, documentId);
-      getDoc(docRef)
-        .then((docSnap) => {
-          if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
-          } else {
-            console.log("No such document!");
-          }
-        })
-        .catch((error) => {
-          console.log("Error getting document:", error);
-        });
-    };
+    // const db = getFirestore(app);
+    // const getUser = async () => {
+    //   const documentId = cookies.get("userId");
+    //   const collectionName = "Instructor";
+    //   const docRef = doc(db, collectionName, documentId);
+    //   getDoc(docRef)
+    //     .then((docSnap) => {
+    //       if (docSnap.exists()) {
+    //         console.log("Document data:", docSnap.data());
+    //       } else {
+    //         console.log("No such document!");
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       console.log("Error getting document:", error);
+    //     });
+    // };
 
     const displayAdsWithBuyers = async () => {
       const db = getFirestore(app);
       const plansRef = collection(db, "AdvertisementPlans");
+      /////this is for course page
       const q = query(
         plansRef,
         where("type", "==", "Display ad"),
@@ -102,7 +103,8 @@ export default function Hero() {
 
     displayAdsWithBuyers();
   }, []);
-
+////////initial dummy data 
+/////// this will be shown
   const backgroundImages = [
     "https://www.stockpathshala.com/wp-content/uploads/2021/02/Fundamental.jpg",
     "https://ultra-realhomes.b-cdn.net/wp-content/uploads/2022/06/spacejoy-scaled.jpg",

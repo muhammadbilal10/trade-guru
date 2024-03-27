@@ -98,12 +98,7 @@ const LectureModal = ({ isOpen, onClose, onSave }) => {
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            const fileType = material.type.startsWith("video")
-              ? "video"
-              : "file";
-            const fileExtension = material.name.split(".").pop();
-            const modifiedURL = `${downloadURL}?type=${fileType}&ext=${fileExtension}`;
-            resolve({ url: modifiedURL, type: fileType });
+            resolve(downloadURL);
           });
         }
       );
@@ -117,9 +112,8 @@ const LectureModal = ({ isOpen, onClose, onSave }) => {
 
   const handleSubmit = async () => {
     setDisabled(true);
-    const { url, type } = await uploadImage();
-    console.log(type);
-    await onSave({ title, material: url });
+    const fileURL = await uploadImage();
+    await onSave({ title, material: fileURL });
     setTitle("");
     setMaterial("");
     setDisabled(false);
@@ -195,12 +189,17 @@ const Lecture = ({ title, material, id, onRemove }) => {
   );
 };
 
+
+
+
+
 // CurriculumItem Component
 const CurriculumItem = ({
   sectionId,
   lectures,
   onAddLecture,
   onRemoveLecture,
+  type,
 }) => {
   const [isLectureModalOpen, setIsLectureModalOpen] = useState(false);
 
@@ -223,12 +222,25 @@ const CurriculumItem = ({
           onRemove={() => removeLecture(index)}
         />
       ))}
+      
       <button
         onClick={() => setIsLectureModalOpen(true)}
         className="mt-2 bg-primary hover:bg-primary-600 text-white font-bold py-2 px-4 rounded"
       >
         + Add Lecture
+        
       </button>
+
+      {type === 'online' && (
+         <button
+         onClick={() => setIsLectureModalOpen(true)}
+         className="mt-2 bg-primary hover:bg-primary-600 text-white font-bold py-2 px-4 rounded"
+       >
+         + Add class details
+       </button>
+
+      )}
+
       <LectureModal
         isOpen={isLectureModalOpen}
         onClose={() => setIsLectureModalOpen(false)}
@@ -309,6 +321,7 @@ const CurriculumSection = ({
             lectures={section.lectures}
             onAddLecture={addLectureToSection}
             onRemoveLecture={removeLectureFromSection}
+            type={type}
           />
         </div>
       ))}

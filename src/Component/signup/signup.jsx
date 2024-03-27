@@ -29,16 +29,16 @@ export default function Signup() {
     const [error_email, setError_email] = useState({
         status: false,
         message: ''
-    })
+    });
     const [error_pass_len, setError_pass_len] = useState({
         status: false,
         message: ''
-    })
+    });
 
     const [error_pass_match, setError_pass_match] = useState({
         status: false,
         message: ''
-    })
+    });
 
 
 
@@ -49,7 +49,13 @@ export default function Signup() {
         });
     };
     const ToastPasswordError = () => {
-        toast.error("invalid password", {
+        toast.error("password too short", {
+            position: "top-right",
+            className: "toast-message",
+        });
+    };
+    const ToastPasswordMatchError = () => {
+        toast.error("Password not matched", {
             position: "top-right",
             className: "toast-message",
         });
@@ -71,6 +77,7 @@ export default function Signup() {
                 email: email,
                 gender: gender,
                 uid: uid,
+                role: 'user',
                 isInstructor: false
 
             });
@@ -83,9 +90,8 @@ export default function Signup() {
     const validateSignUp = () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            // console.error('Invalid email address');
+
             ToastemailError();
-            ToastPasswordError();
             setEmail('');
             setError_email({
                 status: true,
@@ -94,7 +100,6 @@ export default function Signup() {
             return false;
         }
         if (password.length < 6) {
-            // console.error('Password must be at least 6 characters long');
             ToastPasswordError();
             setError_pass_len({
                 status: true,
@@ -103,10 +108,10 @@ export default function Signup() {
             return false;
         }
         if (password !== confirm_pass) {
-            // console.error('Password and confirm password do not match');
+            ToastPasswordMatchError()
             setError_pass_match({
                 status: true,
-                message: 'Password must be at least 6 characters long'
+                message: 'Password Not matched'
             });
             return false;
         }
@@ -143,6 +148,8 @@ export default function Signup() {
                 cookies.set('userId', uid);
                 cookies.set('islogin', true);
                 cookies.set('isInstructor', false);
+                cookies.set('isapprove', false);
+                cookies.set('role', 'user');
                 navigate("/");
             })
             .catch((error) => {
@@ -283,32 +290,7 @@ export default function Signup() {
                                     Create Account
                                 </button>
                                 <hr className="my-8" />
-                                <button
-                                    className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5  text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
-                                >
-                                    <svg
-                                        className="w-4 h-4 mr-2"
-                                        aria-hidden="true"
-                                        viewBox="0 0 24 24"
-                                        fill="currentColor"
-                                    >
-                                        {/* Github icon */}
-                                    </svg>
-                                    Github
-                                </button>
-                                <button
-                                    className="flex items-center justify-center w-full px-4 py-2 mt-4 text-sm font-medium leading-5  text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
-                                >
-                                    <svg
-                                        className="w-4 h-4 mr-2"
-                                        aria-hidden="true"
-                                        viewBox="0 0 24 24"
-                                        fill="currentColor"
-                                    >
-                                        {/* Twitter icon */}
-                                    </svg>
-                                    Twitter
-                                </button>
+
                                 <p className="mt-4">
                                     <Link to="/login">
                                         <button
@@ -326,3 +308,47 @@ export default function Signup() {
         </>
     );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// <button
+//                                     className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5  text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
+//                                 >
+//                                     <svg
+//                                         className="w-4 h-4 mr-2"
+//                                         aria-hidden="true"
+//                                         viewBox="0 0 24 24"
+//                                         fill="currentColor"
+//                                     >
+//                                         {/* Github icon */}
+//                                     </svg>
+//                                     Github
+//                                 </button>
+//                                 <button
+//                                     className="flex items-center justify-center w-full px-4 py-2 mt-4 text-sm font-medium leading-5  text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
+//                                 >
+//                                     <svg
+//                                         className="w-4 h-4 mr-2"
+//                                         aria-hidden="true"
+//                                         viewBox="0 0 24 24"
+//                                         fill="currentColor"
+//                                     >
+//                                         {/* Twitter icon */}
+//                                     </svg>
+//                                     Twitter
+//                                 </button>

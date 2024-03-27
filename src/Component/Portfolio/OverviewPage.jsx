@@ -26,6 +26,7 @@ const colors = ['	#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#d0ed57
 
 
   const [stockHoldings, setStockHoldings] = useState([]);
+  const [sectorHoldings, setSectorHoldings] = useState([]);
 
   const getWalletData = async () => {
     try {
@@ -67,12 +68,12 @@ const colors = ['	#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#d0ed57
         // Fetch user portfolio document
         const userDocRef = doc(db, 'portfolio', userId);
         const userDocSnap = await getDoc(userDocRef);
-
-        // Get stock holdings data from the document
         const stockHoldingsData = userDocSnap.data().stockHoldings;
-
-        console.log(stockHoldingsData);
         const transformedData = Object.keys(stockHoldingsData).map(symbol => ({
+          name: symbol, // Use the symbol as the name
+          value: stockHoldingsData[symbol].quantity, // Use the totalQuantity as the value
+        }));
+        const sectorData = Object.keys(stockHoldingsData).map(symbol => ({
           name: symbol, // Use the symbol as the name
           value: stockHoldingsData[symbol].quantity, // Use the totalQuantity as the value
         }));
@@ -83,8 +84,17 @@ const colors = ['	#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#d0ed57
     };
 
 
-    fetchStockHoldings();
+    const fetchSectorHoldings = async () => {
+      try {
+       
+        setStockHoldings(transformedData);
+      } catch (error) {
+        console.error('Error fetching stock holdings:', error);
+      }
+    };
 
+
+    fetchStockHoldings();
     fetchData();
   }, []);
 
@@ -127,14 +137,28 @@ const colors = ['	#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#d0ed57
 
             {/* Charts Section */}
             <div className="flex flex-row flex-wrap mt-5">
-              <section className="w-full md:w-6/12 lg:w-6/12 h-[300px] border border-gray-400 rounded-lg mb-4 md:mb-0">
+              {/* <section className="w-full md:w-6/12 lg:w-6/12 h-[300px] border border-gray-400 rounded-lg mb-4 md:mb-0">
                 <LineChart width={400} height={300} data={lineChartData}>
                   <XAxis dataKey="date" />
                   <YAxis type="number" domain={['auto', 'auto']} tickFormatter={(value) => `$${value}`} />
                   <Line type="monotone" dataKey="value" stroke="#FFD700" strokeWidth={2} dot={{ fill: '#FFD700' }} />
                   <Tooltip />
                 </LineChart>
+              </section> */}
+              <section className="w-full md:w-6/12 lg:w-6/12 h-[300px] border border-gray-400 rounded-lg">
+                <h2>Sector Holdings</h2>
+                <PieChart width={400} height={300}>
+                  <Pie dataKey="value" data={stockHoldings} label>
+                    {stockHoldings.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+                
               </section>
+
               <section className="w-full md:w-6/12 lg:w-6/12 h-[300px] border border-gray-400 rounded-lg">
                 <h2>Stock Holdings</h2>
                 <PieChart width={400} height={300}>

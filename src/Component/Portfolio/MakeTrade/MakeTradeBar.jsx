@@ -30,10 +30,23 @@ export default function TradeBar() {
 
         setIsSellOpen(true);
     };
-
-
-
+    const SetValues = async () => {
+        if (Is_symbol_exist(symbolsList, symbol.toLocaleUpperCase())) {
+            // setSymbol("HBL")
+            const change = await getchange(symbol);
+            setPercent(change[2]);
+            setValue(change[1]);
+            setPrice(change[0]);
+        }
+    };
     useEffect(() => {
+        const init_Values = async () => {
+            const change = await getchange(symbol);
+            setPercent(change[2]);
+            setValue(change[1]);
+            setPrice(change[0]);
+
+        };
         const fetchData = async () => {
             try {
                 const response = await fetch('http://127.0.0.1:8000/get_symbol');
@@ -52,21 +65,12 @@ export default function TradeBar() {
         };
 
         fetchData();
+        init_Values();
     }, []);
 
     useEffect(() => {
-        const SetValues = async () => {
-            if (Is_symbol_exist(symbolsList, symbol.toLocaleUpperCase())) {
-                // setSymbol("HBL")
-                const change = await getchange(symbol);
-                setPercent(change[2]);
-                setValue(change[1]);
-                setPrice(change[0]);
-            }
-        };
-
         SetValues();
-    }, [ symbol]);
+    }, [symbol]);
 
 
 

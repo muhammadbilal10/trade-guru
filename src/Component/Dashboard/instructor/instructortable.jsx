@@ -13,10 +13,10 @@ export default function Instructortable() {
     const db = getFirestore(app);
 
     useEffect(() => {
-        fetchUserData(db,'User').then((res) => {
+        fetchUserData(db, 'User').then((res) => {
             setInstructor(res)
         })
-    },[]);
+    }, []);
 
 
     return (
@@ -28,7 +28,7 @@ export default function Instructortable() {
                             <tr
                                 class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
                             >
-                                <th class="px-4 py-3">Instructor</th>
+                                <th class="px-4 py-3">Users</th>
                                 <th class="px-4 py-3">total course</th>
                                 <th class="px-4 py-3">Status</th>
                                 <th class="px-4 py-3">Registraion Date</th>
@@ -59,7 +59,7 @@ export default function Instructortable() {
                                             <div>
                                                 <p class="font-semibold">{instructor.fname}</p>
                                                 <p class="text-xs text-gray-600 dark:text-gray-400">
-                                                {instructor.occupation}
+                                                    {instructor.occupation}
                                                 </p>
                                             </div>
                                         </div>
@@ -69,12 +69,12 @@ export default function Instructortable() {
                                     </td>
                                     <td class="px-4 py-3 text-xs">
                                         <span
-                                            className={`px-2 py-1 font-semibold leading-tight rounded-full ${instructor.status
+                                            className={`px-2 py-1 font-semibold leading-tight rounded-full ${instructor.approval
                                                 ? 'text-green-700 bg-green-100 dark:bg-green-700 dark:text-green-100'
                                                 : 'text-red-700 bg-red-100 dark:bg-red-700 dark:text-red-100'
                                                 }`}
                                         >
-                                            {instructor.status ? 'approved' : 'not approved'}
+                                            {instructor.approval ? 'approved' : 'not approved'}
                                         </span>
                                     </td>
                                     <td class="px-4 py-3 text-sm">

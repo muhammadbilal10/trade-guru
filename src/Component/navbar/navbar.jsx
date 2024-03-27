@@ -2,35 +2,57 @@ import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Cookies from "universal-cookie";
+import { useNavigate } from "react-router-dom";
 
 const cookies = new Cookies();
 const isLogin = cookies.get("islogin");
+const isInstructor = cookies.get('isInstructor');
+const isapprove = cookies.get('isapprove');
+// const navigate = useNavigate();
 
+const handleLogout = () => {
+  // List of cookie names to be removed
+  ////, 'role'
+  const cookieNames = ['userId', 'islogin', 'isInstructor', 'isapprove', 'isAdmin'];
+
+  // Iterate through each cookie name and remove it
+  cookieNames.forEach(cookieName => {
+    cookies.remove(cookieName);
+  });
+  console.log("user logged out");
+  // navigate("/");
+};
 const navLinks = [
   { title: "Home", to: "/" },
   { title: "Courses", to: "/course" },
   // { title: "Registration", to: "/registration" },
-  { title: "Dashboard", to: "/dashboard" },
-  { title: "Payment", to: "/payment_main_page" },
-  { title: "Stocks", to: "/terminal" },
-  { title: "Portfolio", to: "/portfolio_main_page" },
-  {
-    title: "Learning",
-    to: "/my-courses",
-  },
+  // { title: "Dashboard", to: "/dashboard" },
+  // { title: "Payment", to: "/payment_main_page" },
+  // { title: "Stocks", to: "/terminal" },
+  // { title: "Portfolio", to: "/portfolio_main_page" },
+  // { title: "Learning", to: "/my-courses", },
 ];
+const MustLoginNavLinks = [
+  { title: "Dashboard", to: "/dashboard" },
+  { title: "Portfolio", to: "/portfolio_main_page" },
+  { title: "Learning", to: "/my-courses", },
+];
+
 
 const navButtons = [
   { title: "Login", to: "/login" },
   { title: "Signup", to: "/signup" },
+  // { title: "Instructor", to: "/instructorform" },
+];
+
+const instructorButtons = [
   { title: "Instructor", to: "/instructorform" },
 ];
 const Sheet = ({ isOpen, onClose }) => {
   return (
     <div
-      className={`fixed top-0 left-0 h-full z-40 transform ${
-        isOpen ? "translate-x-0" : "-translate-x-full"
-      } w-64 bg-white shadow-xl transition-transform duration-300`}
+      className={`fixed top-0 left-0 h-full z-40 transform ${isOpen ? "translate-x-0" : "-translate-x-full"
+        } w-64 bg-white shadow-xl transition-transform duration-300`}
     >
       <div className="flex justify-between items-center p-4 border-b">
         <a href="/" className="flex items-center font-bold">
@@ -69,6 +91,9 @@ const Sheet = ({ isOpen, onClose }) => {
 };
 
 const Navbar = () => {
+
+
+
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   return (
@@ -83,6 +108,7 @@ const Navbar = () => {
               </a>
             </div>
           </div>
+
           <div className="-mr-2 flex items-center lg:hidden">
             <Sheet isOpen={isSheetOpen} onClose={() => setIsSheetOpen(false)} />
             <button
@@ -126,9 +152,8 @@ const Navbar = () => {
             </button>
           </div>
           <div
-            className={`${
-              isLogin && "flex-1 justify-center space-x-5"
-            } hidden lg:flex sm:items-center`}
+            className={`${isLogin && "flex-1 justify-center space-x-5"
+              } hidden lg:flex sm:items-center`}
           >
             {navLinks.map((link, index) => (
               <Link to={link.to} key={index}>
@@ -137,12 +162,24 @@ const Navbar = () => {
                 </button>
               </Link>
             ))}
+            
+            {isLogin && (
+              MustLoginNavLinks.map((link, index) => (
+                <Link to={link.to} key={index}>
+                  <button className="hover:text-white hover:bg-primary-600 px-4 py-1 rounded-md transition duration-300">
+                    {link.title}
+                  </button>
+                </Link>
+              ))
+            )}
+
           </div>
 
+
+
           <div
-            className={`${
-              isLogin ? "hidden" : "hidden lg:flex sm:items-center sm:space-x-4"
-            }`}
+            className={`${isLogin ? "hidden" : "hidden lg:flex sm:items-center sm:space-x-4"
+              }`}
           >
             {navButtons.map((button, index) => (
               <Link to={button.to} key={index}>
@@ -152,6 +189,28 @@ const Navbar = () => {
               </Link>
             ))}
           </div>
+
+          <div className={`${isLogin && !isInstructor && !isapprove ? 'lg:flex sm:items-center sm:space-x-4' : 'hidden'}`}>
+            {instructorButtons.map((button, index) => (
+              <Link to={button.to} key={index}>
+                <button className="border rounded-md px-4 w-full py-2 bg-primary hover:bg-primary-600 text-white">
+                  {button.title}
+                </button>
+              </Link>
+            ))}
+          </div>
+
+
+
+          <div className='lg:flex sm:items-center sm:space-x-4'>
+            <button
+              className="border rounded-md px-4 w-full py-2 bg-primary hover:bg-primary-600 text-white"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </div>
+
         </div>
       </div>
     </nav>

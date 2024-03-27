@@ -28,35 +28,45 @@ export default function Home() {
   //     occupasion: null
   //     profilePicture: null
 
-  const [uid, setUid] = useState("r6SQliH0isTz7qhgS1lggXERJ9E3");
-  cookies.set("userId", uid);
-  cookies.set("islogin", false);
-  console.log(cookies.get("userId"));
-  console.log(cookies.get("islogin"));
+  // const [uid, setUid] = useState("r6SQliH0isTz7qhgS1lggXERJ9E3");
+  // cookies.set("userId", uid);
+  // cookies.set("islogin", false);
+  // console.log(cookies.get("userId"));
+  // cookies.set('isAdmin', false);
+  // cookies.set('isInstructor', isExist[0]);
+  // cookies.set('isapprove', isExist[1]);
+
+ /////for testing
+  console.log("user id->", cookies.get("userId"));
+  console.log("is login->", cookies.get("islogin"));
+  console.log("isAdmin->", cookies.get("isAdmin"));
+  console.log("isInstructor->", cookies.get("isInstructor"));
+  console.log("isapprove->", cookies.get("isapprove"));
   const [displayAds, setDisplayAds] = useState([]);
 
   useEffect(() => {
-    const db = getFirestore(app);
-    const getUser = async () => {
-      const documentId = cookies.get("userId");
-      const collectionName = "Instructor";
-      const docRef = doc(db, collectionName, documentId);
-      getDoc(docRef)
-        .then((docSnap) => {
-          if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
-          } else {
-            console.log("No such document!");
-          }
-        })
-        .catch((error) => {
-          console.log("Error getting document:", error);
-        });
-    };
+    // const db = getFirestore(app);
+    // const getUser = async () => {
+    //   const documentId = cookies.get("userId");
+    //   const collectionName = "Instructor";
+    //   const docRef = doc(db, collectionName, documentId);
+    //   getDoc(docRef)
+    //     .then((docSnap) => {
+    //       if (docSnap.exists()) {
+    //         console.log("Document data:", docSnap.data());
+    //       } else {
+    //         console.log("No such document!");
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       console.log("Error getting document:", error);
+    //     });
+    // };
 
     const displayAdsWithBuyers = async () => {
       const db = getFirestore(app);
       const plansRef = collection(db, "AdvertisementPlans");
+      //////this is for home page
       const q = query(
         plansRef,
         where("type", "==", "Display ad"),

@@ -5,23 +5,29 @@ import { useNavigate } from "react-router";
 
 const AddCourseForm = ({ formData, setFormData, nextStep, prevStep }) => {
   console.log(formData);
-
   const courseCategory = [
-    "Programming",
-    "Design",
-    "Business",
+    "Personal Finance",
+    "Investing",
+    "Investing Fundamentals",
+    "Investing & Trading",
+    "Technical Analysis (finance)",
+    "Forex Trading",
+    "Day Trading ",
+    "Stock Trading",
+    "Swing Trading ",
     "Marketing",
-    "Photography",
-    "Music",
-    "Health",
+   
   ];
 
   const courseLevel = ["Beginner", "Intermediate", "Advanced"];
-  const courseLanguage = ["English", "French", "Spanish", "German"];
-
+  const courseLanguage = ["Urdu","English", "French", "Spanish", "German"];
   const navigate = useNavigate();
-
   const handleChange = (e) => {
+    const currentDate = new Date().toISOString().split('T')[0];
+    if (e.target.name === "startDate" && e.target.value <= currentDate) {
+      alert('Please select upcomming date ');
+      return;
+    }
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -45,7 +51,7 @@ const AddCourseForm = ({ formData, setFormData, nextStep, prevStep }) => {
                 htmlFor="type"
                 className="block text-sm font-medium text-gray-600"
               >
-                What type of course are you making?
+                What type of course are you offering?
               </label>
               <select
                 id="type"
@@ -73,7 +79,7 @@ const AddCourseForm = ({ formData, setFormData, nextStep, prevStep }) => {
                 id="title"
                 name="title"
                 value={formData.title}
-                placeholder="e.g. Introduction to Computer Science"
+                placeholder="e.g. The Complete Technical Analysis Course"
                 onChange={handleChange}
                 required
                 className="mt-1 p-2 w-full border rounded-md"
@@ -84,7 +90,7 @@ const AddCourseForm = ({ formData, setFormData, nextStep, prevStep }) => {
                 htmlFor="courseName"
                 className="block text-sm font-medium text-gray-600"
               >
-                What category best fits the knowledge you'll share?
+                Select category 
               </label>
               <select
                 id="category"
@@ -103,23 +109,6 @@ const AddCourseForm = ({ formData, setFormData, nextStep, prevStep }) => {
               </select>
             </div>
 
-            {/* <div className="mb-4">
-            <label
-              htmlFor="courseCode"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Course Code
-            </label>
-            <input
-              type="text"
-              id="courseCode"
-              name="courseCode"
-              value={formData.courseCode}
-              onChange={handleChange}
-              required
-              className="mt-1 p-2 w-full border rounded-md"
-            />
-          </div> */}
 
             <div className="mb-4">
               <label
@@ -186,25 +175,6 @@ const AddCourseForm = ({ formData, setFormData, nextStep, prevStep }) => {
               ></textarea>
             </div>
 
-            {/* <div className="mb-4">
-              <label
-                htmlFor="courseImage"
-                className="block text-sm font-medium text-gray-600"
-              >
-                Course Image
-              </label>
-              <input
-                type="file"
-                id="courseImage"
-                name="courseImage"
-                onChange={handleChange}
-                accept="image/svg+xml, image/png, image/jpeg, image/gif"
-                className="mt-1 p-2 w-full border rounded-md"
-              />
-            </div> */}
-
-            {/* <ImageUpload /> */}
-
             <div className="mb-4">
               <label
                 htmlFor="startDate"
@@ -228,7 +198,7 @@ const AddCourseForm = ({ formData, setFormData, nextStep, prevStep }) => {
                 htmlFor="price"
                 className="block text-sm font-medium text-gray-600"
               >
-                Price ($)
+                Price (PKR)
               </label>
               <input
                 type="number"
@@ -241,23 +211,7 @@ const AddCourseForm = ({ formData, setFormData, nextStep, prevStep }) => {
               />
             </div>
 
-            {/* <div className="mb-4">
-              <label
-                htmlFor="courseDuration"
-                className="block text-sm font-medium text-gray-600"
-              >
-                Course Duration (Months)
-              </label>
-              <input
-                type="number"
-                id="courseDuration"
-                name="courseDuration"
-                value={formData.courseDuration}
-                onChange={handleChange}
-                required
-                className="mt-1 p-2 w-full border rounded-md"
-              />
-            </div> */}
+           
             <div className="mt-6 text-end flex justify-between">
               <button
                 onClick={prevStep}

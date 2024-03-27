@@ -7,10 +7,10 @@ import app from "../../database/firebase";
 import { useLocation, useParams } from "react-router-dom";
 
 const stripePromise = loadStripe(
-  "pk_test_51Nxd2nSGfSglhWZnLhWDpprmyfCoyjXAtmQChoSa1QpCjtsUU17k468gNCyQ3OpeJG57cltQ9ZAIoietHhuODX1f00OJyeUiGm"
+  "pk_test_51Oz22QLe8tSEq9Yx0mh8K7RRVvX5qXqB86aEeQbzmk2WM6m5A6XkNXsbhpmYeScK2Yjp95Ka1aqPmSOfS0Cmancn00RxRQOSKr"
 );
 
-const backendUrl = `https://uctqy6nhdk.us.aircode.run/payment`;
+const backendUrl = `https://chq49hngy6.us.aircode.run/hello`;
 
 export default function Checkout() {
   const [clientSecret, setClientSecret] = useState("");

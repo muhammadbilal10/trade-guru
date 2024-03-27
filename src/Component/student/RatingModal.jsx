@@ -9,9 +9,13 @@ import {
 } from "firebase/firestore";
 import { v4 as uuid } from "uuid";
 import app from "../../database/firebase"; // Ensure this is the correct path to your Firebase config
+import Cookies from 'universal-cookie';
 
 const RatingModal = ({ modalOpen, setModalOpen, courseId }) => {
+  const cookies = new Cookies();
+  const [userId, setUserId] = useState(cookies.get('userId'));
   // Initialize state variables without using reviewData
+  /////this is dummy rating
   const [rating, setRating] = useState(3);
   const [comment, setComment] = useState("");
   const [reviewData, setReviewData] = useState(null);
@@ -26,7 +30,8 @@ const RatingModal = ({ modalOpen, setModalOpen, courseId }) => {
         "Course",
         courseId,
         "Reviews",
-        "21oEyQqYJHeth0OVEl0DTxDBtd92"
+        // "21oEyQqYJHeth0OVEl0DTxDBtd92"
+        userId
       );
 
       try {
@@ -55,7 +60,8 @@ const RatingModal = ({ modalOpen, setModalOpen, courseId }) => {
       "Course",
       courseId,
       "Reviews",
-      "21oEyQqYJHeth0OVEl0DTxDBtd92"
+      // "21oEyQqYJHeth0OVEl0DTxDBtd92"
+      userId
     );
     const review = {
       reviewId: reviewData ? reviewData.id : uuid(),

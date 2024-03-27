@@ -12,38 +12,56 @@ import CandlestickChart from './crt';
 import CandlestickChartComponent from './chart';
 
 export default function MarketPage() {
-    const [data, setData] = useState([]);
-    
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const temp = await getcandlestick_data("HBL");
-                if (temp) {
-                    setData(temp);
-                }
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-    
-        fetchData();
-    }, []);
-
-
+    const [activeTab, setActiveTab] = useState('day');
+    const [symbol, setSymbol] = useState('OGDC');
+    const handleTabClick = (tab) => {
+        setActiveTab(tab);
+    };
+    const handleSubmit = (e) => {
+        setSymbol(e.target.value);
+    };
     return (
         <>
             <div className="min-h-screen flex flex-col">
                 <Navbar />
                 <Optionbar />
-                <div className="flex flex-row flex-1">
-                    <div className="w-full bg-gray-100 overflow-y-auto">
 
-                        <div className="container mt-3">
-                            {/* <h2 className="mb-6">Daily chart</h2> */}
-                            <CandlestickChart data={data} />
+
+
+                <div className="flex flex-row flex-1">
+                    <div className="w-full bg-gray-100 overflow-y-auto flex flex-row">
+
+                        {/* First object */}
+                        <div className="flex-grow-1" style={{ minWidth: '50%' }}>
+                            <object data="https://sarmaaya.pk/public/widgets/market-performers" width="100%" height="450" type="text/html">
+                                Market Performers
+                            </object>
+                        </div>
+
+                        {/* Second object */}
+                        <div className="flex-grow-1" style={{ minWidth: '50%' }}>
+                            <input
+                                type="text"
+                                value={symbol}
+                                onChange={handleSubmit}
+                                placeholder="Enter symbol..."
+                                className="border border-gray-400 px-2 py-1 rounded"
+                            />
+                            <button
+                                className="bg-green-400 hover:bg-green-500 text-white font-bold py-1 px-2 rounded"
+                                onClick={handleSubmit}
+                            >
+                                Submit
+                            </button>
+                            <object data={`https://sarmaaya.pk/public/widgets/company-snapshot?stock_symbol=${symbol}`} width="100%" height="540" type="text/html">
+                                Company Snapshot
+                            </object>
+
                         </div>
 
                     </div>
+
+
 
                     <TradeBar />
 
