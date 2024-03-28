@@ -97,7 +97,7 @@ const Sheet = ({ isOpen, onClose }) => {
 
 const Navbar = () => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-
+  console.log(isLogin);
   return (
     <nav className="bg-white text-black shadow-lg h-20 relative z-40">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
