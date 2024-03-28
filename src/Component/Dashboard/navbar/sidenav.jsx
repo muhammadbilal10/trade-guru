@@ -10,7 +10,6 @@ import { MdOutlinePayment } from "react-icons/md";
 import Cookies from "universal-cookie";
 
 export default function Sidenav() {
-
   const [togglePages, setTogglePages] = useState(false);
   const [togglecourse, setToggleCourse] = useState(false);
   const [togglepayment, setTogglePayment] = useState(false);
@@ -21,7 +20,7 @@ export default function Sidenav() {
   };
 
   const cookies = new Cookies();
-  const isAdmin = cookies.get('isAdmin');
+  const isAdmin = cookies.get("isAdmin");
 
   const AdminMenu = [
     {
@@ -52,7 +51,6 @@ export default function Sidenav() {
         { title: "My Plans", link: "/myplan" },
         { title: "Manage Plans", link: "/advertisement" },
         // { title: "My Plans", link: "/advertisement" },
-
         ,
       ],
     },
@@ -62,10 +60,9 @@ export default function Sidenav() {
       icon: <MdOutlinePayment className="w-5 h-5" />,
       dropdownOptions: [
         { title: "Home", link: "/paymentpage" },
-        { title: "Transactions", link: "/paymentAllTransactions" }],
+        { title: "Transactions", link: "/paymentAllTransactions" },
+      ],
     },
-   
-
   ];
 
   const InstructorMenu = [
@@ -84,7 +81,7 @@ export default function Sidenav() {
       link: "/student_page",
       icon: <FiUser className="w-5 h-5" />,
       dropdownOptions: [
-        { title: "Manage Students", link: "/coursePage" },
+        // { title: "Manage Students", link: "/coursePage" },
         { title: "Add Courses", link: "/coursePage" },
         // { title: "Queries", link: "/instructorpage" },
       ],
@@ -104,7 +101,6 @@ export default function Sidenav() {
       icon: <RiAdvertisementLine className="w-5 h-5" />,
       dropdownOptions: [{ title: "Feedback", link: "/feedback" }],
     },
-
   ];
 
   return (
@@ -136,7 +132,6 @@ export default function Sidenav() {
 
           {isAdmin && (
             <ul>
-
               {AdminMenu.map((menuItem, index) => (
                 <li key={index} className="relative px-6 py-3">
                   <button
@@ -152,7 +147,9 @@ export default function Sidenav() {
                   </button>
 
                   <template
-                    className={`${openMenuIndex === index ? "block" : "hidden"}`}
+                    className={`${
+                      openMenuIndex === index ? "block" : "hidden"
+                    }`}
                   >
                     <ul
                       className="transition-all ease-in-out duration-300 p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
@@ -173,40 +170,42 @@ export default function Sidenav() {
           )}
 
           {!isAdmin && (
-             <ul>
-             {InstructorMenu.map((menuItem, index) => (
-               <li key={index} className="relative px-6 py-3">
-                 <button
-                   className="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                   aria-haspopup="true"
-                   onClick={() => toggleMenu(index)}
-                 >
-                   <div className="inline-flex items-center">
-                     {menuItem.icon}
-                     <div className="ml-4">{menuItem.title}</div>
-                   </div>
-                   <FaAngleDown />
-                 </button>
+            <ul>
+              {InstructorMenu.map((menuItem, index) => (
+                <li key={index} className="relative px-6 py-3">
+                  <button
+                    className="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    aria-haspopup="true"
+                    onClick={() => toggleMenu(index)}
+                  >
+                    <div className="inline-flex items-center">
+                      {menuItem.icon}
+                      <div className="ml-4">{menuItem.title}</div>
+                    </div>
+                    <FaAngleDown />
+                  </button>
 
-                 <template
-                   className={`${openMenuIndex === index ? "block" : "hidden"}`}
-                 >
-                   <ul
-                     className="transition-all ease-in-out duration-300 p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
-                     aria-label="submenu"
-                   >
-                     {menuItem.dropdownOptions.map((option, idx) => (
-                       <Link to={option.link} key={idx}>
-                         <li className="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                           {option.title}
-                         </li>
-                       </Link>
-                     ))}
-                   </ul>
-                 </template>
-               </li>
-             ))}
-           </ul>
+                  <template
+                    className={`${
+                      openMenuIndex === index ? "block" : "hidden"
+                    }`}
+                  >
+                    <ul
+                      className="transition-all ease-in-out duration-300 p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
+                      aria-label="submenu"
+                    >
+                      {menuItem.dropdownOptions.map((option, idx) => (
+                        <Link to={option.link} key={idx}>
+                          <li className="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                            {option.title}
+                          </li>
+                        </Link>
+                      ))}
+                    </ul>
+                  </template>
+                </li>
+              ))}
+            </ul>
           )}
 
           <div class="px-6 my-6">

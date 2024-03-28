@@ -56,6 +56,7 @@ export default function AddCoursePage() {
 
   const handleAddCourse = async () => {
     try {
+      console.log("ad Id");
       const instructorId = cookies.get("userId");
       // Generate a unique course ID
       const courseId = uuid();

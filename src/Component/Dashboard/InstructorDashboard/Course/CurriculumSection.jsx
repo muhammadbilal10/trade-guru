@@ -189,10 +189,6 @@ const Lecture = ({ title, material, id, onRemove }) => {
   );
 };
 
-
-
-
-
 // CurriculumItem Component
 const CurriculumItem = ({
   sectionId,
@@ -222,23 +218,21 @@ const CurriculumItem = ({
           onRemove={() => removeLecture(index)}
         />
       ))}
-      
+
       <button
         onClick={() => setIsLectureModalOpen(true)}
         className="mt-2 bg-primary hover:bg-primary-600 text-white font-bold py-2 px-4 rounded"
       >
         + Add Lecture
-        
       </button>
 
-      {type === 'online' && (
-         <button
-         onClick={() => setIsLectureModalOpen(true)}
-         className="mt-2 bg-primary hover:bg-primary-600 text-white font-bold py-2 px-4 rounded"
-       >
-         + Add class details
-       </button>
-
+      {type === "online" && (
+        <button
+          onClick={() => setIsLectureModalOpen(true)}
+          className="mt-2 bg-primary hover:bg-primary-600 text-white font-bold py-2 px-4 rounded"
+        >
+          + Add class details
+        </button>
       )}
 
       <LectureModal
@@ -295,6 +289,8 @@ const CurriculumSection = ({
     setSections(sections.filter((section, index) => index !== sectionId));
   };
 
+  console.log(sections);
+  console.log(type);
   return (
     <div className="container mx-auto mt-4 shadow-lg rounded-md p-8 bg-white">
       {sections.map((section, index) => (
@@ -344,7 +340,7 @@ const CurriculumSection = ({
           Prev
         </button>
         <button
-          onClick={type === "Add" ? handleAddCourse : handleEditCourse}
+          onClick={type === "offline" ? handleAddCourse : handleEditCourse}
           className=" bg-primary w-24 hover:bg-primary-600 text-white p-3 rounded-md focus:outline-none focus:shadow-outline-blue "
         >
           Submit
