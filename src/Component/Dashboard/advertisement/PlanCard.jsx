@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function PlanCard({ data, isInstructor = false }) {
   console.log(data);
+
   const navigate = useNavigate();
 
   const newParams = new URLSearchParams();
@@ -28,6 +29,24 @@ export default function PlanCard({ data, isInstructor = false }) {
           Buy plan
         </button>
         <ul className="mt-8 space-y-4">
+          {data.feature?.map((feature, index) => (
+            <li key={index} className="flex items-center">
+              <svg
+                className="text-green-500 w-6 h-6 mr-2"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path d="M5 13l4 4L19 7" />
+              </svg>
+              {feature}
+            </li>
+          ))}
+        </ul>
+        {/* <ul className="mt-8 space-y-4">
           <li className="flex items-center">
             <svg
               className="text-green-500 w-6 h-6 mr-2"
@@ -84,7 +103,7 @@ export default function PlanCard({ data, isInstructor = false }) {
             </svg>
             48-hour support response time
           </li>
-        </ul>
+        </ul> */}
       </div>
     </div>
   );
